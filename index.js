@@ -1,9 +1,12 @@
 let tabla = document.getElementById("tabla")
+
 let editeForm = document.getElementById("editarForm")
 
 
 let clients = []
 
+
+//Adding Clients to the Array
 document.getElementById("form").addEventListener("submit", (event) => {
     event.preventDefault();
 
@@ -20,6 +23,8 @@ document.getElementById("form").addEventListener("submit", (event) => {
 
 })
 
+
+//Render the clients in the frontend
 
 function createClient(name, index){
 
@@ -39,12 +44,17 @@ function createClient(name, index){
     
 }
 
+
+//Set the edite client form to visible
+
 function EditeClient(indexCLient) {
     console.log(indexCLient);
     editeForm.style.visibility = "visible";
 
     document.getElementById("nuevoNombre").dataset.index = indexCLient;
 }
+
+//Edites Client and hidden again the form
 
 document.getElementById("cambiarNombre").addEventListener("submit", (e) => {
     e.preventDefault();
@@ -95,19 +105,3 @@ function deleteClient(indexCLient) {
 
 
 
-
-
-/* function enviar() {
-    
-    let x = document.forms["form"]["Nombre"].value;
-
-    alert(x)
-
-    let nombreElement = document.createElement("p")
-    let nombreNode = document.createTextNode(x)
-
-
-    nombreElement.appendChild(nombreNode)
-
-    tabla.appendChild(nombreElement)
-} */

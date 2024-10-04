@@ -4,26 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Taller</title>
+    <link rel="stylesheet" href="index.css">
 </head>
 <body>
     <div class="mainWrapper">
         <div class="leftWrap">
+
             <a href="#">Cliente</a>
+
+
         </div>
 
 
-        <div class="rigthWrap">
+        <div class="rightWrap">
 
             <div class="topSection">
                 <h1>Clientes</h1>
-                <button>Crear Cliente</button>
+
+                <button onclick="form()">Crear Cliente</button>
             </div>
 
-            
+
+            <div class="form">
+                <form action="" name="form" onsubmit="enviar()">
+                    <label for="primerNombre">Nombre:</label>
+                    <input type="text" name="Nombre" id="nombre">
+
+                    <input type="submit" value="Crear Cliente">
+
+                </form>
+
+            </div>
+
+            <div class="tabla">
+                
+            </div>
+
 
         </div>
     </div>
 
 
 </body>
+<script src="index.js"></script>
 </html>

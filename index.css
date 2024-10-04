@@ -1,0 +1,53 @@
+* {
+    margin: 0;
+    box-sizing: border-box;
+    padding: 0px;
+}
+
+.mainWrapper {
+    display: flex;
+    height: 649px;
+    width: auto;
+}
+
+.leftWrap {
+    margin-right: 3em;
+    padding: 20px;
+    background-color: black;
+    height: 100%;
+}
+
+.leftWrap a {
+    text-decoration: none;
+    color: #fff;
+}
+
+
+
+.rightWrap {
+    padding: 20px;
+    width: 100%;
+}
+
+.rightWrap .topSection {
+    display: flex;
+    justify-content: space-between;
+}
+
+.topSection button{
+    padding: 10px;
+    color: #fff;
+    background-color: black;
+    border: none transparent ;
+    border-radius: 5%;
+}
+
+.topSection button:hover {
+    width: 100px;
+    height: 40px;
+}
+
+.form {
+    margin-top: 20px;
+}
+

@@ -51,3 +51,39 @@
     margin-top: 20px;
 }
 
+#tabla {
+    display: flex;
+}
+
+.delete{
+    background-color: red;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 20px 0px;
+    color: #fff;
+}
+
+.edite{
+    background-color: rgb(0, 119, 255);
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 20px 0px;
+    color: #fff;
+}
+
+#editarForm {
+    visibility: hidden;
+}
+
+.clientCard {
+    width: 160px;
+    height: 140px;
+    padding: 30px 20px;
+    margin: 20px 20px 20px 0px;
+    border-radius: 20px;
+    box-shadow: 5px 5px 8px 2px rgb(87, 87, 87);
+
+
+}

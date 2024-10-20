@@ -4,29 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Taller</title>
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="clientes.css">
 </head>
 <body>
-    <div class="mainWrapper">
-        <div class="leftWrap">
+    <div class="contPrincipal">
 
-            <a href="#">Cliente</a>
+        <div class="contIzquierdo">
 
+            <a href="#">Clientes</a>
+            <a href="#">Mecanicos</a>
 
         </div>
 
 
-        <div class="rightWrap">
+        <div class="contDerecho">
 
-            <div class="topSection">
-                <h1>Clientes</h1>
+            <div class="cabecera">
 
-                <button onclick="form()">Crear Cliente</button>
+                    <h1>Clientes</h1>
+
+                    <button onclick="desplegarForm()">Crear Cliente</button>
+
+                
             </div>
 
 
-            <div class="formClient">
+            <div class="formClient oculto">
+
+                <button class="botonCerrar" onclick="desplegarForm()">X</button>
+
+
                 <form action="" name="form" id="form">
+
+
+                    <h2>Formulario Nuevo cliente</h2>
+
                     <label for="primerNombre">Nombre:</label>
                     <input type="text" name="Nombre" id="nombre">
 
@@ -36,8 +48,10 @@
 
             </div>
 
-            <div id="tabla">
+            <div id="divTabla">
                 
+
+
             </div>
 
             <div id="editarForm">
@@ -54,5 +68,5 @@
 
 
 </body>
-<script src="index.js"></script>
+<script src="clientesPrincipal.js"></script>
 </html>

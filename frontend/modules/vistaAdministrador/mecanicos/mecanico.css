@@ -5,11 +5,11 @@
 }
 
 .contPrincipal {
+    border: 2px dashed yellow;
 
     display: flex;
     height: 100vh;
     width: 100vw;
-    
 }
 
 .contIzquierdo {
@@ -30,18 +30,18 @@
 
 
 .contDerecho {
-
+    border: 2px dashed blue;
     
     height: 100%;
     width: 100%;
-    overflow: auto;
+    overflow: hidden;
 }
 
 .cabecera {
     border: 2px dashed green;
 
     position: fixed;
-    width: 82.5%;
+    width: 100%;
     height: 15%;
 
     display: flex;
@@ -68,32 +68,15 @@
 
 
 #divTabla {
+    border: 2px dashed black;
     
     position: fixed;
-    width: 78%;
+    
 
     top: 20%;
-    left: 20%;
-
+    left: 50%;
+    padding: 20px;
 }
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    border: 1px solid;
-    text-align: center;
-}
-
-th {
-    border: 1px solid;
-}
-
-td {
-    border: 1px solid   
-}
-
-
-
 
 .delete{
     background-color: red;
@@ -117,19 +100,30 @@ td {
     visibility: hidden;
 }
 
+.clientCard {
+    width: 160px;
+    height: 140px;
+    padding: 30px 20px;
+    margin: 0px;
+    border-radius: 20px;
+    box-shadow: 5px 5px 8px 2px rgb(87, 87, 87);
+}
+
+
 .formClient {
+    border: 2px dashed deeppink;
 
     position: absolute;
 
     z-index: 2;
     background-color: rgba(0, 0, 0, 0.158);
-    width: 82.75%;
+    width: 98.9%;
     height: 100%;
-
-    overflow: hidden;
 }
 
 .formClient .botonCerrar{
+    position: absolute;
+    float: left;
 
     padding: 10px;
     color: #fff;
@@ -140,16 +134,15 @@ td {
 
 
 form {
-    border: 2px dashed gold;
 
-    position: absolute;
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 
     top: 20%;
-    left: 25%;
+    left: 20%;
 
     width: 50%;
     height: 40%;
@@ -172,9 +165,4 @@ form input{
 
 .oculto{
     display: none;
-}
-
-.centrado {
-    position: fixed;
-    left: 50%;
 }

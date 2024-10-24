@@ -1,3 +1,0 @@
-//autenticacion
-
-console.log('hola')

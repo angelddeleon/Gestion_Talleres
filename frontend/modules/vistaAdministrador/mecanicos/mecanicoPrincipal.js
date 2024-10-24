@@ -10,6 +10,7 @@ let formularioCLiente = document.querySelector('.formClient')
 
 
 function desplegarForm(){
+    console.log('hola')
 
     if (formularioCLiente.classList.contains("oculto")){
         formularioCLiente.classList.remove('oculto')
@@ -35,7 +36,7 @@ if (clients.length == 0){
 
     content += `
 
-        <p class="centrado">No hay clientes todavia</p>
+        <p class="centrado">No hay mecanicos todavia</p>
     `; 
 
     divTabla.innerHTML += content
@@ -57,17 +58,10 @@ document.getElementById("form").addEventListener("submit", (event) => {
     let content = ''
 
     content += `
-        <table  id="tabla">
+        <table id="tabla">
             <tr>
                 <th>Id</th>
                 <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Telefono</th>
-                <th>Correo</th>
-                <th>Marca</th>
-                <th>Modelo</th>
-                <th>Descripcion</th>
-                <th>Mecanicos</th>
             </tr>
         </table>
     `; 

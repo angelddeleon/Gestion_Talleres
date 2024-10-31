@@ -8,7 +8,7 @@ const absolutePath = path.resolve(__dirname, '../frontend/modules/vistaAdministr
 
 
 // define port
-const port = process.env.PORT || 3000
+const PORT = process.env.PORT || 3000
 
 app.get('/', (req, res) => {
     res.sendFile(absolutePath)
@@ -20,6 +20,7 @@ app.get('/', (req, res) => {
   });
 
 
-app.listen(port)
+app.listen(PORT ,()=>{
+  console.log(`Server is running on port ${PORT}`)
+})
 
-console.log("hola")

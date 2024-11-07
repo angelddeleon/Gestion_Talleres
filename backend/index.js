@@ -2,24 +2,39 @@ const express = require('express')
 const path = require('path')
 
 
+
 const app = express()
-
-const absolutePath = path.resolve(__dirname, '../frontend/modules/vistaAdministrador/clientes/clientes.html');
-
-
-// define port
 const port = process.env.PORT || 3000
 
-app.get('/', (req, res) => {
-    res.sendFile(absolutePath)
+app.use(
+  express.urlencoded({
+    extended: true
+  })
+)
+
+app.use(express.json({
+  type: "*/*"
+}))
+
+let clientes = [{id: 0 ,name: 'Angel'} ]
+
+
+app.get("/clientes", (req, res) =>{
+  console.log(clientes)
+
+  res.send(clientes)
 })
 
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '../frontend/modules/vistaAdministrador/clientes/clientes.css');
-    res.type('text/css');
-  });
 
+app.post("/clientes", (req, res) =>{
+    const nuevoCliente = req.body;
+
+    console.log("llego info" + JSON.stringify(nuevoCliente))
+
+
+})
 
 app.listen(port)
+
 
 console.log("hola")

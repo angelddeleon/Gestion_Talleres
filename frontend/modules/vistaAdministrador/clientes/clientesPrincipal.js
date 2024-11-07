@@ -24,6 +24,22 @@ function desplegarForm(){
 
 let clients = []
 
+async function fetchClients() {
+    try {
+        let response = await fetch('http://localhost:3000/clientes');
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        let clientsApi = await response.json(); // Asegúrate de convertir la respuesta a JSON
+        console.log(clientsApi); // Aquí puedes ver los datos
+    } catch (error) {
+        console.error('Error fetching clients:', error);
+    }
+}
+
+fetchClients()
+
+
 
 // Si no hay clientes registrados muestra en el html eso
 
@@ -49,6 +65,15 @@ document.getElementById("form").addEventListener("submit", (event) => {
     event.preventDefault();
 
     let name = document.getElementById("nombre").value;
+
+    let nameCliente = document.getElementById("nombre").value;
+    let transaccion = {name: nameCliente}
+    let transaccionJson = JSON.stringify(transaccion)
+
+    fetch('http://localhost:3000/clientes',{
+        method: 'Post',
+        body: transaccionJson
+    })
 
     clients.push(name)
 

@@ -1,0 +1,83 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.oculto{
+    display: none;
+}
+
+.contenedor {
+    height: 100vh;
+  }
+
+h2 {
+    margin-top: 1em;
+    text-align: center;
+}
+
+.contForm {
+    position: relative;
+
+    background-color: #fff;
+
+    top: 20%;
+    left: 30%;
+
+
+    width: 30%;
+
+    padding: 2em;
+    box-shadow: 5px 5px 5px 5px rgba(51, 51, 51, 0.795);
+}
+
+
+  
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Opcional: asegura que los elementos del formulario se alineen en el centro verticalmente */
+
+    align-items: center;
+  }
+
+
+h2{
+    margin-bottom: 2em;
+}
+
+input {
+    height: 3em;
+    width: 80%;
+    padding: 5px;
+
+
+    margin-bottom: 2em;
+
+}
+
+button {
+    height: 3em;
+    width: 40%;
+
+    margin-top: 1em;
+    margin-bottom: 1em;
+
+    background-color: #313131;
+    border: none;
+    color: #fff;
+
+}
+
+p {
+    text-decoration-color: #313131;
+    text-decoration-line: underline;
+    color: #313131;
+    position: relative;
+    margin-top: 2em;
+    cursor: pointer;
+
+    text-align: center;
+}
+

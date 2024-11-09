@@ -3,56 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< HEAD:frontend/modules/login/sign_up/login.html
-    <link rel="stylesheet" href="login.css">
+
+    <link rel="stylesheet" href="./login.css">
     <title>Document</title>
 </head>
 <body>
 
     <div class="contenedor">
 
-        <div class="contForm divSignin">
-            <h2>Sign In</h2>
+        <div class="contForm" id="divSignin">
+            <h2>Crear Cuenta</h2>
 
-            <form >
-                <label for="correo">Ingrese un Correo electronico</label>
-                <input type="email" name="correo" class="correo">
-                <label for="">Ingrese una Contrasena</label>
-                <input type="password" name="" class="password">
+            <form id="formSignIn">
+
+                <input type="email" name="correo" id="correoSignIn" placeholder="Email">
+
+                <input type="password" name="" class="passwordSignIn" placeholder="Password">
     
-                <button type="submit">Crear Cuenta</button>
+                <button id="signInButton" >Crear Cuenta</button>
     
             </form>
-    
+
+
+            <p onclick="desplegarContenedor()">Ya tienes una cuenta?</p>
 
         </div>
 
-        <div class="contFrom divLogin oculto">
+        <div class="contForm oculto" id="divLogin">
 
             <h2>Log In</h2>
 
-            <form>
-                <label for="correo">Ingrese un Correo electronico</label>
-                <input type="email" name="correo" class="correo">
-                <label for="">Ingrese una Contrasena</label>
-                <input type="password" name="" class="password">
+            <form id="formLogIn">
+                <input type="email" name="correo" class="correo" placeholder="Email">
+
+                <input type="password" name="" class="password" placeholder="Password">
     
-                <button type="submit">Crear Cuenta</button>
+                <button type="submit">Ingresar</button>
     
             </form>
+
+            
+            <p onclick="desplegarContenedor()">No tienes una cuenta todavia?</p>
     
         </div>
 
 
     </div>
 
-=======
-    <title>Login</title>
-</head>
-<body>
-
-    <h1>LOGIN</h1>
->>>>>>> 4cb9965f1693cd7c6c1717a3a7786cceb8c0291f:frontend/index.html
-    
 </body>
+<script src="login.js"></script>
+
 </html>

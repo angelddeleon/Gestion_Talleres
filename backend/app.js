@@ -4,11 +4,16 @@ import mecanicosRouter from "./routes/mecanicos/mecanicosRoutes.js"
 import reparacionesRouter from "./routes/reparaciones/reparacionesRoutes.js"
 import vehiculosRouter from "./routes/vehiculos/vehiculosRoutes.js"
 
+import signInRouter from './routes/signIn/signinRoutes.js';
+
 const app = express()
 const PORT = process.env.PORT || 3000
 
 
 app.use(json())
+
+app.use('/signIn', signInRouter)
+
 app.use('/clientes', clientesRouter)
 app.use('/mecanicos', mecanicosRouter)
 app.use('/vehiculos', vehiculosRouter)

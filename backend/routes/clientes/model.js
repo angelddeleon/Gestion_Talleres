@@ -22,7 +22,8 @@ await client.execute(`
         direccion TEXT NOT NULL
         )
       `)
-      
+
+      //Prueba
 await client.execute(`
     INSERT INTO CLIENTES (nombre, telefono, correo, cedula, direccion) VALUES
         ('Juan Pérez', '0414-1234567', 'juan.perez@example.com', '12345678', 'Av. Principal, Edif. Apto 2'),

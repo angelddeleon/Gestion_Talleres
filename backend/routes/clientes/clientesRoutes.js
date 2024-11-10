@@ -57,9 +57,9 @@ clientesRouter.delete("/:cedula", async (req, res) =>{
 })
 
 clientesRouter.patch("/:cedula", async(req, res) =>{
-
     const { cedula } = req.params
     
+
 
 
 

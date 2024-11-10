@@ -2,7 +2,7 @@
 GET http://localhost:3000/clientes
 
 ###Obtener un cliente por su cedula
-GET http://localhost:3000/clientes/12345678
+GET http://localhost:3000/clientes/29764828
 
 ###Crear un cliente 
 

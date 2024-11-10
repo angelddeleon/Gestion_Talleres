@@ -1,0 +1,21 @@
+###Obtener todos los clientes
+GET http://localhost:3000/clientes
+
+###Obtener un cliente por su cedula
+GET http://localhost:3000/clientes/12345678
+
+###Crear un cliente 
+
+POST http://localhost:3000/clientes
+Content-Type: application/json
+
+{
+    "nombre":"Andres Ng",
+    "cedula":"29764828",
+    "telefono":"04244645645",
+    "direccion":"Calle 123",
+    "correo":"ngandres2003@gmail.com"
+}
+
+###Eliminar un cliente por cedula
+DELETE http://localhost:3000/clientes/29764828

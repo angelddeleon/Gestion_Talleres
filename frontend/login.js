@@ -30,7 +30,7 @@ function desplegarContenedor() {
 }
 
 async function pedirDatos() {
-    const respuesta = await fetch('http://localhost:3000/signIn')
+    const respuesta = await fetch('http://localhost:3000/signin')
 
     console.log(respuesta)
 
@@ -45,17 +45,29 @@ signInButton.addEventListener("click", e => {
 
     let correo = document.getElementById("correoSignIn").value
     let contrasena = document.getElementById("passwordSignIn").value
+    let role = document.getElementById("listaRoles").value
 
-    let transaccion = {correo: correo, contrasena: contrasena}
+    let transaccion = {email: correo, password: contrasena, role: role}
     let transaccionJson = JSON.stringify(transaccion)
 
     console.log(transaccion)
     console.log(transaccionJson)
 
-    fetch('http://localhost:3000/signIn', {
+
+    fetch('http://localhost:3000/signin', {
         method: 'POST',
-        body: transaccion
+        headers: {
+            'Content-Type': 'application/json' // Asegúrate de incluir este encabezado
+        },
+        body: transaccionJson
     })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data); // Maneja la respuesta aquí
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
 
 
 

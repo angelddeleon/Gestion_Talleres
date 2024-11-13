@@ -25,4 +25,23 @@ mecanicosRouter.get("/especialidad", async( req, res) =>{
 })
 
 
+mecanicosRouter.get("/:cedula", async (req, res) =>{
+    try{
+
+    
+    const { cedula } = req.params
+    const response = await client.execute(`SELECT * FROM MECANICOS WHERE cedula = '${cedula}'`)
+    if(response.rows.length === 0){
+        return res.status(404).json({error: "Mecanico no encontrado"})
+
+    }
+    return res.json(response.rows)
+}catch{
+    res.status(500).json({message: "Error al obtener el mecanico"})
+}
+})
+
+
+
+
 export default mecanicosRouter

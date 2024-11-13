@@ -19,7 +19,11 @@ clientesRouter.get("/:cedula", async(req, res) =>{
     try{
         const { cedula } = req.params
         const cliente = await client.execute(`SELECT * FROM clientes WHERE cedula = '${cedula}'`)
-        res.json(cliente.rows)
+
+        if (cliente.rows.length ===0){
+            return res.status(404).json({error: "Cliente no encontrado"})
+        }
+        return res.json(cliente.rows)
     }catch (e){
         res.status(500).json({error: e})
     }

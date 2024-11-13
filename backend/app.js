@@ -13,7 +13,6 @@ const PORT = process.env.PORT || 3000
 app.use(json())
 
 app.use('/signIn', signInRouter)
-
 app.use('/clientes', clientesRouter)
 app.use('/mecanicos', mecanicosRouter)
 app.use('/vehiculos', vehiculosRouter)

@@ -3,10 +3,7 @@ let divTabla = document.getElementById("divTabla")
 
 let editeForm = document.getElementById("editarForm")
 
-let formularioCLiente = document.querySelector('.formClient')
-
-
-
+let formularioCLiente = document.querySelector('.contForm')
 
 
 function desplegarForm(){
@@ -20,48 +17,9 @@ function desplegarForm(){
 
 }
 
-// Almacena la lista de clientes
+// Crear Tabla 
 
-let clients = []
-
-
-
-// Si no hay clientes registrados muestra en el html eso
-
-if (clients.length == 0){
-
-    divTabla.innerHTML = ''
-
-    let content = ''
-
-    content += `
-
-        <p class="centrado">No hay clientes todavia</p>
-    `; 
-
-    divTabla.innerHTML += content
-
-}
-
-
-//Adding Clients to the Array
-
-document.getElementById("form").addEventListener("submit", (event) => {
-    event.preventDefault();
-
-    let name = document.getElementById("nombre").value;
-
-    let nameCliente = document.getElementById("nombre").value;
-    let transaccion = {name: nameCliente}
-    let transaccionJson = JSON.stringify(transaccion)
-
-    fetch('http://localhost:3000/clientes',{
-        method: 'Post',
-        body: transaccionJson
-    })
-
-    clients.push(name)
-
+function crearTabla() {
     divTabla.innerHTML = ''
 
     let content = ''
@@ -83,12 +41,73 @@ document.getElementById("form").addEventListener("submit", (event) => {
     `; 
 
     divTabla.innerHTML += content
+}
+
+//Crear clientes 
+
+// Almacena la lista de clientes
+
+let clients = []
+
+
+
+// Si no hay clientes registrados muestra en el html eso
+
+function hayClientes() {
+    if (clients.length == 0){
+
+        divTabla.innerHTML = ''
+    
+        let content = ''
+    
+        content += `
+            <p class="centrado">No hay clientes todavia</p>
+        `; 
+    
+        divTabla.innerHTML += content
+
+        return console.log('no hay clientes')
+    
+    }
+}
+
+
+hayClientes()
+
+//Adding Clients to the Array
+
+function crearCliente(params) {
+
+    let name = document.getElementById("nombre").value;
+
+    let nameCliente = document.getElementById("nombre").value;
+    let transaccion = {name: nameCliente}
+    let transaccionJson = JSON.stringify(transaccion)
+
+    fetch('http://localhost:3000/clientes',{
+        method: 'Post',
+        body: transaccionJson
+    })
+
+    clients.push(name)
+
+    crearTabla()
+
+    
 
     clients.forEach(createClient)
 
     desplegarForm()
 
     console.log(clients)
+    
+}
+
+document.getElementById("form").addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    
+
 
 })
 
@@ -157,6 +176,7 @@ document.getElementById("cambiarNombre").addEventListener("submit", (e) => {
 /*It can be used a arrayFilter */
 
 function deleteClient(indexCLient) {
+
     let newClient = []
     
     for (let index = 0; index < clients.length; index++) {
@@ -167,22 +187,28 @@ function deleteClient(indexCLient) {
 
     clients = newClient
 
+    console.log(`Tamano del array: ${clients.length}`)
+
+    if (clients.length === 0) {
+
+        divTabla.innerHTML = ''
+
+        let content = ''
+    
+        content += `
+            <p class="centrado">No hay clientes todavia</p>
+        `; 
+    
+        divTabla.innerHTML += content
+
+        return console.log('no hay clientes')
+        
+    }
+
+
     console.log(clients)
 
-    divTabla.innerHTML = ''
-
-    let content = ''
-
-    content += `
-        <table id="tabla">
-            <tr>
-                <th>Id</th>
-                <th>Nombre</th>
-            </tr>
-        </table>
-    `; 
-
-    divTabla.innerHTML += content
+    crearTabla()
 
     clients.forEach(createClient)
     

@@ -11,9 +11,12 @@
     <div class="contPrincipal">
 
         <div class="contIzquierdo">
+            
+            <ul id="listLinks">
+                <a href="../clientes/clientes.html">Clientes</a>
+                <a href="../mecanicos/mecanico.html">Mecanicos</a>
+            </ul>
 
-            <a href="#">Clientes</a>
-            <a href="#">Mecanicos</a>
 
         </div>
 
@@ -30,22 +33,55 @@
             </div>
 
 
-            <div class="formClient oculto">
+            <div class="contForm oculto">
 
-                <button class="botonCerrar" onclick="desplegarForm()">X</button>
+                <div class="styleForm">
+
+                    <button class="botonCerrar" onclick="desplegarForm()">X</button>
+                    
+                    <h2>Nuevo cliente</h2>
+
+            
+                    <form action="" name="form" id="form">
+    
+
+    
+                        <label for="nombre">Nombre</label>
+                        <input type="text" name="Nombre" id="nombre">
+
+                        <label for="apellido">Apellido</label>
+                        <input type="text" name="Apellido" id="apellido">
+
+                        <label for="telefono">Telefono</label>
+                        <input type="text" name="telefono" id="telefono">
+
+                        <label for="primerNombre">Marca</label>
+                        <input type="text" name="Apellido" id="apellido">
+
+                        <label for="primerNombre">Modelo</label>
+                        <input type="text" name="Apellido" id="apellido">
+
+                        <label for="primerNombre">Año</label>
+                        <input type="number" name="ano" id="ano" >
+
+                        <label for="primerNombre">Mecanicos</label>
+                        <input type="text" name="Apellido" id="apellido">
+
+                        <label for="primerNombre">Estado</label>
+                        <select name="" id="">
+                            <option value="">Pendiente</option>
+                            <option value="">Revision</option>
+                            <option value="">Reparacion</option>
+                        </select>
 
 
-                <form action="" name="form" id="form">
+    
+                    </form>
 
+                    <button onclick="crearCliente()" class="crearClienteButton">Crear Clientex</button>
 
-                    <h2>Formulario Nuevo cliente</h2>
+                </div>
 
-                    <label for="primerNombre">Nombre:</label>
-                    <input type="text" name="Nombre" id="nombre">
-
-                    <button type="submit" >Crear Clientex</button>
-
-                </form>
 
             </div>
 

@@ -23,6 +23,8 @@ await client.execute(`
         )
       `)
 
+      
+
       //Prueba
 await client.execute(`
     INSERT INTO CLIENTES (nombre, telefono, correo, cedula, direccion) VALUES

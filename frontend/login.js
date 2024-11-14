@@ -64,6 +64,7 @@ signInButton.addEventListener("click", e => {
     .then(response => response.json())
     .then(data => {
         console.log(data); // Maneja la respuesta aquí
+        desplegarContenedor()
     })
     .catch(error => {
         console.error('Error:', error);
@@ -75,5 +76,7 @@ signInButton.addEventListener("click", e => {
 
     console.log(correo)
     console.log(contrasena)
+
+    
 
 })

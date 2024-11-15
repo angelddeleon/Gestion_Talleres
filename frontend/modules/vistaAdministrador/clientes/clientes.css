@@ -128,9 +128,7 @@ td {
     color: #fff;
 }
 
-#editarForm {
-    visibility: hidden;
-}
+
 
 .contForm {
     position: absolute;
@@ -178,10 +176,8 @@ td {
 
     font-size: 1em;
 
-    
-
     padding: 0.1rem;
-    color: #272727;
+    color: #2727277a;
     background-color: transparent;
     border: 1px solid #2727277a ;
     border-radius: 20%;

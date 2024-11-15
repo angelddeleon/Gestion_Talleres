@@ -8,15 +8,16 @@
 
 </head>
 <body>
+
     <div class="contPrincipal">
 
         <div class="contIzquierdo">
-
-                        
+            
             <ul id="listLinks">
                 <a href="../clientes/clientes.html">Clientes</a>
                 <a href="../mecanicos/mecanico.html">Mecanicos</a>
             </ul>
+
 
         </div>
 
@@ -27,44 +28,80 @@
 
                     <h1>Mecanicos</h1>
 
-                    <button onclick="desplegarForm()">Crear Cliente</button>
+                    <button onclick="desplegarForm('crearMecanico')">Crear Mecanico</button>
 
                 
             </div>
 
 
-            <div class="formClient oculto">
+            <div class="contForm formCrearMecanico oculto">
 
-                <button class="botonCerrar" onclick="desplegarForm()">X</button>
+                <div class="styleForm">
 
+                    <button class="botonCerrar" onclick="desplegarForm('crearMecanico')">X</button>
+                    
+                    <h2>Nuevo Mecanico</h2>
 
-                <form action="" name="form" id="form">
+            
+                    <form action="" name="form" id="form">
+    
+                        <label for="nombre">Nombre</label>
+                        <input type="text" name="Nombre" id="nombre">
 
+                        <label for="apellido">Apellido</label>
+                        <input type="text" name="Apellido" id="apellido">
 
-                    <h2>Formulario Nuevo cliente</h2>
+                        <label for="telefono">Telefono</label>
+                        <input type="text" name="telefono" id="telefono">
 
-                    <label for="primerNombre">Nombre:</label>
-                    <input type="text" name="Nombre" id="nombre">
+                        <label for="correo">Correo</label>
+                        <input type="text" name="correo" id="correo">
+    
+                    </form>
 
-                    <button type="submit" >Crear Clientex</button>
+                    <button onclick="crearMecanico()" class="crearClienteButton">Crear Mecanico</button>
 
-                </form>
+                </div>
+
 
             </div>
 
             <div id="divTabla">
-                
 
 
             </div>
 
-            <div id="editarForm">
-                <form action="" id="cambiarNombre">
-                    <label for="">Cambiar Nombre:</label>
-                    <input type="text" id="nuevoNombre">
-                    <button type="submit" > Cambiar Nombre</button>
-                </form>
+            <div class="contForm formEditarMecanico oculto">
+                <div class="styleForm">
+
+                    <button class="botonCerrar" onclick="desplegarForm()">X</button>
+                    
+                    <h2>Editar Cliente</h2>
+
+            
+                    <form action="" name="form" id="form">
+    
+                        <label for="nombre">Nombre</label>
+                        <input type="text" name="Nombre" id="nuevoNombre">
+
+                        <label for="apellido">Apellido</label>
+                        <input type="text" name="Apellido" id="apellido">
+
+                        <label for="telefono">Telefono</label>
+                        <input type="text" name="telefono" id="telefono">
+
+                        <label for="correo">Correo</label>
+                        <input type="text" name="correo" id="correo">
+    
+                    </form>
+
+                    <button onclick="editarMecanico()" class="crearClienteButton">Editar Mecanico</button>
+
+                </div>
+
             </div>
+
+
 
 
         </div>

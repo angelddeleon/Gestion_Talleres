@@ -3,78 +3,112 @@ let divTabla = document.getElementById("divTabla")
 
 let editeForm = document.getElementById("editarForm")
 
-let formularioCLiente = document.querySelector('.formClient')
+let formularioCrearMecanico = document.querySelector('.formCrearMecanico')
+let formularioEditar = document.querySelector('.formEditarMecanico')
 
 
+function desplegarForm(nombreVentana){
+    if(nombreVentana === 'crearMecanico'){
 
+        if (formularioCrearMecanico.classList.contains("oculto")){
+            formularioCrearMecanico.classList.remove('oculto')
+            
+        } else {
+            formularioCrearMecanico.classList.add('oculto')
+        }
 
+        return
 
-function desplegarForm(){
-    console.log('hola')
-
-    if (formularioCLiente.classList.contains("oculto")){
-        formularioCLiente.classList.remove('oculto')
-        
-    } else {
-        formularioCLiente.classList.add('oculto')
     }
 
+    //Abrir el otro formulario
+
+    if (formularioEditar.classList.contains("oculto")){
+        formularioEditar.classList.remove('oculto')
+        
+    } else {
+        formularioEditar.classList.add('oculto')
+    }
+
+
+
+
 }
 
-// Almacena la lista de clientes
+// Crear Tabla 
 
-let clients = []
-
-
-// Si no hay clientes registrados muestra en el html eso
-
-if (clients.length == 0){
-
+function crearTabla() {
     divTabla.innerHTML = ''
 
     let content = ''
 
     content += `
-
-        <p class="centrado">No hay mecanicos todavia</p>
-    `; 
-
-    divTabla.innerHTML += content
-
-}
-
-
-//Adding Clients to the Array
-
-document.getElementById("form").addEventListener("submit", (event) => {
-    event.preventDefault();
-
-    let name = document.getElementById("nombre").value;
-
-    clients.push(name)
-
-    divTabla.innerHTML = ''
-
-    let content = ''
-
-    content += `
-        <table id="tabla">
+        <table  id="tabla">
             <tr>
                 <th>Id</th>
                 <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Telefono</th>
+                <th>Correo</th>
             </tr>
         </table>
     `; 
 
     divTabla.innerHTML += content
+}
 
-    clients.forEach(createClient)
+//Crear mecanicos
 
-    desplegarForm()
+// Almacena la lista de clientes
 
-    console.log(clients)
+let mecanicos = []
 
-})
+
+
+// Si no hay clientes registrados muestra en el html eso
+
+
+    if (mecanicos.length == 0){
+
+        divTabla.innerHTML = ''
+    
+        let content = ''
+    
+        content += `
+            <p class="centrado">No hay mecanicos todavia</p>
+
+        `; 
+    
+        divTabla.innerHTML += content
+
+    }
+
+//Adding Clients to the Array
+
+function crearMecanico() {
+
+    let name = document.getElementById("nombre").value;
+
+    let nameCliente = document.getElementById("nombre").value;
+    let transaccion = {name: nameCliente}
+    let transaccionJson = JSON.stringify(transaccion)
+
+    fetch('http://localhost:3000/clientes',{
+        method: 'Post',
+        body: transaccionJson
+    })
+
+    mecanicos.push(name)
+
+    crearTabla()    
+
+    mecanicos.forEach(createClient)
+
+    desplegarForm('crearMecanico')
+
+    console.log(mecanicos)
+    
+}
 
 
 //Render the clients in the frontend
@@ -89,8 +123,8 @@ function createClient(name, index){
                 <tr>
                     <td>${index}</td>
                     <td>${name}</td>
-                    <td><button class="delete" onclick="deleteClient(${index})">Delete</button></td>
-                    <td><button class="edite" onclick="EditeClient(${index})">Edite</button></td>
+                    <td><button class="delete" onclick="deleteMecanico(${index})">Delete</button></td>
+                    <td><button class="edite" onclick="EditeMecanico(${index})">Edite</button></td>
                                 
                 </tr>
         
@@ -102,77 +136,82 @@ function createClient(name, index){
 }
 
 
-//Set the edite client form to visible
+//Toma que Cliente se quiere Editar y despliega el formulario
 
-function EditeClient(indexCLient) {
+function EditeMecanico(indexCLient) {
+    desplegarForm()
     
     console.log(indexCLient);
-    editeForm.style.visibility = "visible";
 
     document.getElementById("nuevoNombre").dataset.index = indexCLient;
+
 }
 
-//Edites Client and hidden again the form
+//Edita el cliente y esconde el formulario
 
-document.getElementById("cambiarNombre").addEventListener("submit", (e) => {
-    e.preventDefault();
+function editarMecanico() {
 
     let nuevoNombre = document.getElementById("nuevoNombre").value;
     let indexCLient = document.getElementById("nuevoNombre").dataset.index;
 
     console.log(nuevoNombre);
+    console.log(indexCLient)
 
-    clients[indexCLient] = nuevoNombre;
+    mecanicos[indexCLient] = nuevoNombre;
 
-    console.log(clients);
+    console.log(mecanicos);
 
-    divTabla.innerHTML = '';
+    crearTabla()    
 
-    clients.forEach(createClient);
+    mecanicos.forEach(createClient)
 
     console.log("Despues de enviar los datos");
 
     console.log(nuevoNombre);
-    console.log(clients);
+    console.log(mecanicos);
 
-    editeForm.style.visibility = "hidden";
-});
-
-/*It can be used a arrayFilter */
-
-function deleteClient(indexCLient) {
-    let newClient = []
+    desplegarForm()
     
-    for (let index = 0; index < clients.length; index++) {
-        if (indexCLient !== index){
-            newClient.push(clients[index])
-        }
-    }
-
-    clients = newClient
-
-    console.log(clients)
-
-    divTabla.innerHTML = ''
-
-    let content = ''
-
-    content += `
-        <table id="tabla">
-            <tr>
-                <th>Id</th>
-                <th>Nombre</th>
-            </tr>
-        </table>
-    `; 
-
-    divTabla.innerHTML += content
-
-    clients.forEach(createClient)
-    
-
 }
 
 
+/*It can be used a arrayFilter */
+
+function deleteMecanico(indexMecanico) {
+
+    let newMecanico = []
+    
+    for (let index = 0; index < mecanicos.length; index++) {
+        if (indexMecanico !== index){
+            newMecanico.push(mecanicos[index])
+        }
+    }
+
+    mecanicos = newMecanico
 
 
+
+    if (mecanicos.length === 0) {
+
+        divTabla.innerHTML = ''
+
+        let content = ''
+    
+        content += `
+            <p class="centrado">No hay mecanicos todavia</p>
+        `; 
+    
+        divTabla.innerHTML += content
+
+        return console.log('No hay mecanicos')
+        
+    }
+
+
+    console.log(mecanicos)
+
+    crearTabla()
+
+    mecanicos.forEach(createClient)   
+
+}

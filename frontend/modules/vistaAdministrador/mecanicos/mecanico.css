@@ -9,7 +9,7 @@
     display: flex;
     height: 100vh;
     width: 100vw;
-
+    
 }
 
 .contIzquierdo {
@@ -18,6 +18,8 @@
     background-color: #272727;
     width: 20%;
     height: 100%;
+
+    z-index: 3;
 
     border-radius: 0% 5% 5% 0%;
 }
@@ -34,6 +36,8 @@
     align-items: center;
     justify-content: flex-start;
 
+
+
 }
 
 .contIzquierdo a {
@@ -44,17 +48,19 @@
 }
 
 
-.contDerecho {
-    
+.contDerecho {    
     height: 100%;
     width: 100%;
-    overflow: hidden;
+    overflow: auto;
 }
 
 .cabecera {
 
+    font-family: Verdana;
+    font-weight: 100;
+
     position: fixed;
-    width: 100%;
+    width: 82.5%;
     height: 15%;
 
     display: flex;
@@ -69,9 +75,9 @@
 
     padding: 10px;
     color: #fff;
-    background-color: black;
+    background-color: #272727;
     border: none transparent ;
-    border-radius: 5%;
+    border-radius: 5% 5%;
 }
 
 .cabecera button:hover {
@@ -80,15 +86,28 @@
 }
 
 
-#divTabla {
-    border: 2px dashed black;
-    
+#divTabla {    
     position: fixed;
-    
+    width: 78%;
 
     top: 20%;
-    left: 50%;
-    padding: 20px;
+    left: 20%;
+
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid;
+    text-align: center;
+}
+
+th {
+    border: 1px solid;
+}
+
+td {
+    border: 1px solid   
 }
 
 .delete{
@@ -109,72 +128,162 @@
     color: #fff;
 }
 
-#editarForm {
-    visibility: hidden;
-}
-
-.clientCard {
-    width: 160px;
-    height: 140px;
-    padding: 30px 20px;
-    margin: 0px;
-    border-radius: 20px;
-    box-shadow: 5px 5px 8px 2px rgb(87, 87, 87);
-}
 
 
-.formClient {
-
+.contForm {
     position: absolute;
 
     z-index: 2;
     background-color: rgba(0, 0, 0, 0.158);
-    width: 98.9%;
+    width: 83.70%;
     height: 100%;
+
+    left: 16.3%;
+
+    overflow: hidden;
 }
 
-.formClient .botonCerrar{
-    position: absolute;
-    float: left;
+.styleForm {
 
-    padding: 10px;
-    color: #fff;
-    background-color: black;
-    border: none transparent ;
+
+    display: flex;
+    flex-direction: column;
+
+    position: absolute;
+    top: 8%;
+    left: 25%;
+    width: 38%;
+    height: 80%;
+
+    padding: 0.6rem;
+
+
+    background-color: #fff;
     border-radius: 5%;
+
+    overflow: hidden;
+
+}
+
+
+
+.botonCerrar{
+    align-self: flex-end;
+
+
+    width: 7%;
+    height: 9%;
+
+    font-size: 1em;
+
+    padding: 0.1rem;
+    color: #2727277a;
+    background-color: transparent;
+    border: 1px solid #2727277a ;
+    border-radius: 20%;
+
+}
+
+.styleForm h2 {
+    align-self: center;
+
 }
 
 
 form {
-
-    position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-start;
+    align-items: flex-start;
 
-    top: 20%;
-    left: 20%;
+    padding-right: 0.5em;
 
-    width: 50%;
-    height: 40%;
+    margin: 1em 0;
 
-    background-color: #fff;
-    border-radius: 9%;
+    overflow-y: scroll;
 
+}
+
+form::-webkit-scrollbar {
+    margin: 0.5em;
+    padding: 0.5em;
+    width: 0.4em;
+}
+
+form::-webkit-scrollbar-track {
+    background-color: transparent;
 }
 
 
 
-form h2{
-    margin: 20px 0px;
+form::-webkit-scrollbar-thumb {
+    background-color: gray; /* Color de la barra de desplazamiento */
+    border-radius: 10px; /* Bordes redondeados */
+}
+
+/* Ocultar los botones de la barra de desplazamiento */
+form::-webkit-scrollbar-button {
+    display: none; /* Oculta los botones de desplazamiento */
+}
+
+form label {
+    margin-bottom: 0.8em;
+    margin-left: 0.5em;
 }
 
 form input{
-    width: 20%;
-    margin: 20px;
+    width: 100%;
+
+    margin-bottom: 0.8em;
+
+    padding: 1em;
+    background-color: transparent;
+    border: #2727277a 2px solid;
+    border-radius: 1em;
+    
+}
+
+select {
+    width: 100%;
+
+    margin-bottom: 0.8em;
+
+    padding: 1em;
+    background-color: transparent;
+    border: #2727277a 2px solid;
+    border-radius: 1em;
+
+}
+
+form input:focus {
+    background-color: transparent; /* Mantener el fondo transparente */
+    outline: none; /* Eliminar el contorno predeterminado */
+    border-color: #272727; /* Cambiar el color del borde si lo deseas */
+}
+
+
+
+.styleForm .crearClienteButton {
+    align-self: center;
+
+    font-size: 1em;
+
+    width: 45%;
+    height: 3em;
+
+    padding: 1em;
+    color: #fff;
+    background-color: #272727;
+    border: none transparent ;
+    border-radius: 5% 5%;
+
 }
 
 .oculto{
     display: none;
+}
+
+.centrado {
+    position: fixed;
+    left: 50%;
 }

@@ -27,17 +27,17 @@
 
                     <h1>Clientes</h1>
 
-                    <button onclick="desplegarForm()">Crear Cliente</button>
+                    <button onclick="desplegarForm('crearCliente')">Crear Cliente</button>
 
                 
             </div>
 
 
-            <div class="contForm oculto">
+            <div class="contForm formCrearCliente oculto">
 
                 <div class="styleForm">
 
-                    <button class="botonCerrar" onclick="desplegarForm()">X</button>
+                    <button class="botonCerrar" onclick="desplegarForm('crearCliente')">X</button>
                     
                     <h2>Nuevo cliente</h2>
 
@@ -91,13 +91,55 @@
 
             </div>
 
-            <div id="editarForm">
-                <form action="" id="cambiarNombre">
-                    <label for="">Cambiar Nombre:</label>
-                    <input type="text" id="nuevoNombre">
-                    <button type="submit" > Cambiar Nombre</button>
-                </form>
+            <div class="contForm formEditarCliente oculto">
+                <div class="styleForm">
+
+                    <button class="botonCerrar" onclick="desplegarForm()">X</button>
+                    
+                    <h2>Editar Cliente</h2>
+
+            
+                    <form action="" name="form" id="form">
+    
+                        <label for="nombre">Nombre</label>
+                        <input type="text" name="Nombre" id="nuevoNombre">
+
+                        <label for="apellido">Apellido</label>
+                        <input type="text" name="Apellido" id="apellido">
+
+                        <label for="telefono">Telefono</label>
+                        <input type="text" name="telefono" id="telefono">
+
+                        <label for="primerNombre">Marca</label>
+                        <input type="text" name="Apellido" id="apellido">
+
+                        <label for="primerNombre">Modelo</label>
+                        <input type="text" name="Apellido" id="apellido">
+
+                        <label for="primerNombre">Año</label>
+                        <input type="number" name="ano" id="ano" >
+
+                        <label for="primerNombre">Mecanicos</label>
+                        <input type="text" name="Apellido" id="apellido">
+
+                        <label for="primerNombre">Estado</label>
+                        <select name="" id="">
+                            <option value="">Pendiente</option>
+                            <option value="">Revision</option>
+                            <option value="">Reparacion</option>
+                        </select>
+
+
+    
+                    </form>
+
+                    <button onclick="editarCliente()" class="crearClienteButton">Editar Clientex</button>
+
+                </div>
+
             </div>
+
+
 
 
         </div>

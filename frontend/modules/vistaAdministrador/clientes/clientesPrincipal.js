@@ -3,17 +3,36 @@ let divTabla = document.getElementById("divTabla")
 
 let editeForm = document.getElementById("editarForm")
 
-let formularioCLiente = document.querySelector('.contForm')
+let formularioCLiente = document.querySelector('.formCrearCliente')
+let formularioEditar = document.querySelector('.formEditarCliente')
 
 
-function desplegarForm(){
+function desplegarForm(nombreVentana){
+    if(nombreVentana === 'crearCliente'){
+        console.log('CREAR CLIENTE FUNCIONA')
 
-    if (formularioCLiente.classList.contains("oculto")){
-        formularioCLiente.classList.remove('oculto')
+        if (formularioCLiente.classList.contains("oculto")){
+            formularioCLiente.classList.remove('oculto')
+            
+        } else {
+            formularioCLiente.classList.add('oculto')
+        }
+
+        return
+
+    }
+
+    //Abrir el otro formulario
+
+    if (formularioEditar.classList.contains("oculto")){
+        formularioEditar.classList.remove('oculto')
         
     } else {
-        formularioCLiente.classList.add('oculto')
+        formularioEditar.classList.add('oculto')
     }
+
+
+
 
 }
 
@@ -53,7 +72,7 @@ let clients = []
 
 // Si no hay clientes registrados muestra en el html eso
 
-function hayClientes() {
+
     if (clients.length == 0){
 
         divTabla.innerHTML = ''
@@ -66,17 +85,13 @@ function hayClientes() {
     
         divTabla.innerHTML += content
 
-        return console.log('no hay clientes')
+        
     
     }
-}
-
-
-hayClientes()
 
 //Adding Clients to the Array
 
-function crearCliente(params) {
+function crearCliente() {
 
     let name = document.getElementById("nombre").value;
 
@@ -91,25 +106,15 @@ function crearCliente(params) {
 
     clients.push(name)
 
-    crearTabla()
-
-    
+    crearTabla()    
 
     clients.forEach(createClient)
 
-    desplegarForm()
+    desplegarForm('crearCliente')
 
     console.log(clients)
     
 }
-
-document.getElementById("form").addEventListener("submit", (event) => {
-    event.preventDefault();
-
-    
-
-
-})
 
 
 //Render the clients in the frontend
@@ -137,41 +142,44 @@ function createClient(name, index){
 }
 
 
-//Set the edite client form to visible
+//Toma que Cliente se quiere Editar y despliega el formulario
 
 function EditeClient(indexCLient) {
+    desplegarForm()
     
     console.log(indexCLient);
-    editeForm.style.visibility = "visible";
 
     document.getElementById("nuevoNombre").dataset.index = indexCLient;
+
 }
 
-//Edites Client and hidden again the form
+//Edita el cliente y esconde el formulario
 
-document.getElementById("cambiarNombre").addEventListener("submit", (e) => {
-    e.preventDefault();
+function editarCliente() {
 
     let nuevoNombre = document.getElementById("nuevoNombre").value;
     let indexCLient = document.getElementById("nuevoNombre").dataset.index;
 
     console.log(nuevoNombre);
+    console.log(indexCLient)
 
     clients[indexCLient] = nuevoNombre;
 
     console.log(clients);
 
-    divTabla.innerHTML = '';
+    crearTabla()    
 
-    clients.forEach(createClient);
+    clients.forEach(createClient)
 
     console.log("Despues de enviar los datos");
 
     console.log(nuevoNombre);
     console.log(clients);
 
-    editeForm.style.visibility = "hidden";
-});
+    desplegarForm()
+    
+}
+
 
 /*It can be used a arrayFilter */
 

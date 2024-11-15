@@ -24,7 +24,6 @@ mecanicosRouter.get("/especialidad", async( req, res) =>{
     }
 })
 
-
 mecanicosRouter.get("/:cedula", async (req, res) =>{
     try{
 

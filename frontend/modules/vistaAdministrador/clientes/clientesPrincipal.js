@@ -7,11 +7,12 @@ let formularioCLiente = document.querySelector('.formCrearCliente')
 let formularioEditar = document.querySelector('.formEditarCliente')
 
 let menuAbierto = false
+let indexMenu = 0
 
 
 document.addEventListener('click', function(event) {
-    const opcionesMenu = document.getElementsByClassName("opcionesMenu")[0];
-    const botonMenu = document.getElementsByClassName("botonMenu")[0];
+    const opcionesMenu = document.getElementsByClassName("opcionesMenu")[indexMenu];
+    const botonMenu = document.getElementsByClassName("botonMenu")[indexMenu];
 
     // Verifica si el menú está abierto y si el clic no fue en el menú o el botón
     if (menuAbierto && !opcionesMenu.contains(event.target) && !botonMenu.contains(event.target)) {
@@ -99,8 +100,6 @@ let clients = []
         `; 
     
         divTabla.innerHTML += content
-
-        
     
     }
 
@@ -134,10 +133,14 @@ function crearCliente() {
 
 function openMenu(index) {
     console.log("hola")
-    console.log(index)
+    console.log('Antes ' + indexMenu)
     
     let botonMenu = document.getElementsByClassName("botonMenu")[index]
     let opcionesMenu = document.getElementsByClassName("opcionesMenu")[index]
+
+    indexMenu = index
+
+    console.log('Despues ' + indexMenu)
 
     if (opcionesMenu.classList.contains("oculto")){
         console.log("FUNCIONO")

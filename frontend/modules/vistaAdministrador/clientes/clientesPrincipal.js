@@ -6,6 +6,21 @@ let editeForm = document.getElementById("editarForm")
 let formularioCLiente = document.querySelector('.formCrearCliente')
 let formularioEditar = document.querySelector('.formEditarCliente')
 
+let menuAbierto = false
+
+
+document.addEventListener('click', function(event) {
+    const opcionesMenu = document.getElementsByClassName("opcionesMenu")[0];
+    const botonMenu = document.getElementsByClassName("botonMenu")[0];
+
+    // Verifica si el menú está abierto y si el clic no fue en el menú o el botón
+    if (menuAbierto && !opcionesMenu.contains(event.target) && !botonMenu.contains(event.target)) {
+        opcionesMenu.classList.add('oculto');
+        botonMenu.classList.remove('oculto');
+        menuAbierto = false; // Cambia el estado a cerrado
+    }
+});
+
 
 function desplegarForm(nombreVentana){
     if(nombreVentana === 'crearCliente'){
@@ -113,7 +128,32 @@ function crearCliente() {
     desplegarForm('crearCliente')
 
     console.log(clients)
+
+}
     
+
+function openMenu(index) {
+    console.log("hola")
+    console.log(index)
+    
+    let botonMenu = document.getElementsByClassName("botonMenu")[index]
+    let opcionesMenu = document.getElementsByClassName("opcionesMenu")[index]
+
+    if (opcionesMenu.classList.contains("oculto")){
+        console.log("FUNCIONO")
+        botonMenu.classList.add('oculto')
+        opcionesMenu.classList.remove('oculto')
+
+        menuAbierto = true
+        
+    } else {
+        console.log("FUNCIONO")
+        opcionesMenu.classList.add('oculto')
+        botonMenu.classList.remove('oculto')
+
+        menuAbierto = false
+    }
+
 }
 
 
@@ -129,8 +169,25 @@ function createClient(name, index){
                 <tr>
                     <td>${index}</td>
                     <td>${name}</td>
+                    <td>${name}</td>
+                    <td>${name}</td>
+                    <td>${name}</td>
+                    <td>${name}</td>
+                    <td>${name}</td>
+
                     <td><button class="delete" onclick="deleteClient(${index})">Delete</button></td>
                     <td><button class="edite" onclick="EditeClient(${index})">Edite</button></td>
+
+                    <td class="casillaBoton">
+                    <button class="botonMenu" onclick="openMenu(${index})">...</button>
+
+                    <div class="opcionesMenu oculto">
+                        <button class="deleteMenu" onclick="deleteClient(${index})">Delete</button>
+                        <button class="editeMenu" onclick="EditeClient(${index})">Edite</button>
+                    </div>
+
+                    </td>
+
                                 
                 </tr>
         

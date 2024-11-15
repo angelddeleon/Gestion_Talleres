@@ -98,17 +98,64 @@
 table {
     width: 100%;
     border-collapse: collapse;
-    border: 1px solid;
+    border: none;
     text-align: center;
 }
 
 th {
     border: 1px solid;
+    border-radius: 1em;
 }
 
 td {
-    border: 1px solid   
+    border: 1px solid;
+    border-radius: 1em;
 }
+
+.botonMenu {
+    opacity: 0;
+    background-color: #2727277a;
+    border: transparent;
+    border-radius: 1em;
+    width: 60%;
+    padding: 0.2em;
+    transition: 1s;
+    padding-left: 0.5em;
+}
+
+.casillaBoton {
+    width: 8%;
+    border: none;
+
+    padding: 0;
+    margin: 0;
+}
+
+.botonMenu:hover {
+    opacity: 1;
+    transition: 1s;
+}
+
+.opcionesMenu {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-self: flex-end;
+}
+
+
+.opcionesMenu button {
+    background-color: #2727271c;
+    border: none;
+    width: 100%;
+    padding: 0.5em;
+}
+
+.opcionesMenu button:hover{
+    background-color: #2727277a;
+
+}
+
 
 .delete{
     background-color: red;

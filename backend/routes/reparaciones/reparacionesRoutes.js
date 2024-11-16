@@ -21,7 +21,7 @@ reparacionesRouter.get("/", async (req, res) =>{
 
 reparacionesRouter.get("/detalles", async (req, res) =>{
     try{
-        const detalles = await client.execute(`SELECT * FROM DETALLES_REPARACIONES`)
+        const detalles = await client.execute(`SELECT * FROM DETALLES_REPARACION`)
         return res.json(detalles.rows)
 
     }catch{

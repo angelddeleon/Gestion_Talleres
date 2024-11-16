@@ -46,12 +46,39 @@ await client.execute(`
     
 
 await client.execute(`
-    CREATE TABLE IF NOT EXIST PIEZAS(
+    CREATE TABLE IF NOT EXISTS PIEZAS(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         nombre_pieza VARCHAR(255) NOT NULL,
         procedencia VARCHAR(255) NOT NULL
     )
     `)
+
+
+
+    
+//Testeo
+await client.execute(`
+    INSERT INTO REPARACIONES (fecha_inicio, fecha_finalizacion, descripcion, status, id_vehiculo)
+    VALUES 
+    ('2024-11-01 08:00:00', '2024-11-03 17:00:00', 'Cambio de aceite y revisión general', 'completada', 1),
+    ('2024-11-05 09:00:00', '2024-11-07 15:00:00', 'Reparación del sistema de frenos', 'en progreso', 2);
+`);
+
+
+await client.execute(`
+    INSERT INTO DETALLES_REPARACION (tarea_realizada, OBSERVACIONES, id_mecanico, id_reparacion, id_pieza)
+    VALUES 
+    ('Cambio de aceite', 'Todo en buen estado', 1, 1, 1),
+    ('Revisión de frenos', 'Pastillas desgastadas, se reemplazarán', 2, 2, 2);
+`);
+
+
+await client.execute(`
+    INSERT INTO PIEZAS (nombre_pieza, procedencia)
+    VALUES 
+    ('Filtro de aceite', 'Importada'),
+    ('Pastillas de freno', 'Nacional');
+`);
 
     
 

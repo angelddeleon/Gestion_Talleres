@@ -1,217 +1,87 @@
-let divTabla = document.getElementById("divTabla")
+let mechanics = [];
+        let selectedSpecialties = new Set();
 
+        const specialtyModal = document.getElementById('specialtyModal');
+        const addSpecialtyBtn = document.getElementById('addSpecialtyBtn');
+        const cancelSpecialtyBtn = document.getElementById('cancelSpecialty');
+        const confirmSpecialtyBtn = document.getElementById('confirmSpecialty');
+        const selectedSpecialtiesContainer = document.getElementById('selectedSpecialties');
 
-let editeForm = document.getElementById("editarForm")
+        addSpecialtyBtn.onclick = () => specialtyModal.classList.remove('hidden');
+        cancelSpecialtyBtn.onclick = () => specialtyModal.classList.add('hidden');
 
-let formularioCrearMecanico = document.querySelector('.formCrearMecanico')
-let formularioEditar = document.querySelector('.formEditarMecanico')
+        confirmSpecialtyBtn.onclick = () => {
+            const specialty = document.getElementById('specialtySelect').value;
+            if (!selectedSpecialties.has(specialty)) {
+                selectedSpecialties.add(specialty);
+                updateSpecialtiesDisplay();
+            }
+            specialtyModal.classList.add('hidden');
+        };
 
+        function updateSpecialtiesDisplay() {
+            selectedSpecialtiesContainer.innerHTML = '';
+            selectedSpecialties.forEach(specialty => {
+                const tag = document.createElement('div');
+                tag.className = 'inline-flex items-center bg-blue-100 text-blue-800 rounded-full px-3 py-1 text-sm';
+                tag.innerHTML = `
+                    ${specialty}
+                    <button type="button" onclick="removeSpecialty('${specialty}')" class="ml-2 text-blue-500 hover:text-blue-700">
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                `;
+                selectedSpecialtiesContainer.appendChild(tag);
+            });
+        }
 
-function desplegarForm(nombreVentana){
-    if(nombreVentana === 'crearMecanico'){
-
-        if (formularioCrearMecanico.classList.contains("oculto")){
-            formularioCrearMecanico.classList.remove('oculto')
+        function removeSpecialty(specialty) {
+            selectedSpecialties.delete(specialty);
+            updateSpecialtiesDisplay();
+        }
+        
+        document.getElementById("mechanicForm").addEventListener("submit", function(e) {
+            e.preventDefault();
             
-        } else {
-            formularioCrearMecanico.classList.add('oculto')
+            const mechanic = {
+                id: Date.now(),
+                nombre: document.getElementById("nombre").value,
+                telefono: document.getElementById("telefono").value,
+                correo: document.getElementById("correo").value,
+                cedula: document.getElementById("cedula").value,
+                interno: document.getElementById("interno").value === "true",
+                especialidades: Array.from(selectedSpecialties)
+            };
+            
+            mechanics.push(mechanic);
+            updateTable();
+            this.reset();
+            selectedSpecialties.clear();
+            updateSpecialtiesDisplay();
+        });
+
+        function updateTable() {
+            const tbody = document.getElementById("mechanicsTableBody");
+            tbody.innerHTML = "";
+            
+            mechanics.forEach(mechanic => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${mechanic.nombre}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${mechanic.telefono}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${mechanic.correo}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${mechanic.cedula}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${mechanic.interno ? "Yes" : "No"}</td>
+                    <td class="px-6 py-4 whitespace-normal text-sm text-gray-900">${mechanic.especialidades.join(", ")}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button onclick="deleteMechanic(${mechanic.id})" class="text-red-600 hover:text-red-900">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
         }
 
-        return
-
-    }
-
-    //Abrir el otro formulario
-
-    if (formularioEditar.classList.contains("oculto")){
-        formularioEditar.classList.remove('oculto')
-        
-    } else {
-        formularioEditar.classList.add('oculto')
-    }
-
-
-
-
-}
-
-// Crear Tabla 
-
-function crearTabla() {
-    divTabla.innerHTML = ''
-
-    let content = ''
-
-    content += `
-        <table  id="tabla">
-            <tr>
-                <th>Id</th>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Telefono</th>
-                <th>Correo</th>
-            </tr>
-        </table>
-    `; 
-
-    divTabla.innerHTML += content
-}
-
-//Crear mecanicos
-
-// Almacena la lista de clientes
-
-let mecanicos = []
-
-
-
-// Si no hay clientes registrados muestra en el html eso
-
-
-    if (mecanicos.length == 0){
-
-        divTabla.innerHTML = ''
-    
-        let content = ''
-    
-        content += `
-            <p class="centrado">No hay mecanicos todavia</p>
-
-        `; 
-    
-        divTabla.innerHTML += content
-
-    }
-
-//Adding Clients to the Array
-
-function crearMecanico() {
-
-    let name = document.getElementById("nombre").value;
-
-    let nameCliente = document.getElementById("nombre").value;
-    let transaccion = {name: nameCliente}
-    let transaccionJson = JSON.stringify(transaccion)
-
-    fetch('http://localhost:3000/clientes',{
-        method: 'Post',
-        body: transaccionJson
-    })
-
-    mecanicos.push(name)
-
-    crearTabla()    
-
-    mecanicos.forEach(createClient)
-
-    desplegarForm('crearMecanico')
-
-    console.log(mecanicos)
-    
-}
-
-
-//Render the clients in the frontend
-
-function createClient(name, index){
-    let tabla = document.getElementById("tabla")
-
-
-        let content = ''
-
-        content += `
-                <tr>
-                    <td>${index}</td>
-                    <td>${name}</td>
-                    <td><button class="delete" onclick="deleteMecanico(${index})">Delete</button></td>
-                    <td><button class="edite" onclick="EditeMecanico(${index})">Edite</button></td>
-                                
-                </tr>
-        
-    `; 
-    
-        tabla.innerHTML += content
-        
-    
-}
-
-
-//Toma que Cliente se quiere Editar y despliega el formulario
-
-function EditeMecanico(indexCLient) {
-    desplegarForm()
-    
-    console.log(indexCLient);
-
-    document.getElementById("nuevoNombre").dataset.index = indexCLient;
-
-}
-
-//Edita el cliente y esconde el formulario
-
-function editarMecanico() {
-
-    let nuevoNombre = document.getElementById("nuevoNombre").value;
-    let indexCLient = document.getElementById("nuevoNombre").dataset.index;
-
-    console.log(nuevoNombre);
-    console.log(indexCLient)
-
-    mecanicos[indexCLient] = nuevoNombre;
-
-    console.log(mecanicos);
-
-    crearTabla()    
-
-    mecanicos.forEach(createClient)
-
-    console.log("Despues de enviar los datos");
-
-    console.log(nuevoNombre);
-    console.log(mecanicos);
-
-    desplegarForm()
-    
-}
-
-
-/*It can be used a arrayFilter */
-
-function deleteMecanico(indexMecanico) {
-
-    let newMecanico = []
-    
-    for (let index = 0; index < mecanicos.length; index++) {
-        if (indexMecanico !== index){
-            newMecanico.push(mecanicos[index])
-        }
-    }
-
-    mecanicos = newMecanico
-
-
-
-    if (mecanicos.length === 0) {
-
-        divTabla.innerHTML = ''
-
-        let content = ''
-    
-        content += `
-            <p class="centrado">No hay mecanicos todavia</p>
-        `; 
-    
-        divTabla.innerHTML += content
-
-        return console.log('No hay mecanicos')
-        
-    }
-
-
-    console.log(mecanicos)
-
-    crearTabla()
-
-    mecanicos.forEach(createClient)   
-
-}
+        function deleteMechanic(id) {
+            mechanics = mechanics.filter(m => m.id !== id);
+            updateTable();}

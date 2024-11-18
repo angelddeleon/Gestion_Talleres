@@ -3,111 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Taller</title>
-    <link rel="stylesheet" href="mecanico.css">
-
+    <title>Creacion Mecanico</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-
-    <div class="contPrincipal">
-
-        <div class="contIzquierdo">
-            
-            <ul id="listLinks">
-                <a href="../clientes/clientes.html">Clientes</a>
-                <a href="../mecanicos/mecanico.html">Mecanicos</a>
-            </ul>
-
-
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <div class="bg-white shadow-lg rounded-lg p-6 mb-8">
+            <h1 class="text-2xl font-bold text-gray-800">Crear Mecanico</h1>
         </div>
 
-
-        <div class="contDerecho">
-
-            <div class="cabecera">
-
-                    <h1>Mecanicos</h1>
-
-                    <button onclick="desplegarForm('crearMecanico')">Crear Mecanico</button>
-
-                
-            </div>
-
-
-            <div class="contForm formCrearMecanico oculto">
-
-                <div class="styleForm">
-
-                    <button class="botonCerrar" onclick="desplegarForm('crearMecanico')">X</button>
-                    
-                    <h2>Nuevo Mecanico</h2>
-
-            
-                    <form action="" name="form" id="form">
-    
-                        <label for="nombre">Nombre</label>
-                        <input type="text" name="Nombre" id="nombre">
-
-                        <label for="apellido">Apellido</label>
-                        <input type="text" name="Apellido" id="apellido">
-
-                        <label for="telefono">Telefono</label>
-                        <input type="text" name="telefono" id="telefono">
-
-                        <label for="correo">Correo</label>
-                        <input type="text" name="correo" id="correo">
-    
-                    </form>
-
-                    <button onclick="crearMecanico()" class="crearClienteButton">Crear Mecanico</button>
-
+        <div class="bg-white shadow-lg rounded-lg p-6 mb-8">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Agregar Nuevo Mecanico</h2>
+            <form id="mechanicForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Nombre</label>
+                    <input type="text" id="nombre" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                 </div>
-
-
-            </div>
-
-            <div id="divTabla">
-
-
-            </div>
-
-            <div class="contForm formEditarMecanico oculto">
-                <div class="styleForm">
-
-                    <button class="botonCerrar" onclick="desplegarForm()">X</button>
-                    
-                    <h2>Editar Cliente</h2>
-
-            
-                    <form action="" name="form" id="form">
-    
-                        <label for="nombre">Nombre</label>
-                        <input type="text" name="Nombre" id="nuevoNombre">
-
-                        <label for="apellido">Apellido</label>
-                        <input type="text" name="Apellido" id="apellido">
-
-                        <label for="telefono">Telefono</label>
-                        <input type="text" name="telefono" id="telefono">
-
-                        <label for="correo">Correo</label>
-                        <input type="text" name="correo" id="correo">
-    
-                    </form>
-
-                    <button onclick="editarMecanico()" class="crearClienteButton">Editar Mecanico</button>
-
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Telefono</label>
+                    <input type="tel" id="telefono" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                 </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" id="correo" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Cedula</label>
+                    <input type="text" id="cedula" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Interno</label>
+                    <select id="interno" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        <option value="true">Si</option>
+                        <option value="false">No</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Especialidades</label>
+                    <div class="mt-2 space-y-2" id="specialtiesContainer">
+                        <div class="flex flex-wrap gap-2" id="selectedSpecialties"></div>
+                        <button type="button" id="addSpecialtyBtn" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                            Agregar Especialidad
+                        </button>
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-3">
+                    <button type="reset" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Limpiar</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Guardar Mecanico</button>
+                </div>
+            </form>
+        </div>
 
+        <div class="bg-white shadow-lg rounded-lg p-6">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Mecanicos</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full table-auto">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Telefono</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cedula</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Interno</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Especialidades</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Edit</th>
+                        </tr>
+                    </thead>
+                    <tbody id="mechanicsTableBody" class="bg-white divide-y divide-gray-200">
+                    </tbody>
+                </table>
             </div>
-
-
-
-
         </div>
     </div>
 
+    <!-- Modal for adding specialty -->
+    <div id="specialtyModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <h3 class="text-lg font-medium text-gray-900 mb-4"> Agregar Especialidad</h3>
+                <select id="specialtySelect" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    <option value="Engine Repair">Ejemplo</option>
+                    <option value="Transmission">Ejemplo</option>
+                 
+                </select>
+                <div class="mt-4 flex justify-end space-x-3">
+                    <button id="cancelSpecialty" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Cancelar</button>
+                    <button id="confirmSpecialty" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Agregar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
+</div>
+
+<script src="./mecanicoPrincipal.js"></script>
 </body>
-<script src="mecanicoPrincipal.js"></script>
 </html>

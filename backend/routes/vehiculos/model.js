@@ -17,8 +17,8 @@ await client.execute(`
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         placa VARCHAR(255) NOT NULL,
         marca VARCHAR(20) NOT NULL,
-        modelo VARCHAR(255) UNIQUE NOT NULL,
-        year VARCHAR(20) UNIQUE NOT NULL,
+        modelo VARCHAR(255) NOT NULL,
+        year VARCHAR(20) NOT NULL,
         id_cliente INTEGER NOT NULL
         )
       `)

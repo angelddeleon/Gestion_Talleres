@@ -6,7 +6,7 @@ const db = createClient({
     url: url
   })
 
-  // Eliminar la tabla CLIENTES si existe
+
 await db.execute(`
     DROP TABLE IF EXISTS USERS
 `);

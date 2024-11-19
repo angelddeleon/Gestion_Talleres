@@ -1,3 +1,5 @@
+
+
 let mechanics = [];
         let selectedSpecialties = new Set();
 
@@ -6,6 +8,9 @@ let mechanics = [];
         const cancelSpecialtyBtn = document.getElementById('cancelSpecialty');
         const confirmSpecialtyBtn = document.getElementById('confirmSpecialty');
         const selectedSpecialtiesContainer = document.getElementById('selectedSpecialties');
+        const specialtySelect = document.getElementById('specialtySelect')
+
+        
 
         addSpecialtyBtn.onclick = () => specialtyModal.classList.remove('hidden');
         cancelSpecialtyBtn.onclick = () => specialtyModal.classList.add('hidden');
@@ -36,52 +41,51 @@ let mechanics = [];
             });
         }
 
+        async function loadSpecialities(){
+
+            const specialities = await fetchSpecialities()
+            console.log(specialities)
+    
+
+            if (specialities.length === 0){
+                console.log("Error")
+            }
+
+            specialities.forEach((speciality) =>{
+                const option = document.createElement('option');
+                option.value = speciality.nombre_especialidad;
+                option.text = speciality.nombre_especialidad
+                specialtySelect.appendChild(option)
+            })
+
+            
+        }
+
+
+
         function removeSpecialty(specialty) {
             selectedSpecialties.delete(specialty);
             updateSpecialtiesDisplay();
         }
-        
-        document.getElementById("mechanicForm").addEventListener("submit", function(e) {
-            e.preventDefault();
-            
-            const mechanic = {
-                id: Date.now(),
-                nombre: document.getElementById("nombre").value,
-                telefono: document.getElementById("telefono").value,
-                correo: document.getElementById("correo").value,
-                cedula: document.getElementById("cedula").value,
-                interno: document.getElementById("interno").value === "true",
-                especialidades: Array.from(selectedSpecialties)
-            };
-            
-            mechanics.push(mechanic);
-            updateTable();
-            this.reset();
-            selectedSpecialties.clear();
-            updateSpecialtiesDisplay();
-        });
 
-        function updateTable() {
-            const tbody = document.getElementById("mechanicsTableBody");
-            tbody.innerHTML = "";
+        async function fetchSpecialities(){
+
+            try{
+                const response = await fetch('/mecanicos/especialidad')
+                const specialities = await response.json()
+                return specialities
+                
+
+            }catch{
+                console.error('Error loading specialities');
+                return []
+            }
             
-            mechanics.forEach(mechanic => {
-                const row = document.createElement("tr");
-                row.innerHTML = `
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${mechanic.nombre}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${mechanic.telefono}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${mechanic.correo}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${mechanic.cedula}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${mechanic.interno ? "Yes" : "No"}</td>
-                    <td class="px-6 py-4 whitespace-normal text-sm text-gray-900">${mechanic.especialidades.join(", ")}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <button onclick="deleteMechanic(${mechanic.id})" class="text-red-600 hover:text-red-900">Delete</button>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
         }
+        
+       
 
-        function deleteMechanic(id) {
-            mechanics = mechanics.filter(m => m.id !== id);
-            updateTable();}
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSpecialities()
+            
+        });

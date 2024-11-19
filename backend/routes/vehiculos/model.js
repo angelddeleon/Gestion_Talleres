@@ -28,7 +28,7 @@ await client.execute(`
     INSERT INTO VEHICULOS (placa, marca, modelo, year, id_cliente)
     VALUES 
         ('XYZ456', 'Honda', 'Civic', '2018', 1),
-        ('LMN789', 'Ford', 'Focus', '2021', 1),
+        ('LMN789', 'Ford', 'Focus', '2021', 3),
         ('TAC349', 'Toyota', 'Fortuner', '2008', 2);;
     `);
     

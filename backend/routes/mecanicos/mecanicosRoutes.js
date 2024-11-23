@@ -95,13 +95,20 @@ mecanicosRouter.post("/", async (req, res) =>{
             const resultId  = await client.execute(`SELECT id FROM MECANICOS WHERE cedula = ?`, [cedula])
             const [result] = resultId.rows
             const {id} = result
+
+            const resultEspecialidadesId = await client.execute(`SELECT * FROM ESPECIALIDAD`)
+            const resultEspecialidades = resultEspecialidadesId.rows
+            const especialidadesId = resultEspecialidades.filter((especialidad) => especialidades.includes(especialidad.nombre_especialidad))
+            
+
+          
            
         try{
-            for (const especialidadId of especialidades) {
+            for (const especialidadId of especialidadesId) {
                 await client.execute(`
                     INSERT INTO MECANICOS_ESPECIALIDADES (id_mecanico, id_especialidad)
                     VALUES (?, ?)`,
-                    [id, especialidadId])
+                    [id, especialidadId.id])
             };
 
         }catch (error){

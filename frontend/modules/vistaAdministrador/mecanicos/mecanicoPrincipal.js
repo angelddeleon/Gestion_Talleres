@@ -26,23 +26,36 @@ let mechanics = [];
         mechanicForm.addEventListener("submit",(event)=>{
             
             event.preventDefault()
-            const nombre = document.getElementById('nombre').textContent;
+            const nombre = document.getElementById('nombre').value  ;
             console.log(nombre)
-            const telefono = document.getElementById('telefono').textContent;
-            const email = document.getElementById("correo").textContent
-            const cedula = document.getElementById("cedula").textContent
-            const interno = document.getElementById("interno").value
+            const telefono = document.getElementById('telefono').value;
+            const correo = document.getElementById("correo").value
+            const cedula = document.getElementById("cedula").value
+            let interno = document.getElementById("interno").value 
             const especialidades = Array.from(selectedSpecialties)
 
-            const mecanico = {
-                nombre,
-                telefono,
-                email,
-                cedula,
-                interno,
-                especialidades
+            if (especialidades.length === 0){
+                alert("Agrega al menos una especialidad");
+                return
             }
-            console.log(mecanico)
+
+            const mecanico ={
+                nombre,
+                cedula,
+                telefono,
+                correo,
+                interno,
+               especialidades
+            }
+           
+            
+            const response = createMecanico(mecanico)
+
+            if (response){
+                clearForm() 
+            }
+            
+          
           
         })
 
@@ -88,6 +101,19 @@ let mechanics = [];
             updateSpecialtiesDisplay();
         }
 
+       
+        function clearForm(){
+            document.getElementById('nombre').value = ""  ;
+            document.getElementById('telefono').value = "";
+            document.getElementById("correo").value =""
+            document.getElementById("cedula").value = ""
+            selectedSpecialties.clear()
+            updateSpecialtiesDisplay()
+          
+        }
+          
+       
+
 
 
 
@@ -107,18 +133,22 @@ let mechanics = [];
             
         }
 
-        async function createMecanico(mecanico) {
+        async function fetchCreateMecanico(mecanico) {
 
             try{
 
-                  fetch("/mecanicos", {
+                  const response = await fetch("/mecanicos", {
                     method: "POST", // Tipo de solicitud
                     headers: {
                       "Content-Type": "application/json", // Especifica que se está enviando JSON
                     },
                     body: JSON.stringify(mecanico), // Convierte el objeto a un string JSON
                   })
+
+                
+ 
             }catch{
+                
                 
             }   
             
@@ -126,7 +156,32 @@ let mechanics = [];
 
 
         //Controllers
+
+        async function createMecanico(mecanico){
+
+            const validate = validateM(mecanico)
+
+            if (!validate){
+                alert("!!!!!")
+                // Ingresar logica para mostrar donde estan los errores del usuario
+                return false
+            }
+
+            const response = await fetchCreateMecanico(mecanico)
+
+            if (!response){
+                alert("Error al crear el mecanico")
+                //Agregar logica para mostrar en donde esta el error
+                return false
+            }
+
+            alert("Mecanico creado correctamente")
+            return true
+
+        }
         
+
+
         function validateM(mecanico){
 
             return true

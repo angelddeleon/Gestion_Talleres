@@ -8,8 +8,9 @@ const client = createClient({
 
 await client.execute(`
   DROP TABLE IF EXISTS MECANICOS
-`);
-
+  
+  
+  `)
 await client.execute(`
   DROP TABLE IF EXISTS MECANICOS_ESPECIALIDADES
 `);
@@ -41,16 +42,16 @@ await client.execute(`
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     id_mecanico INTEGER NOT NULL,
     id_especialidad INTEGER NOT NULL
-  )
+)
 `);
 
 // Insertar mecánicos
 await client.execute(`
   INSERT INTO MECANICOS (nombre, telefono, correo, cedula, interno)
   VALUES 
-  ('Juan Pérez', '555-1234', 'juan.perez@mail.com', '123456789', true),
-  ('María López', '555-5678', 'maria.lopez@mail.com', '987654321', false),
-  ('Carlos Gómez', '555-9101', 'carlos.gomez@mail.com', '456789123', true)
+  ('Juan Pérez', '555-1234', 'juan.perez@mail.com', 'v-123456789', true),
+  ('María López', '555-5678', 'maria.lopez@mail.com', 'v-987654321', false),
+  ('Carlos Gómez', '555-9101', 'carlos.gomez@mail.com', 'v-456789123', true)
 `);
 
 // // Insertar especialidades
@@ -59,7 +60,8 @@ await client.execute(`
   VALUES 
   ('Electricidad'),
   ('Mecánica'),
-  ('Aire Acondicionado')
+  ('Aire Acondicionado'),
+  ('Otro')
 `);
 
 // // Insertar relaciones entre mecánicos y especialidades

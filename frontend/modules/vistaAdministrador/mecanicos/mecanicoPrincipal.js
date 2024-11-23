@@ -1,20 +1,20 @@
 
-
 let mechanics = [];
         let selectedSpecialties = new Set();
 
+        // 
         const specialtyModal = document.getElementById('specialtyModal');
         const addSpecialtyBtn = document.getElementById('addSpecialtyBtn');
         const cancelSpecialtyBtn = document.getElementById('cancelSpecialty');
         const confirmSpecialtyBtn = document.getElementById('confirmSpecialty');
         const selectedSpecialtiesContainer = document.getElementById('selectedSpecialties');
         const specialtySelect = document.getElementById('specialtySelect')
+        const mechanicForm = document.getElementById('mechanicForm')
 
         
-
+        //Eventos
         addSpecialtyBtn.onclick = () => specialtyModal.classList.remove('hidden');
         cancelSpecialtyBtn.onclick = () => specialtyModal.classList.add('hidden');
-
         confirmSpecialtyBtn.onclick = () => {
             const specialty = document.getElementById('specialtySelect').value;
             if (!selectedSpecialties.has(specialty)) {
@@ -23,7 +23,31 @@ let mechanics = [];
             }
             specialtyModal.classList.add('hidden');
         };
+        mechanicForm.addEventListener("submit",(event)=>{
+            
+            event.preventDefault()
+            const nombre = document.getElementById('nombre').textContent;
+            console.log(nombre)
+            const telefono = document.getElementById('telefono').textContent;
+            const email = document.getElementById("correo").textContent
+            const cedula = document.getElementById("cedula").textContent
+            const interno = document.getElementById("interno").value
+            const especialidades = Array.from(selectedSpecialties)
 
+            const mecanico = {
+                nombre,
+                telefono,
+                email,
+                cedula,
+                interno,
+                especialidades
+            }
+            console.log(mecanico)
+          
+        })
+
+        
+        //UI Functions
         function updateSpecialtiesDisplay() {
             selectedSpecialtiesContainer.innerHTML = '';
             selectedSpecialties.forEach(specialty => {
@@ -40,7 +64,6 @@ let mechanics = [];
                 selectedSpecialtiesContainer.appendChild(tag);
             });
         }
-
         async function loadSpecialities(){
 
             const specialities = await fetchSpecialities()
@@ -60,14 +83,15 @@ let mechanics = [];
 
             
         }
-
-
-
         function removeSpecialty(specialty) {
             selectedSpecialties.delete(specialty);
             updateSpecialtiesDisplay();
         }
 
+
+
+
+        //Fetchs
         async function fetchSpecialities(){
 
             try{
@@ -82,10 +106,37 @@ let mechanics = [];
             }
             
         }
+
+        async function createMecanico(mecanico) {
+
+            try{
+
+                  fetch("/mecanicos", {
+                    method: "POST", // Tipo de solicitud
+                    headers: {
+                      "Content-Type": "application/json", // Especifica que se está enviando JSON
+                    },
+                    body: JSON.stringify(mecanico), // Convierte el objeto a un string JSON
+                  })
+            }catch{
+                
+            }   
+            
+        }
+
+
+        //Controllers
+        
+        function validateM(mecanico){
+
+            return true
+        }
+
+
+       
         
        
 
         document.addEventListener('DOMContentLoaded', () => {
-            loadSpecialities()
-            
+            loadSpecialities()   
         });

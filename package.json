@@ -5,7 +5,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "dev":"node --watch ./backend/app.js"
+    "dev": "node --watch ./backend/app.js"
   },
   "keywords": [],
   "author": "",

@@ -43,6 +43,46 @@ async function pedirDatos() {
 signInButton.addEventListener("click", e => {
     e.preventDefault()
 
+    let correo = document.getElementsByName("correoLognin").value
+    let contrasena = document.getElementsByName("passwordLognin").value
+
+    let transaccion = {email: correo, password: contrasena}
+    let transaccionJson = JSON.stringify(transaccion)
+
+    console.log(transaccion)
+    console.log(transaccionJson)
+
+
+    fetch('http://localhost:3000/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json' // Asegúrate de incluir este encabezado
+        },
+        body: transaccionJson
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data); // Maneja la respuesta aquí
+        desplegarContenedor()
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+
+
+
+    pedirDatos()
+
+    console.log(correo)
+    console.log(contrasena)
+
+
+})
+
+
+logInButton.addEventListener("click", e => {
+    e.preventDefault()
+
     let correo = document.getElementById("correoSignIn").value
     let contrasena = document.getElementById("passwordSignIn").value
     let role = document.getElementById("listaRoles").value
@@ -71,12 +111,6 @@ signInButton.addEventListener("click", e => {
     });
 
 
-
-    pedirDatos()
-
     console.log(correo)
     console.log(contrasena)
-
-    
-
 })

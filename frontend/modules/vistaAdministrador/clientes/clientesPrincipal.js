@@ -63,13 +63,15 @@ function crearTabla() {
         <table  id="tabla">
             <tr>
                 <th>Id</th>
-                <th>Nombre</th>
-                <th>Apellido</th>
+                <th>Nombre y Apellido</th>
                 <th>Telefono</th>
                 <th>Correo</th>
+                <th>Cedula</th>
+                <th>Direccion</th>
+                <th>Placa</th>
                 <th>Marca</th>
                 <th>Modelo</th>
-                <th>Descripcion</th>
+                <th>Ano</th>
                 <th>Mecanicos</th>
             </tr>
         </table>
@@ -105,20 +107,34 @@ let clients = []
 
 //Adding Clients to the Array
 
-function crearCliente() {
+let botonCrearCLiente = document.getElementById("crearClienteButton")
 
-    let name = document.getElementById("nombre").value;
+botonCrearCLiente.addEventListener('click',(e) => {
+    e.preventDefault()
 
-    let nameCliente = document.getElementById("nombre").value;
-    let transaccion = {name: nameCliente}
+    let nombre = document.getElementById("nombre").value;
+    let cedula = document.getElementById("cedula").value
+    let telefono = document.getElementById("telefono").value
+    let direccion = document.getElementById("direccion").value
+    let correo = document.getElementById("correo").value;
+
+    console.log(correo)
+
+    let nameClient = document.getElementById("nombre").value;
+
+
+    let transaccion = {nombre: nombre, cedula: cedula, telefono: telefono, direccion: direccion, correo: correo}
     let transaccionJson = JSON.stringify(transaccion)
 
     fetch('http://localhost:3000/clientes',{
         method: 'Post',
+        headers: {
+            'Content-Type': 'application/json' 
+        },
         body: transaccionJson
     })
 
-    clients.push(name)
+    clients.push(nameClient)
 
     crearTabla()    
 
@@ -128,7 +144,7 @@ function crearCliente() {
 
     console.log(clients)
 
-}
+})
     
 
 function openMenu(index) {

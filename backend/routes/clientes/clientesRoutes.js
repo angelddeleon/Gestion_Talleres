@@ -31,16 +31,21 @@ clientesRouter.get("/:cedula", async(req, res) =>{
 
 clientesRouter.post("/", async (req, res) =>{
     try{
+
         const { nombre, cedula, telefono, direccion , correo} = req.body
+
+        console.log('info ' + nombre, cedula, telefono, direccion, correo)
 
         const cliente = await client.execute(
             `INSERT INTO CLIENTES (nombre, telefono, correo, cedula, direccion) 
              VALUES (?, ?, ?, ?, ?)`,
             [nombre, telefono, correo, cedula, direccion]
           );
+
+        console.log('creo el cliente')
         res.status(201).json({message:"Client created"})
     }catch (e){
-        res.status(500).json({error: e})
+        res.status(500).json({error: e.message })
     }
 })
 

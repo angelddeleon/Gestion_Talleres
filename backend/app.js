@@ -1,4 +1,6 @@
 import express, { json } from 'express';
+import cors from 'cors'
+
 import clientesRouter from "./routes/clientes/clientesRoutes.js"
 import mecanicosRouter from "./routes/mecanicos/mecanicosRoutes.js"
 import reparacionesRouter from "./routes/reparaciones/reparacionesRoutes.js"
@@ -11,6 +13,7 @@ const PORT = process.env.PORT || 3000
 
 
 app.use(json())
+app.use(cors())
 
 app.use('/signin', signInRouter)
 
@@ -18,8 +21,6 @@ app.use('/clientes', clientesRouter)
 app.use('/mecanicos', mecanicosRouter)
 app.use('/vehiculos', vehiculosRouter)
 app.use('/reparaciones', reparacionesRouter)
-
-
 
 app.use(express.static("frontend"))
 

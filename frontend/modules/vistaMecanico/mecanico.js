@@ -97,5 +97,5 @@ async function saveRepairStatus() {
 // Initialize the dashboard
 document.addEventListener('DOMContentLoaded', () => {
     fetchActiveRepairs();
-    fetchRepairHistory();
+    // fetchRepairHistory();
 });

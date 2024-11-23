@@ -7,11 +7,12 @@ let formularioCLiente = document.querySelector('.formCrearCliente')
 let formularioEditar = document.querySelector('.formEditarCliente')
 
 let menuAbierto = false
+let indexMenu = 0
 
 
 document.addEventListener('click', function(event) {
-    const opcionesMenu = document.getElementsByClassName("opcionesMenu")[0];
-    const botonMenu = document.getElementsByClassName("botonMenu")[0];
+    const opcionesMenu = document.getElementsByClassName("opcionesMenu")[indexMenu];
+    const botonMenu = document.getElementsByClassName("botonMenu")[indexMenu];
 
     // Verifica si el menú está abierto y si el clic no fue en el menú o el botón
     if (menuAbierto && !opcionesMenu.contains(event.target) && !botonMenu.contains(event.target)) {
@@ -62,13 +63,15 @@ function crearTabla() {
         <table  id="tabla">
             <tr>
                 <th>Id</th>
-                <th>Nombre</th>
-                <th>Apellido</th>
+                <th>Nombre y Apellido</th>
                 <th>Telefono</th>
                 <th>Correo</th>
+                <th>Cedula</th>
+                <th>Direccion</th>
+                <th>Placa</th>
                 <th>Marca</th>
                 <th>Modelo</th>
-                <th>Descripcion</th>
+                <th>Ano</th>
                 <th>Mecanicos</th>
             </tr>
         </table>
@@ -99,27 +102,39 @@ let clients = []
         `; 
     
         divTabla.innerHTML += content
-
-        
     
     }
 
 //Adding Clients to the Array
 
-function crearCliente() {
+let botonCrearCLiente = document.getElementById("crearClienteButton")
 
-    let name = document.getElementById("nombre").value;
+botonCrearCLiente.addEventListener('click',(e) => {
+    e.preventDefault()
 
-    let nameCliente = document.getElementById("nombre").value;
-    let transaccion = {name: nameCliente}
+    let nombre = document.getElementById("nombre").value;
+    let cedula = document.getElementById("cedula").value
+    let telefono = document.getElementById("telefono").value
+    let direccion = document.getElementById("direccion").value
+    let correo = document.getElementById("correo").value;
+
+    console.log(correo)
+
+    let nameClient = document.getElementById("nombre").value;
+
+
+    let transaccion = {nombre: nombre, cedula: cedula, telefono: telefono, direccion: direccion, correo: correo}
     let transaccionJson = JSON.stringify(transaccion)
 
     fetch('http://localhost:3000/clientes',{
         method: 'Post',
+        headers: {
+            'Content-Type': 'application/json' 
+        },
         body: transaccionJson
     })
 
-    clients.push(name)
+    clients.push(nameClient)
 
     crearTabla()    
 
@@ -129,15 +144,19 @@ function crearCliente() {
 
     console.log(clients)
 
-}
+})
     
 
 function openMenu(index) {
     console.log("hola")
-    console.log(index)
+    console.log('Antes ' + indexMenu)
     
     let botonMenu = document.getElementsByClassName("botonMenu")[index]
     let opcionesMenu = document.getElementsByClassName("opcionesMenu")[index]
+
+    indexMenu = index
+
+    console.log('Despues ' + indexMenu)
 
     if (opcionesMenu.classList.contains("oculto")){
         console.log("FUNCIONO")

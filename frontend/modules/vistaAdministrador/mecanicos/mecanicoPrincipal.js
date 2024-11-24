@@ -10,6 +10,7 @@ let mechanics = [];
         const selectedSpecialtiesContainer = document.getElementById('selectedSpecialties');
         const specialtySelect = document.getElementById('specialtySelect')
         const mechanicForm = document.getElementById('mechanicForm')
+        const mecanicosTable = document.getElementById('mechanicsTableBody')
 
         
         //Eventos
@@ -53,6 +54,7 @@ let mechanics = [];
 
             if (response){
                 clearForm() 
+                updateMecanicosTable()
             }
             
           
@@ -76,6 +78,32 @@ let mechanics = [];
                 `;
                 selectedSpecialtiesContainer.appendChild(tag);
             });
+        }
+
+        async function updateMecanicosTable(){
+
+            const mecanicos = await fetchMecanicos()
+            console.log(mecanicos[0].especialidades)
+            mecanicosTable.innerHTML = " "
+
+            mecanicos.map((mecanico) =>{
+                const row = `
+                <tr>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${mecanico.nombre}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${mecanico.telefono}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${mecanico.correo}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${mecanico.cedula}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${mecanico.interno == 1 ? 'Sí' : 'No'}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${mecanico.especialidades.map((especialidad)=>especialidad.nombre)}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-600 hover:text-blue-900 cursor-pointer">Editar</td>
+                </tr>
+              `;
+              mecanicosTable.innerHTML += row;
+
+            })
+          
+
+
         }
         async function loadSpecialities(){
 
@@ -101,7 +129,6 @@ let mechanics = [];
             updateSpecialtiesDisplay();
         }
 
-       
         function clearForm(){
             document.getElementById('nombre').value = ""  ;
             document.getElementById('telefono').value = "";
@@ -113,10 +140,6 @@ let mechanics = [];
         }
           
        
-
-
-
-
         //Fetchs
         async function fetchSpecialities(){
 
@@ -131,6 +154,20 @@ let mechanics = [];
                 return []
             }
             
+        }
+
+        async function fetchMecanicos() {
+            try{
+                const response = await fetch('/mecanicos')
+                const mecanicos = await response.json()
+        
+                return mecanicos
+                
+
+            }catch{
+                console.error('Error loading mecanicos');
+                return []
+            }
         }
 
         async function fetchCreateMecanico(mecanico) {
@@ -181,8 +218,9 @@ let mechanics = [];
         }
         
 
-
         function validateM(mecanico){
+
+            //Agregar todas las validaciones antes de mandarlo al servidor
 
             return true
         }
@@ -193,5 +231,7 @@ let mechanics = [];
        
 
         document.addEventListener('DOMContentLoaded', () => {
-            loadSpecialities()   
+            loadSpecialities()
+            updateMecanicosTable()
+            
         });

@@ -1,6 +1,7 @@
 
 let mechanics = [];
         let selectedSpecialties = new Set();
+        let editingSpecialties = new Set();
 
         // 
         const specialtyModal = document.getElementById('specialtyModal');
@@ -11,10 +12,15 @@ let mechanics = [];
         const specialtySelect = document.getElementById('specialtySelect')
         const mechanicForm = document.getElementById('mechanicForm')
         const mecanicosTable = document.getElementById('mechanicsTableBody')
+        const editSelectedSpecialtiesContainer = document.getElementById("editSelectedSpecialties");
+        const editModal = document.getElementById("editModal");
+        const editModalButton = document.getElementsByClassName("edit")
+        const editAddSpecialtyBtn = document.getElementById("editAddSpecialtyBtn");
 
         
         //Eventos
         addSpecialtyBtn.onclick = () => specialtyModal.classList.remove('hidden');
+        editAddSpecialtyBtn.onclick = () => specialtyModal.classList.remove("hidden");
         cancelSpecialtyBtn.onclick = () => specialtyModal.classList.add('hidden');
         confirmSpecialtyBtn.onclick = () => {
             const specialty = document.getElementById('specialtySelect').value;
@@ -24,6 +30,19 @@ let mechanics = [];
             }
             specialtyModal.classList.add('hidden');
         };
+     
+        mecanicosTable.addEventListener("click", (e)=>{
+
+            if (e.target.classList.contains("edit-button")){
+
+                const trElement = e.target.parentElement.parentElement
+                const cedula = trElement.children[3].textContent
+                editarMecanicoModal(cedula)
+            }
+
+           
+        })  
+
         mechanicForm.addEventListener("submit",(event)=>{
             
             event.preventDefault()
@@ -80,10 +99,31 @@ let mechanics = [];
             });
         }
 
+        function updateEditSpecialtiesDisplay() {
+            editSelectedSpecialtiesContainer.innerHTML = "";
+            editingSpecialties.forEach(specialty => {
+                const tag = document.createElement("div");
+                tag.className = "inline-flex items-center bg-blue-100 text-blue-800 rounded-full px-3 py-1 text-sm";
+                tag.innerHTML = `
+                    ${specialty}
+                    <button type="button" onclick="removeEditSpecialty('${specialty}')" class="ml-2 text-blue-500 hover:text-blue-700">
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                `;
+                editSelectedSpecialtiesContainer.appendChild(tag);
+            });
+        }
+
+        function closeEditModal() {
+            editModal.classList.add("hidden");
+            editingSpecialties.clear();
+            document.getElementById("editForm").reset();
+        }
         async function updateMecanicosTable(){
 
             const mecanicos = await fetchMecanicos()
-            console.log(mecanicos[0].especialidades)
             mecanicosTable.innerHTML = " "
 
             mecanicos.map((mecanico) =>{
@@ -95,7 +135,9 @@ let mechanics = [];
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${mecanico.cedula}</td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${mecanico.interno == 1 ? 'Sí' : 'No'}</td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${mecanico.especialidades.map((especialidad)=>especialidad.nombre)}</td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-600 hover:text-blue-900 cursor-pointer">Editar</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button class="edit-button text-blue-600 hover:text-blue-900">Edit</button>
+                </td>
                 </tr>
               `;
               mecanicosTable.innerHTML += row;
@@ -138,6 +180,36 @@ let mechanics = [];
             updateSpecialtiesDisplay()
           
         }
+
+        async function editarMecanicoModal(mecanico_cedula) {
+
+            const mecanico = await fetchMecanicoById(mecanico_cedula)
+           
+         
+            const editNombre = document.getElementById("editNombre")
+            const editTelefono = document.getElementById("editTelefono")
+            const editCorreo = document.getElementById("editCorreo")
+            const editCedula = document.getElementById("editCedula")
+            console.log(mecanico)
+
+            if (mecanico){
+                editNombre.value = mecanico.nombre
+                editTelefono.value = mecanico.telefono
+                editCorreo.value = mecanico.correo
+                editCedula.value = mecanico.cedula
+                editingSpecialties = mecanico.especialidades.map((especialidad) => especialidad.nombre)
+                console.log(editingSpecialties)
+                updateEditSpecialtiesDisplay()
+
+               
+
+            }
+           
+            
+            editModal.classList.remove("hidden");
+            
+        }
+
           
        
         //Fetchs
@@ -170,7 +242,25 @@ let mechanics = [];
             }
         }
 
+        async function fetchMecanicoById(mecanico_cedula) {
+
+            try{
+                const response = await fetch(`/mecanicos/${mecanico_cedula}`)
+                const mecanicos = await response.json()
+    
+                return mecanicos
+                
+            }catch{
+                console.error('Error loading mecanicos');
+                return []
+            }
+
+            
+        }
+
         async function fetchCreateMecanico(mecanico) {
+
+
 
             try{
 
@@ -217,13 +307,15 @@ let mechanics = [];
 
         }
         
-
+      
         function validateM(mecanico){
 
             //Agregar todas las validaciones antes de mandarlo al servidor
 
             return true
         }
+
+        
 
 
        

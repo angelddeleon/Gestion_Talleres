@@ -66,21 +66,57 @@ mecanicosRouter.get("/especialidad", async( req, res) =>{
     }
 })
 
-mecanicosRouter.get("/:cedula", async (req, res) =>{
-    try{
+mecanicosRouter.get("/:cedula", async (req, res) => {
+    try {
+        const { cedula } = req.params;
 
-    
-    const { cedula } = req.params
-    const response = await client.execute(`SELECT * FROM MECANICOS WHERE cedula = '${cedula}'`)
-    if(response.rows.length === 0){
-        return res.status(404).json({error: "Mecanico no encontrado"})
+        const result = await client.execute(`
+            SELECT 
+                m.id,
+                m.nombre,
+                m.telefono,
+                m.correo,
+                m.cedula,
+                m.interno,
+                e.id AS especialidad_id,
+                e.nombre_especialidad
+            FROM MECANICOS m
+            LEFT JOIN MECANICOS_ESPECIALIDADES me ON m.id = me.id_mecanico
+            LEFT JOIN ESPECIALIDAD e ON me.id_especialidad = e.id
+            WHERE m.cedula = ?
+        `, [cedula]);
 
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: "Mecánico no encontrado" });
+        }
+
+        // Estructurar los datos para agrupar las especialidades por mecánico
+        const mecanico = {
+            id: result.rows[0].id,
+            nombre: result.rows[0].nombre,
+            telefono: result.rows[0].telefono,
+            correo: result.rows[0].correo,
+            cedula: result.rows[0].cedula,
+            interno: result.rows[0].interno,
+            especialidades: []
+        };
+
+        result.rows.forEach(row => {
+            if (row.especialidad_id) {
+                mecanico.especialidades.push({
+                    id: row.especialidad_id,
+                    nombre: row.nombre_especialidad
+                });
+            }
+        });
+
+        return res.status(200).json(mecanico);
+    } catch (error) {
+        console.error("Error al obtener el mecánico:", error);
+        return res.status(500).json({ message: "Error al obtener el mecánico." });
     }
-    return res.json(response.rows)
-}catch{
-    res.status(500).json({message: "Error al obtener el mecanico"})
-}
-})
+});
+
 
 mecanicosRouter.post("/", async (req, res) =>{
 
@@ -145,16 +181,16 @@ mecanicosRouter.delete("/:cedula", async (req,res) =>{
 
 })
 
-mecanicosRouter.patch("/:cedula", async (req, res) =>{
+mecanicosRouter.patch("/:id", async (req, res) =>{
 
-    const {cedula} = req.params
-    const {nombre, telefono, correo, interno, especialidades} = req.body
+    const {id} = req.params
+    const {nombre, telefono, correo, cedula ,interno, especialidades} = req.body
 
     try{
        await client.execute(
-            `UPDATE MECANICOS SET nombre = ?, telefono = ?, correo = ?, interno = ?
-             WHERE cedula = ?`,
-            [nombre, telefono, correo, interno, cedula]
+            `UPDATE MECANICOS SET nombre = ?, telefono = ?, correo = ?, interno = ?, cedula = ?
+             WHERE id = ?`,
+            [nombre, telefono, correo, interno, cedula, id]
         );
         
        res.status(200).json({message: "Mecanico actualizado"})

@@ -145,6 +145,77 @@ mecanicosRouter.delete("/:cedula", async (req,res) =>{
 
 })
 
+mecanicosRouter.patch("/:cedula", async (req, res) =>{
+
+    const {cedula} = req.params
+    const {nombre, telefono, correo, interno, especialidades} = req.body
+
+    try{
+       await client.execute(
+            `UPDATE MECANICOS SET nombre = ?, telefono = ?, correo = ?, interno = ?
+             WHERE cedula = ?`,
+            [nombre, telefono, correo, interno, cedula]
+        );
+        
+       res.status(200).json({message: "Mecanico actualizado"})
+
+     
+    }catch{
+        return res.status(500).json({message: "Error al actualizar el mecanico"})
+
+    }
+
+    try{
+            const resultId  = await client.execute(`SELECT id FROM MECANICOS WHERE cedula = ?`, [cedula])
+            const [result] = resultId.rows
+            const {id} = result
+
+            const resultEspecialidadesId = await client.execute(`SELECT * FROM ESPECIALIDAD`)
+            const resultEspecialidades = resultEspecialidadesId.rows
+            const especialidadesId = resultEspecialidades.filter((especialidad) => especialidades.includes(especialidad.nombre_especialidad))
+
+
+
+
+        try{
+
+            const response = await client.execute(`DELETE FROM MECANICOS_ESPECIALIDADES WHERE id_mecanico = ?`,[id])
+            console.log(response.rowsAffected)
+            
+        }catch{
+
+            return res.status(500).json({message:"Error actualizando/eliminando especialidades del mecanico"})
+
+        }
+
+                    
+        try{
+            for (const especialidadId of especialidadesId) {
+                await client.execute(`
+                    INSERT INTO MECANICOS_ESPECIALIDADES (id_mecanico, id_especialidad)
+                    VALUES (?, ?)`,
+                    [id, especialidadId.id])
+            };
+
+        }catch {
+            return res.status(500).json({message:"Error actualizando especialidades del mecanico"})
+        }
+     
+
+    }catch{
+
+        return res.status(500).json({message:"Error actualizando especialidades del mecanico"})
+
+    }
+    
+
+
+
+
+
+
+})
+
 
 
 export default mecanicosRouter

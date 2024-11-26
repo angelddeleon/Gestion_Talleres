@@ -1,3 +1,4 @@
+import client from "../../../../backend/routes/clientes/model";
 
 let mechanics = [];
         let selectedSpecialties = new Set();
@@ -16,6 +17,8 @@ let mechanics = [];
         const editModal = document.getElementById("editModal");
         const editModalButton = document.getElementsByClassName("edit")
         const editAddSpecialtyBtn = document.getElementById("editAddSpecialtyBtn");
+        const editForm = document.getElementById("editForm")
+  
 
         
         //Eventos
@@ -23,12 +26,25 @@ let mechanics = [];
         editAddSpecialtyBtn.onclick = () => specialtyModal.classList.remove("hidden");
         cancelSpecialtyBtn.onclick = () => specialtyModal.classList.add('hidden');
         confirmSpecialtyBtn.onclick = () => {
-            const specialty = document.getElementById('specialtySelect').value;
-            if (!selectedSpecialties.has(specialty)) {
-                selectedSpecialties.add(specialty);
-                updateSpecialtiesDisplay();
+
+            const specialty = document.getElementById("specialtySelect").value;
+            
+            if (editModal.classList.contains("hidden")) {
+                console.log("Hidden")
+                if (!selectedSpecialties.has(specialty)) {
+                    selectedSpecialties.add(specialty);
+                    updateSpecialtiesDisplay();
+                }
             }
-            specialtyModal.classList.add('hidden');
+             else {
+                console.log("Aqui")
+             
+                if (!editingSpecialties.has(specialty)) {
+                    editingSpecialties.add(specialty);
+                    updateEditSpecialtiesDisplay();
+                }
+            }
+            specialtyModal.classList.add("hidden");
         };
      
         mecanicosTable.addEventListener("click", (e)=>{
@@ -37,7 +53,7 @@ let mechanics = [];
 
                 const trElement = e.target.parentElement.parentElement
                 const cedula = trElement.children[3].textContent
-                editarMecanicoModal(cedula)
+             editarMecanicoModal(cedula)
             }
 
            
@@ -52,7 +68,7 @@ let mechanics = [];
             const correo = document.getElementById("correo").value
             const cedula = document.getElementById("cedula").value
             let interno = document.getElementById("interno").value 
-            const especialidades = Array.from(selectedSpecialties)
+            const especialidades = Array.from(editingSpecialties)
 
             if (especialidades.length === 0){
                 alert("Agrega al menos una especialidad");
@@ -78,6 +94,32 @@ let mechanics = [];
             
           
           
+        })
+
+        editForm.addEventListener("submit", (event)=>{
+            event.preventDefault()
+            const nombre = document.getElementById('editNombre').value  ;
+            const telefono = document.getElementById('editTelefono').value;
+            const correo = document.getElementById("editCorreo").value
+            const cedula = document.getElementById("editCedula").value
+            let interno = document.getElementById("editInterno").value 
+            const especialidades = Array.from(editingSpecialties)
+
+            if (especialidades.length === 0){
+                alert("Agrega al menos una especialidad");
+                return
+            }
+
+            const mecanico ={
+                nombre,
+                cedula,
+                telefono,
+                correo,
+                interno,
+               especialidades,
+            }
+           
+            
         })
 
         
@@ -171,6 +213,12 @@ let mechanics = [];
             updateSpecialtiesDisplay();
         }
 
+        function removeEditSpecialty(specialty) {
+            editingSpecialties.delete(specialty);
+            updateEditSpecialtiesDisplay();
+
+        }
+
         function clearForm(){
             document.getElementById('nombre').value = ""  ;
             document.getElementById('telefono').value = "";
@@ -184,25 +232,21 @@ let mechanics = [];
         async function editarMecanicoModal(mecanico_cedula) {
 
             const mecanico = await fetchMecanicoById(mecanico_cedula)
-           
-         
             const editNombre = document.getElementById("editNombre")
             const editTelefono = document.getElementById("editTelefono")
             const editCorreo = document.getElementById("editCorreo")
             const editCedula = document.getElementById("editCedula")
-            console.log(mecanico)
+            
 
             if (mecanico){
                 editNombre.value = mecanico.nombre
                 editTelefono.value = mecanico.telefono
                 editCorreo.value = mecanico.correo
                 editCedula.value = mecanico.cedula
-                editingSpecialties = mecanico.especialidades.map((especialidad) => especialidad.nombre)
+                editingSpecialties = new Set(mecanico.especialidades.map((especialidad) => especialidad.nombre))
                 console.log(editingSpecialties)
                 updateEditSpecialtiesDisplay()
-
-               
-
+            
             }
            
             
@@ -279,6 +323,28 @@ let mechanics = [];
                 
             }   
             
+        }
+
+        async function fetchUpdateMecanico(mecanico, id) {
+
+
+            try{
+                const response = await fetch(`/mecanicos/${id}`, {
+                    method: "PATCH", // Tipo de solicitud
+                    headers: {
+                        "Content-Type": "application/json", 
+                        },
+                        body: JSON.stringify(mecanico), 
+                        })
+                }
+             
+            catch{
+
+                alert("Error al actualizar mecanico")
+
+            }
+
+     
         }
 
 

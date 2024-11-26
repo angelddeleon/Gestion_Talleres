@@ -188,7 +188,7 @@ mecanicosRouter.patch("/:id", async (req, res) =>{
 
     try{
        await client.execute(
-            `UPDATE MECANICOS SET nombre = ?, telefono = ?, correo = ?, interno = ?, cedula = ?
+            `UPDATE MECANICOS SET nombre = ?, telefono = ? ,correo = ?, interno = ?,cedula =?
              WHERE id = ?`,
             [nombre, telefono, correo, interno, cedula, id]
         );

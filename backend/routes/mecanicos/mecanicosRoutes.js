@@ -181,16 +181,16 @@ mecanicosRouter.delete("/:cedula", async (req,res) =>{
 
 })
 
-mecanicosRouter.patch("/:id", async (req, res) =>{
+mecanicosRouter.patch("/:cedula", async (req, res) =>{
 
-    const {id} = req.params
-    const {nombre, telefono, correo, cedula ,interno, especialidades} = req.body
+    const {cedula} = req.params
+    const {nombre, telefono, correo ,interno, especialidades} = req.body
 
     try{
        await client.execute(
-            `UPDATE MECANICOS SET nombre = ?, telefono = ? ,correo = ?, interno = ?,cedula =?
-             WHERE id = ?`,
-            [nombre, telefono, correo, interno, cedula, id]
+            `UPDATE MECANICOS SET nombre = ?, telefono = ? ,correo = ?, interno = ?
+             WHERE cedula = ?`,
+            [nombre, telefono, correo, interno, cedula]
         );
         
        res.status(200).json({message: "Mecanico actualizado"})

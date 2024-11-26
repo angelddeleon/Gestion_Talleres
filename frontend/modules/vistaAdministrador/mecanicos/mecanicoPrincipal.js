@@ -1,4 +1,3 @@
-import client from "../../../../backend/routes/clientes/model";
 
 let mechanics = [];
         let selectedSpecialties = new Set();
@@ -68,7 +67,7 @@ let mechanics = [];
             const correo = document.getElementById("correo").value
             const cedula = document.getElementById("cedula").value
             let interno = document.getElementById("interno").value 
-            const especialidades = Array.from(editingSpecialties)
+            const especialidades = Array.from(selectedSpecialties)
 
             if (especialidades.length === 0){
                 alert("Agrega al menos una especialidad");
@@ -118,6 +117,12 @@ let mechanics = [];
                 interno,
                especialidades,
             }
+
+            updateMecanico(mecanico)
+            closeEditModal()
+            updateMecanicosTable()
+
+            
            
             
         })
@@ -236,6 +241,7 @@ let mechanics = [];
             const editTelefono = document.getElementById("editTelefono")
             const editCorreo = document.getElementById("editCorreo")
             const editCedula = document.getElementById("editCedula")
+            const editInterno = document.getElementById("editInterno")
             
 
             if (mecanico){
@@ -243,6 +249,7 @@ let mechanics = [];
                 editTelefono.value = mecanico.telefono
                 editCorreo.value = mecanico.correo
                 editCedula.value = mecanico.cedula
+                editInterno.value = mecanico.interno
                 editingSpecialties = new Set(mecanico.especialidades.map((especialidad) => especialidad.nombre))
                 console.log(editingSpecialties)
                 updateEditSpecialtiesDisplay()
@@ -251,6 +258,7 @@ let mechanics = [];
            
             
             editModal.classList.remove("hidden");
+            updateMecanicosTable()
             
         }
 
@@ -325,11 +333,11 @@ let mechanics = [];
             
         }
 
-        async function fetchUpdateMecanico(mecanico, id) {
+        async function fetchUpdateMecanico(mecanico) {
 
 
             try{
-                const response = await fetch(`/mecanicos/${id}`, {
+                const response = await fetch(`/mecanicos/${mecanico.cedula}`, {
                     method: "PATCH", // Tipo de solicitud
                     headers: {
                         "Content-Type": "application/json", 
@@ -371,6 +379,17 @@ let mechanics = [];
             alert("Mecanico creado correctamente")
             return true
 
+        }
+
+        async function updateMecanico(mecanico,id) {
+
+            const validate = validateM(mecanico)
+
+            if (validate){
+
+                const response = await fetchUpdateMecanico(mecanico)
+            }
+            
         }
         
       

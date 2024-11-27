@@ -254,8 +254,8 @@ let vehicles = [];
                     selectedCustomer = cliente;
                     resultDiv.innerHTML = `
                         <div class="p-4 bg-green-50 border border-green-200 rounded-md">
-                            <p class="font-medium text-green-800">Customer Found:</p>
-                            <p class="text-green-700">${cliente.nombre} (ID: ${cliente.cedula})</p>
+                            <p class="font-medium text-green-800">Cliente Registrado</p>
+                            <p class="text-green-700">${cliente.nombre} (Cedula: ${cliente.cedula})</p>
                             <p class="text-green-700">${cliente.telefono}</p>
                         </div>
                     `;

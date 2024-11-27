@@ -19,7 +19,8 @@ await client.execute(`
         telefono VARCHAR(20) NOT NULL,
         correo VARCHAR(255) UNIQUE NOT NULL,
         cedula VARCHAR(20) UNIQUE NOT NULL,
-        direccion TEXT NOT NULL
+        direccion TEXT NOT NULL,
+        activo BOOLEAN DEFAULT TRUE
         )
       `)
 

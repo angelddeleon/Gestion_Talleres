@@ -29,7 +29,8 @@ await client.execute(`
     VALUES 
         ('XYZ456', 'Honda', 'Civic', '2018', 1),
         ('LMN789', 'Ford', 'Focus', '2021', 3),
-        ('TAC349', 'Toyota', 'Fortuner', '2008', 2);;
+        ('TAC349', 'Toyota', 'Fortuner', '2008', 2),
+        ('WER359', 'Toyota', '4runner', '2010', 4);
     `);
     
 

@@ -1,5 +1,4 @@
 
-let mechanics = [];
         let selectedSpecialties = new Set();
         let editingSpecialties = new Set();
 

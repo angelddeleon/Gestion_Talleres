@@ -14,6 +14,7 @@ mecanicosRouter.get("/", async (req,res)=>{
                 m.correo,
                 m.cedula,
                 m.interno,
+                m.activo,
                 e.id AS especialidad_id,
                 e.nombre_especialidad
             FROM MECANICOS m
@@ -34,6 +35,7 @@ mecanicosRouter.get("/", async (req,res)=>{
                     correo: row.correo,
                     cedula: row.cedula,
                     interno: row.interno,
+                    activo:row.activo,
                     especialidades: []
                 };
             }
@@ -116,7 +118,6 @@ mecanicosRouter.get("/:cedula", async (req, res) => {
         return res.status(500).json({ message: "Error al obtener el mecánico." });
     }
 });
-
 
 mecanicosRouter.post("/", async (req, res) =>{
 
@@ -252,6 +253,22 @@ mecanicosRouter.patch("/:cedula", async (req, res) =>{
 
 })
 
+mecanicosRouter.patch("/estatus/:cedula", async (req, res) =>{
+
+   const { cedula } = req.params
+   const { estatus } = req.body
+
+   try{
+    const response = await client.execute(`UPDATE MECANICOS SET activo = ?
+         WHERE cedula = ?`,[estatus,cedula])
+    
+         return res.status(200).json({message: "Mecanico actualizado"})
+
+   }catch{
+
+    return res.status(500).json({message:"Error actualizando estatus del mecanico"})
+   }
+})
 
 
 export default mecanicosRouter

@@ -6,35 +6,88 @@ const clientesRouter = Router()
 
 //Obtener Todos los clientes
 clientesRouter.get("/", async(req, res) =>{
-    try{
-        const clientes = await client.execute(`SELECT * FROM clientes`)
-        res.json(clientes.rows)
-    }catch (e){
-        res.status(500).json({error: e})
-    }
-})
-
-clientesRouter.get("/:cedula", async(req, res) =>{
-
-    try{
-        const { cedula } = req.params
-        const cliente = await client.execute(`SELECT * FROM clientes WHERE cedula = '${cedula}'`)
-
-        if (cliente.rows.length ===0){
-            return res.status(404).json({error: "Cliente no encontrado"})
+  
+        try {
+            // Obtener todos los clientes
+            const clientesResult = await client.execute(`
+                SELECT * 
+                FROM CLIENTES
+            `);
+    
+            const clientes = clientesResult.rows;
+    
+            // Si no hay clientes, devolver una lista vacía
+            if (clientes.length === 0) {
+                return res.status(200).json([]);
+            }
+    
+            // Obtener todos los vehículos asociados
+            const vehiculosResult = await client.execute(`
+                SELECT * 
+                FROM VEHICULOS
+            `);
+    
+            const vehiculos = vehiculosResult.rows;
+    
+            // Asociar los vehículos a sus respectivos clientes
+            const clientesConVehiculos = clientes.map(cliente => {
+                const vehiculosCliente = vehiculos.filter(vehiculo => vehiculo.id_cliente === cliente.id);
+                return {
+                    ...cliente,
+                    vehiculos: vehiculosCliente
+                };
+            });
+    
+            // Enviar los clientes con sus vehículos
+            return res.status(200).json(clientesConVehiculos);
+        } catch (error) {
+            console.error("Error al obtener los clientes y sus vehículos:", error);
+            return res.status(500).json({ message: "Error al obtener los clientes y sus vehículos." });
         }
-        return res.json(cliente.rows)
-    }catch (e){
-        res.status(500).json({error: e})
-    }
-})
+    });
+    
+
+
+clientesRouter.get("/:cedula", async (req, res) => {
+        try {
+            const { cedula } = req.params;
+    
+            // Obtener datos del cliente
+            const clienteResult = await client.execute(`
+                SELECT * 
+                FROM CLIENTES
+                WHERE cedula = ?
+            `, [cedula]);
+    
+            if (clienteResult.rows.length === 0) {
+                return res.status(404).json({});
+            }
+    
+            const cliente = clienteResult.rows[0];
+    
+            // Obtener vehículos asociados al cliente
+            const vehiculosResult = await client.execute(`
+                SELECT * 
+                FROM VEHICULOS
+                WHERE id_cliente = ?
+            `, [cliente.id]);
+    
+            // Agregar los vehículos al cliente
+            cliente.vehiculos = vehiculosResult.rows;
+    
+            // Enviar el cliente con sus vehículos
+            return res.status(200).json(cliente);
+        } catch (error) {
+            console.error("Error al obtener cliente y sus vehículos:", error);
+            return res.status(500).json({ message: "Error al obtener cliente y sus vehículos." });
+        }
+    });
 
 clientesRouter.post("/", async (req, res) =>{
     try{
 
         const { nombre, cedula, telefono, direccion , correo} = req.body
 
-        console.log('info ' + nombre, cedula, telefono, direccion, correo)
 
         const cliente = await client.execute(
             `INSERT INTO CLIENTES (nombre, telefono, correo, cedula, direccion) 
@@ -70,6 +123,21 @@ clientesRouter.patch("/:cedula", async(req, res) =>{
 
     
     
+})
+
+clientesRouter.patch("/estatus/:cedula", async(req, res) =>{
+    const { cedula } = req.params
+    const { estatus } = req.body
+
+    try{
+        const result = await client.execute(`UPDATE CLIENTES SET activo = ? 
+            WHERE cedula = ?`,[estatus,cedula])
+        
+        res.status(200).json({message: "Mecanico actualizado"})
+
+    }catch{
+        return res.status(500).json({error: "Error al cambiar estatus"})
+    }
 })
 
 

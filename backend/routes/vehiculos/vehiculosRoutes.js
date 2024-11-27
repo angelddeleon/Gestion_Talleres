@@ -30,6 +30,21 @@ vehiculosRouter.get("/:placa", async (req, res) => {
     }
 });
 
+vehiculosRouter.post("/", async (req, res) => {
+    try {
+        const { placa, marca, modelo, year, id_cliente } = req.body;
+        await client.execute(`
+            INSERT INTO VEHICULOS (placa, marca, modelo, year, id_cliente)
+            VALUES (?, ?, ?, ?, ?)
+        `, [placa, marca, modelo, year, id_cliente]);
+
+        return res.status(201).json({ message: "Vehículo registrado exitosamente." });
+    } catch (error) {
+        console.error("Error al registrar el vehículo:", error);
+        return res.status(500).json({ message: "Error al registrar el vehículo." });
+    }
+});
+
 
 
 

@@ -15,26 +15,22 @@ let vehicles = [];
 
         // Eventos
 
-        
-        confirmDeleteBtn.addEventListener("click", () => {
        
-            hideDeleteModal();
-        });
 
         cancelDeleteBtn.addEventListener("click", hideDeleteModal);
 
         
         document.getElementById("editVehicleForm").addEventListener("submit", function(e) {
-           
-            
+
+            updateTable()    
         });
 
         document.getElementById("vehicleForm").addEventListener("submit", function(e) {
 
             e.preventDefault()
-            const placa = document.getElementById("plate").value
-            const marca = document.getElementById("brand").value
-            const modelo = document.getElementById("model").value
+            const placa = document.getElementById("plate").value.toUpperCase()
+            const marca = document.getElementById("brand").value.charAt(0).toUpperCase()
+            const modelo = document.getElementById("model").value.charAt(0).toUpperCase()
             const year = document.getElementById("year").value
     
 
@@ -46,7 +42,7 @@ let vehicles = [];
 
             }else{
                 
-                const nombre = document.getElementById("customerName").value
+                const nombre = document.getElementById("customerName").value.charAt(0).toUpperCase()
                 const cedula =  document.getElementById("customerId").value
                 const telefono = document.getElementById("customerPhone").value
                 const correo = document.getElementById("customerEmail").value
@@ -55,19 +51,42 @@ let vehicles = [];
                 createClient(vehiculo, cliente, 1)
 
             }
+            updateTable()
 
             clearNewCustomerForm()
             this.reset();
             selectedCustomer = null;
             document.getElementById("customerSearchResult").innerHTML = "";
+            
            
         });
+
+        document.getElementById('vehiclesTableBody').addEventListener("click", (e)=>{
+            
+            let cedula
+
+            if(e.target.classList.contains("delete-button")){
+                const trElement = e.target.parentElement.parentElement
+                cedula = trElement.children[2].children[1].querySelector("span").textContent
+                showDeleteModal()    
+            }
+
+             
+        confirmDeleteBtn.addEventListener("click", () => {
+            deleteClient(cedula)
+            hideDeleteModal();
+            updateTable()
+        });
+
+
+
+        })
 
 
         //UI
 
-        function showDeleteModal(id) {
-            vehicleToDelete = id;
+        function showDeleteModal() {
+        
             deleteModal.classList.remove("hidden");
         }
 
@@ -159,32 +178,37 @@ let vehicles = [];
         }
 
 
-        function updateTable() {
+        async function updateTable() {
             const tbody = document.getElementById("vehiclesTableBody");
+            const clientesFull = await fetchClientes()
+            const clientes = clientesFull.filter(cliente => cliente.activo === 1)
             tbody.innerHTML = "";
             
-            vehicles.forEach(vehicle => {
-                const row = document.createElement("tr");
-                row.innerHTML = `
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${vehicle.plate}</td>
+            clientes.forEach(cliente => {
+                cliente.vehiculos.forEach(vehiculo => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${vehiculo.placa}</td>
                     <td class="px-6 py-4 whitespace-normal text-sm text-gray-900">
-                        <div class="font-medium">${vehicle.brand} ${vehicle.model}</div>
-                        <div class="text-gray-500">Year: ${vehicle.year} | Color: ${vehicle.color}</div>
+                        <div class="font-medium">${vehiculo.marca} ${vehiculo.modelo}</div>
+                        <div class="text-gray-500">Year: ${vehiculo.year}</div>
                     </td>
                     <td class="px-6 py-4 whitespace-normal text-sm text-gray-900">
-                        <div class="font-medium">${vehicle.customer.name}</div>
-                        <div class="text-gray-500">ID: ${vehicle.customer.id}</div>
+                        <div class="font-medium">${cliente.nombre}</div>
+                        <div class="text-gray-500">Cedula:<span>${cliente.cedula}</span></div>
                     </td>
                     <td class="px-6 py-4 whitespace-normal text-sm text-gray-900">
-                        <div>${vehicle.customer.phone}</div>
-                        <div class="text-gray-500">${vehicle.customer.email}</div>
+                        <div>${cliente.telefono}</div>
+                        <div class="text-gray-500">${cliente.correo}</div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <button onclick="editVehicle(${vehicle.id})" class="text-blue-600 hover:text-blue-900 mr-3">Edit</button>
-                        <button onclick="showDeleteModal(${vehicle.id})" class="text-red-600 hover:text-red-900">Delete</button>
+                        <button onclick="editVehicle()" class="text-blue-600 hover:text-blue-900 mr-3">Modificar</button>
+                        <button class="delete-button text-red-600 hover:text-red-900">Eliminar</button>
                     </td>
                 `;
                 tbody.appendChild(row);
+                })
+                
             });
         }
 
@@ -222,11 +246,11 @@ let vehicles = [];
             }
         }
 
+        async function deleteClient(cedula){
 
+            await fetchDeleteClient(cedula)
+        }
 
-
-
-        
 
         function validateClient(cliente){
 
@@ -322,6 +346,36 @@ let vehicles = [];
             
         }
 
+        async function fetchClientes() {
+
+            try{
+                const response = await fetch("/clientes")
+                const clientes = response.json()
+                return clientes
+
+            }catch{
+                alert("Error en el fetch")
+
+            }
+            
+        }
+
+        async function fetchDeleteClient(cedula) {
+
+            try{
+                const response = await fetch(`/clientes/estatus/${cedula}`, {
+                    method: "PATCH", // Tipo de solicitud
+                    headers: {
+                        "Content-Type": "application/json", // Especifica que se está enviando JSON
+                        },
+                    body: JSON.stringify({estatus:0})}) // Convierte el objeto a un string JSON
+
+
+            }catch{
+                alert("Error en el fetch al cliente")
+            }
+            
+        }
 
 
         
@@ -334,3 +388,8 @@ let vehicles = [];
 
 
 
+
+document.addEventListener('DOMContentLoaded', () => {
+           updateTable()
+            
+        });

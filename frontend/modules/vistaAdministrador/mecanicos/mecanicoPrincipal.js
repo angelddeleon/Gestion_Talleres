@@ -76,10 +76,8 @@
             })
 
            
-           
-     
-
-        mechanicForm.addEventListener("submit",(event)=>{
+        
+        mechanicForm.addEventListener("submit",async (event)=>{
             
             event.preventDefault()
             const nombre = document.getElementById('nombre').value  ;
@@ -105,7 +103,7 @@
             }
            
             
-            const response = createMecanico(mecanico)
+            const response = await createMecanico(mecanico)
 
             if (response){
                 clearForm() 
@@ -116,7 +114,7 @@
           
         })
 
-        editForm.addEventListener("submit", (event)=>{
+        editForm.addEventListener("submit", async (event)=>{
             event.preventDefault()
             const nombre = document.getElementById('editNombre').value  ;
             const telefono = document.getElementById('editTelefono').value;
@@ -139,9 +137,14 @@
                especialidades,
             }
 
-            updateMecanico(mecanico)
-            closeEditModal()
-            updateMecanicosTable()
+            const response = await updateMecanico(mecanico)
+
+            if (response){
+                closeEditModal()
+                updateMecanicosTable()
+
+            }
+           
 
             
            
@@ -415,23 +418,24 @@
 
             const validate = validateM(mecanico)
 
-            if (!validate){
-                alert("!!!!!")
-                // Ingresar logica para mostrar donde estan los errores del usuario
-                return false
+            if (validate){
+                try{
+                    const response = await fetchCreateMecanico(mecanico)
+                    alert('Mecanico Creado')
+                    return true
+
+                }catch{
+                    alert("Error creando mecanico")
+
+                }
+               
+
+            }else{
+                alert("Datos Invalidos")
             }
 
-            const response = await fetchCreateMecanico(mecanico)
-
-            if (!response){
-                alert("Error al crear el mecanico")
-                //Agregar logica para mostrar en donde esta el error
-                return false
-            }
-
-            alert("Mecanico creado correctamente")
-            return true
-
+            return false
+            
         }
 
         async function updateMecanico(mecanico,id) {
@@ -439,9 +443,18 @@
             const validate = validateM(mecanico)
 
             if (validate){
+                try{
+                    const response = await fetchUpdateMecanico(mecanico)
+                    alert("Mecanico Modificado Correctamente")
+                    return true
 
-                const response = await fetchUpdateMecanico(mecanico)
+                }catch{
+                    alert("Error actualizando mecanico")
+                }   
+            }else{
+                alert("Datos Invalidos")
             }
+            return false
             
         }
 
@@ -469,10 +482,14 @@
     
         function validateM(mecanico){
 
-            //Agregar todas las validaciones antes de mandarlo al servidor
-            if(expression.nombre.test(mecanico.nombre) && expression.telefono.test(mecanico.telefono) && expression.cedula.test(mecanico.cedula) && expression.correo.test(mecanico.correo)){
-                return true
-            }
+            // //Agregar todas las validaciones antes de mandarlo al servidor
+            // if(expression.nombre.test(mecanico.nombre) && expression.telefono.test(mecanico.telefono) && expression.cedula.test(mecanico.cedula) && expression.correo.test(mecanico.correo)){
+            //     return true
+            // }
+
+            // return false
+
+            return true
 
 
         }

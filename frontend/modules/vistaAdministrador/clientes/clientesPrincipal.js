@@ -29,8 +29,8 @@ let vehicles = [];
 
             e.preventDefault()
             const placa = document.getElementById("plate").value.toUpperCase()
-            const marca = document.getElementById("brand").value
-            const modelo = document.getElementById("model").value
+            const marca = document.getElementById("brand").value.charAt(0).toUpperCase()
+            const modelo = document.getElementById("model").value.charAt(0).toUpperCase()
             const year = document.getElementById("year").value
     
 
@@ -42,7 +42,7 @@ let vehicles = [];
 
             }else{
                 
-                const nombre = document.getElementById("customerName").value
+                const nombre = document.getElementById("customerName").value.charAt(0).toUpperCase()
                 const cedula =  document.getElementById("customerId").value
                 const telefono = document.getElementById("customerPhone").value
                 const correo = document.getElementById("customerEmail").value
@@ -251,14 +251,38 @@ let vehicles = [];
             await fetchDeleteClient(cedula)
         }
 
+        //Validate Form
+        
+
+        let expression = {
+            nombre: /^[A-Za-z\s]+$/, // Solo letras y espacios
+            telefono: /^[0-9]{11}$/, // Solo números y exactamente 11 dígitos
+            cedula: /^[0-9]{8}$/, // Solo números y exactamente 8 dígitos
+            correo: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+            direccion: /.+/ ,
+
+            placa: /^[A-Z]{4}[0-9]{3}$/,
+            marca: /.+/,
+            modelo: /.+/,
+            year: /^[0-9]{4}$/
+        }
+
 
         function validateClient(cliente){
 
-            return true
+            if(expression.nombre.test(cliente.nombre) && expression.telefono.test(cliente.telefono) && expression.cedula.test(cliente.cedula) && expression.correo.test(cliente.correo) && expression.direccion.test(cliente.direccion)){
+                return true
+            }
+
+
+ 
         }
         function validateVehicle(vehiculo){
 
-            return true
+            if(expression.placa.test(vehiculo.placa) && expression.marca.test(vehiculo.marca) && expression.modelo.test(vehiculo.modelo) && expression.year.test(vehiculo.year) ){
+                return true
+            }
+
         }
 
         

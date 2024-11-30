@@ -390,13 +390,24 @@
             }
             
         }
+
+        let expression = {
+            nombre: /^[A-Za-z\s]+$/, // Solo letras y espacios
+            telefono: /^[0-9]{11}$/, // Solo números y exactamente 11 dígitos
+            cedula: /^[0-9]{8}$/, // Solo números y exactamente 8 dígitos
+            correo: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+        }
+
         
       
         function validateM(mecanico){
 
             //Agregar todas las validaciones antes de mandarlo al servidor
+            if(expression.nombre.test(mecanico.nombre) && expression.telefono.test(mecanico.telefono) && expression.cedula.test(mecanico.cedula) && expression.correo.test(mecanico.correo)){
+                return true
+            }
 
-            return true
+
         }
 
         

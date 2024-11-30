@@ -39,13 +39,13 @@ let vehicles = [];
             const cliente = {nombre, cedula, telefono, correo, direccion}
 
             const response = await editClient(vehiculo, cliente)
-
             if (response){
                 hideEditModal()
                 updateTable()
-               
+                
+                
             }
-           
+            
             
             
           

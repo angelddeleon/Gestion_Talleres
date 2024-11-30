@@ -20,6 +20,8 @@
 
         
         //Eventos
+        document.getElementById("cancelDelete").onclick = () => hideDeleteModal();
+        
         addSpecialtyBtn.onclick = () => specialtyModal.classList.remove('hidden');
         editAddSpecialtyBtn.onclick = () => specialtyModal.classList.remove("hidden");
         cancelSpecialtyBtn.onclick = () => specialtyModal.classList.add('hidden');
@@ -46,16 +48,36 @@
         };
      
         mecanicosTable.addEventListener("click", (e)=>{
+            let cedula
 
             if (e.target.classList.contains("edit-button")){
 
                 const trElement = e.target.parentElement.parentElement
-                const cedula = trElement.children[3].textContent
+                cedula = trElement.children[3].textContent
              editarMecanicoModal(cedula)
-            }
+            }else if(e.target.classList.contains("delete-button")){
+                const trElement = e.target.parentElement.parentElement
+                cedula = trElement.children[3].textContent
+                showDeleteModal()   
 
            
-        })  
+
+            }
+
+                        
+            document.getElementById("confirmDelete").addEventListener("click", async () => {
+                await deleteMecanico(cedula)
+                hideDeleteModal();
+                updateMecanicosTable()
+            });
+
+
+          
+            })
+
+           
+           
+     
 
         mechanicForm.addEventListener("submit",(event)=>{
             
@@ -126,8 +148,20 @@
             
         })
 
+     
         
         //UI Functions
+
+        function showDeleteModal() {
+        
+            deleteModal.classList.remove("hidden");
+        }
+ 
+
+        function hideDeleteModal() {
+            deleteModal.classList.add("hidden");
+
+        }
         function updateSpecialtiesDisplay() {
             selectedSpecialtiesContainer.innerHTML = '';
             selectedSpecialties.forEach(specialty => {
@@ -169,7 +203,8 @@
         }
         async function updateMecanicosTable(){
 
-            const mecanicos = await fetchMecanicos()
+            const mecanicosSinFiltrar = await fetchMecanicos()
+            const mecanicos = mecanicosSinFiltrar.filter(mecanico => mecanico.activo === 1)
             mecanicosTable.innerHTML = " "
 
             mecanicos.map((mecanico) =>{
@@ -182,7 +217,9 @@
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${mecanico.interno == 1 ? 'Sí' : 'No'}</td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${mecanico.especialidades.map((especialidad)=>especialidad.nombre)}</td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                  
                         <button class="edit-button text-blue-600 hover:text-blue-900">Edit</button>
+                        <button class="delete-button text-red-600 hover:text-red-900">Eliminar</button>
                 </td>
                 </tr>
               `;
@@ -190,7 +227,7 @@
 
             })
           
-
+ 
 
         }
         async function loadSpecialities(){
@@ -354,6 +391,23 @@
      
         }
 
+        async function  fetchDeleteMecanico(mecanico) {
+
+            try{
+                const response = await fetch(`/mecanicos/estatus/${mecanico.cedula}`, {
+                    method: "PATCH", // Tipo de solicitud
+                    headers: {
+                        "Content-Type": "application/json", 
+                        },
+                        body: JSON.stringify({estatus:0}), 
+            })
+                
+            }catch{
+
+            }
+            
+        }
+
 
         //Controllers
 
@@ -391,6 +445,20 @@
             
         }
 
+        async function deleteMecanico(cedula) {
+
+            try{
+                console.log({cedula})
+                const response = await fetchDeleteMecanico({cedula})
+
+            }catch{
+                alert("Error al eliminar el mecanico")
+            }
+
+            
+            
+        }
+
         let expression = {
             nombre: /^[A-Za-z\s]+$/, // Solo letras y espacios
             telefono: /^[0-9]{11}$/, // Solo números y exactamente 11 dígitos
@@ -398,8 +466,7 @@
             correo: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
         }
 
-        
-      
+    
         function validateM(mecanico){
 
             //Agregar todas las validaciones antes de mandarlo al servidor

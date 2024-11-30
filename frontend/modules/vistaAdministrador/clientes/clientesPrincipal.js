@@ -20,17 +20,43 @@ let vehicles = [];
         cancelDeleteBtn.addEventListener("click", hideDeleteModal);
 
         
-        document.getElementById("editVehicleForm").addEventListener("submit", function(e) {
+        document.getElementById("editVehicleForm").addEventListener("submit", async function(e) {
+            e.preventDefault();
 
-            updateTable()    
+            const placa = document.getElementById("editPlate").value
+            const marca =document.getElementById("editBrand").value 
+            const modelo = document.getElementById("editModel").value 
+            const year = document.getElementById("editYear").value 
+            
+            const nombre = document.getElementById("editCustomerName").value 
+            const cedula = document.getElementById("editCustomerId").value 
+            const telefono =document.getElementById("editCustomerPhone").value 
+            const correo = document.getElementById("editCustomerEmail").value  
+            
+            const direccion = document.getElementById("editCustomerAddress").value  
+
+            const vehiculo = {placa,marca,modelo,year}
+            const cliente = {nombre, cedula, telefono, correo, direccion}
+
+            const response = await editClient(vehiculo, cliente)
+
+            if (response){
+                hideEditModal()
+                updateTable()
+               
+            }
+           
+            
+            
+          
         });
 
         document.getElementById("vehicleForm").addEventListener("submit", function(e) {
 
             e.preventDefault()
             const placa = document.getElementById("plate").value.toUpperCase()
-            const marca = document.getElementById("brand").value.charAt(0).toUpperCase()
-            const modelo = document.getElementById("model").value.charAt(0).toUpperCase()
+            const marca = document.getElementById("brand").value
+            const modelo = document.getElementById("model").value
             const year = document.getElementById("year").value
     
 
@@ -42,7 +68,7 @@ let vehicles = [];
 
             }else{
                 
-                const nombre = document.getElementById("customerName").value.charAt(0).toUpperCase()
+                const nombre = document.getElementById("customerName").value
                 const cedula =  document.getElementById("customerId").value
                 const telefono = document.getElementById("customerPhone").value
                 const correo = document.getElementById("customerEmail").value
@@ -69,17 +95,23 @@ let vehicles = [];
                 const trElement = e.target.parentElement.parentElement
                 cedula = trElement.children[2].children[1].querySelector("span").textContent
                 showDeleteModal()    
+
+
+            }else if(e.target.classList.contains("edit-button")){
+                const trElement = e.target.parentElement.parentElement
+                cedula = trElement.children[2].children[1].querySelector("span").textContent
+                const placa = trElement.children[0].textContent
+                editarClienteModal(cedula, placa)
+                showEditModal()
+
             }
 
              
-        confirmDeleteBtn.addEventListener("click", () => {
+            confirmDeleteBtn.addEventListener("click", () => {
             deleteClient(cedula)
             hideDeleteModal();
             updateTable()
         });
-
-
-
         })
 
 
@@ -89,6 +121,7 @@ let vehicles = [];
         
             deleteModal.classList.remove("hidden");
         }
+ 
 
         function hideDeleteModal() {
             deleteModal.classList.add("hidden");
@@ -202,7 +235,7 @@ let vehicles = [];
                         <div class="text-gray-500">${cliente.correo}</div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <button onclick="editVehicle()" class="text-blue-600 hover:text-blue-900 mr-3">Modificar</button>
+                        <button class ="edit-button text-blue-600 hover:text-blue-900 mr-3">Modificar</button>
                         <button class="delete-button text-red-600 hover:text-red-900">Eliminar</button>
                     </td>
                 `;
@@ -212,12 +245,37 @@ let vehicles = [];
             });
         }
 
+        async function editarClienteModal(cedula, placa){
+
+            const cliente = await fetchClienteId({cedula})
+            const vehiculo = await fetchVehiculoPlaca({placa})
+
+            document.getElementById("editPlate").value = vehiculo.placa
+            document.getElementById("editBrand").value = vehiculo.marca
+            document.getElementById("editModel").value = vehiculo.modelo
+            document.getElementById("editYear").value = vehiculo.year
+            
+
+            document.getElementById("editCustomerName").value = cliente.nombre
+            document.getElementById("editCustomerId").value = cliente.cedula
+            document.getElementById("editCustomerPhone").value = cliente.telefono
+            document.getElementById("editCustomerEmail").value = cliente.correo
+            document.getElementById("editCustomerAddress").value = cliente.direccion
+
+
+
+
+
+        }
+
         //Controllers
 
         async function createClient(vehiculo, cliente, newClient){
 
             const validateC = validateClient(cliente)
             const validateV = validateVehicle(vehiculo)
+            console.log(validateC)
+            console.log(validateV)
 
             if (validateC && validateV){
 
@@ -251,6 +309,29 @@ let vehicles = [];
             await fetchDeleteClient(cedula)
         }
 
+        async function editClient(vehiculo, cliente) {
+
+            const validateC = validateClient(cliente)
+            const validateV = validateVehicle(vehiculo)
+
+            if (validateC && validateV){
+                try{
+                    await fetchEditClient(cliente)
+                    await fetchEditVehicle(vehiculo)
+                    alert("Cliente Actualizado Correctamente")
+                    return true
+
+                }catch{
+                    alert("Error al actualizar cliente")
+                    return false
+                }
+               
+            }else{
+                alert("Datos no validos")
+            }
+            
+        }
+
         //Validate Form
         
 
@@ -261,27 +342,32 @@ let vehicles = [];
             correo: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
             direccion: /.+/ ,
 
-            placa: /^[A-Z]{4}[0-9]{3}$/,
+            placa: /.+/,
             marca: /.+/,
             modelo: /.+/,
             year: /^[0-9]{4}$/
         }
-
-
         function validateClient(cliente){
 
-            if(expression.nombre.test(cliente.nombre) && expression.telefono.test(cliente.telefono) && expression.cedula.test(cliente.cedula) && expression.correo.test(cliente.correo) && expression.direccion.test(cliente.direccion)){
-                return true
-            }
+            // if(expression.nombre.test(cliente.nombre) && expression.telefono.test(cliente.telefono) && expression.cedula.test(cliente.cedula) && expression.correo.test(cliente.correo) && expression.direccion.test(cliente.direccion)){
+            //     return true
+            // }
+            // return false
+
+            return true
 
 
  
         }
         function validateVehicle(vehiculo){
 
-            if(expression.placa.test(vehiculo.placa) && expression.marca.test(vehiculo.marca) && expression.modelo.test(vehiculo.modelo) && expression.year.test(vehiculo.year) ){
-                return true
-            }
+            // if(expression.placa.test(vehiculo.placa) && expression.marca.test(vehiculo.marca) && expression.modelo.test(vehiculo.modelo) && expression.year.test(vehiculo.year) ){
+            //     return true
+            // }
+
+            // return false
+
+            return true
 
         }
 
@@ -346,6 +432,20 @@ let vehicles = [];
             
         }
 
+        async function fetchVehiculoPlaca(vehicle) {
+            
+            try{
+                const response = await fetch(`/vehiculos/${vehicle.placa}`)
+                const vehiculo = await response.json()
+                console.log(vehiculo)
+                return vehiculo
+            }catch{
+                alert("Error Creando")
+            }
+            
+            
+        }
+
         async function fetchCreateVehiculo(vehiculo, idCliente) {
 
             vehiculo.id_cliente = idCliente
@@ -399,6 +499,46 @@ let vehicles = [];
                 alert("Error en el fetch al cliente")
             }
             
+        }
+
+        async function fetchEditClient(cliente){
+
+            try{
+                const response = await fetch(`/clientes/${cliente.cedula}`, {
+                    method: "PATCH", // Tipo de solicitud
+                    headers: {
+                        "Content-Type": "application/json", // Especifica que se está enviando JSON
+                        },
+                        body: JSON.stringify(cliente) // Convierte el objeto a un string JSON
+                        })
+
+            }catch{
+                alert("Error en el fetch al cliente")
+            }
+
+
+
+        }
+
+        async function fetchEditVehicle(vehiculo) {
+
+            try{
+       
+                const response = await fetch(`/vehiculos/${vehiculo.placa}`, {
+                    method: "PATCH", // Tipo de solicitud
+                    headers: {
+                        "Content-Type": "application/json", // Especifica que se está enviando JSON
+                        },
+                        body: JSON.stringify(vehiculo) // Convierte el objeto a un string JSON
+                        })
+
+            }catch(error) {
+                alert("error enviando el fetch de vehiculos")
+         
+                
+              
+            }
+        
         }
 
 

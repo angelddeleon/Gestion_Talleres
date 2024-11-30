@@ -21,12 +21,12 @@ vehiculosRouter.get("/:placa", async (req, res) => {
         const response = await client.execute(`SELECT * FROM VEHICULOS WHERE placa = '${placa}' `)
 
         if (response.rows.length === 0) {
-            return res.status(404).json({ error: "Vehículo no encontrado" });
+            return res.status(404).json({});
         }
-        return res.json(response.rows);
+        return res.json(response.rows[0]);
 
     } catch (error) {
-        return res.status(500).json({ error: "Error encontrando el vehículo" });
+        return res.status(500).json({});
     }
 });
 
@@ -44,6 +44,29 @@ vehiculosRouter.post("/", async (req, res) => {
         return res.status(500).json({ message: "Error al registrar el vehículo." });
     }
 });
+
+
+vehiculosRouter.patch("/:placa", async (req, res) =>{
+
+
+    const { placa } = req.params
+    const { marca , modelo, year} = req.body
+
+    try{
+
+        await client.execute(`UPDATE VEHICULOS SET marca = ?, modelo = ?, year = ?
+            WHERE placa = ?`,
+            [marca ,modelo ,year, placa]);
+        res.status(200).json({message: "Vehiculo actualizado correctamente"})
+
+
+    }catch{
+        res.status(500).json({message: "Error al actualizar el vehículo"})
+
+    }
+
+
+})
 
 
 

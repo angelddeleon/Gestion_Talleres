@@ -119,7 +119,25 @@ clientesRouter.delete("/:cedula", async (req, res) =>{
 })
 
 clientesRouter.patch("/:cedula", async(req, res) =>{
-    const { cedula } = req.params
+    
+    const {cedula} = req.params
+    const {nombre, telefono, correo , direccion} = req.body
+
+    try{
+       await client.execute(
+            `UPDATE CLIENTES SET nombre = ?, telefono = ? ,correo = ?, direccion = ?
+             WHERE cedula = ?`,
+            [nombre, telefono, correo, direccion, cedula]
+        );
+        
+       res.status(200).json({message: "Cliente Actualizado"})
+
+    }catch{
+        return res.status(500).json({message: "Error al actualizar el mecanico"})
+    }
+
+    
+
 
     
     

@@ -12,10 +12,12 @@
   "license": "ISC",
   "dependencies": {
     "@libsql/client": "^0.14.0",
+    "autoprefixer": "^10.4.20",
     "cors": "^2.8.5",
     "express": "^4.21.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.7"
+    "nodemon": "^3.1.7",
+    "tailwindcss": "^3.4.15"
   }
 }

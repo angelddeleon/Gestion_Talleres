@@ -29,8 +29,8 @@ let vehicles = [];
 
             e.preventDefault()
             const placa = document.getElementById("plate").value.toUpperCase()
-            const marca = document.getElementById("brand").value.charAt(0).toUpperCase()
-            const modelo = document.getElementById("model").value.charAt(0).toUpperCase()
+            const marca = document.getElementById("brand").value
+            const modelo = document.getElementById("model").value
             const year = document.getElementById("year").value
     
 
@@ -42,7 +42,7 @@ let vehicles = [];
 
             }else{
                 
-                const nombre = document.getElementById("customerName").value.charAt(0).toUpperCase()
+                const nombre = document.getElementById("customerName").value
                 const cedula =  document.getElementById("customerId").value
                 const telefono = document.getElementById("customerPhone").value
                 const correo = document.getElementById("customerEmail").value

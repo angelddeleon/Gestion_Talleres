@@ -21,9 +21,9 @@ vehiculosRouter.get("/:placa", async (req, res) => {
         const response = await client.execute(`SELECT * FROM VEHICULOS WHERE placa = '${placa}' `)
 
         if (response.rows.length === 0) {
-            return res.status(404).json({});
+            return res.status(404).json([]);
         }
-        return res.json(response.rows[0]);
+        return res.json(response.rows);
 
     } catch (error) {
         return res.status(500).json({});

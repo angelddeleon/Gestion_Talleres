@@ -30,7 +30,7 @@ await client.execute(`
         fecha_inicio DATETIME NOT NULL,
         fecha_finalizacion DATETIME NOT NULL,
         descripcion VARCHAR(255) NOT NULL,
-        status VARCHAR(255) NOT NULL,
+        status VARCHAR(255) NOT NULL DEFAULT pendiente,
         id_vehiculo INTEGER NOT NULL
     )`)
 
@@ -38,8 +38,8 @@ await client.execute(`
     CREATE TABLE IF NOT EXISTS TAREAS_REPARACION (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         tarea_realizada TEXT NOT NULL,
-        OBSERVACIONES TEXT NOT NULL,
-        status VARCHAR(255) NOT NULL,
+        OBSERVACIONES TEXT,
+        status VARCHAR(255) DEFAULT pendiente,
         fecha_inicio,
         fecha_finalizacion,
         id_mecanico INTEGER NOT NULL,

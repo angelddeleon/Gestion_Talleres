@@ -56,4 +56,11 @@ reparacionesRouter.get("/:id_mecanico", async (req, res) => {
 
 
 
+
+
+
+
+
+
+
 export default reparacionesRouter

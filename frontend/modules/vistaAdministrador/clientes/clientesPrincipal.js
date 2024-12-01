@@ -250,10 +250,12 @@ let vehicles = [];
             const cliente = await fetchClienteId({cedula})
             const vehiculo = await fetchVehiculoPlaca({placa})
 
-            document.getElementById("editPlate").value = vehiculo.placa
-            document.getElementById("editBrand").value = vehiculo.marca
-            document.getElementById("editModel").value = vehiculo.modelo
-            document.getElementById("editYear").value = vehiculo.year
+            console.log(cliente, vehiculo)
+
+            document.getElementById("editPlate").value = vehiculo[0].placa
+            document.getElementById("editBrand").value = vehiculo[0].marca
+            document.getElementById("editModel").value = vehiculo[0].modelo
+            document.getElementById("editYear").value = vehiculo[0].year
             
 
             document.getElementById("editCustomerName").value = cliente.nombre
@@ -261,10 +263,6 @@ let vehicles = [];
             document.getElementById("editCustomerPhone").value = cliente.telefono
             document.getElementById("editCustomerEmail").value = cliente.correo
             document.getElementById("editCustomerAddress").value = cliente.direccion
-
-
-
-
 
         }
 

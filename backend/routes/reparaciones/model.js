@@ -28,9 +28,9 @@ await client.execute(`
     CREATE TABLE IF NOT EXISTS REPARACIONES(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         fecha_inicio DATETIME NOT NULL,
-        fecha_finalizacion DATETIME NOT NULL,
+        fecha_finalizacion DATETIME,
         descripcion VARCHAR(255) NOT NULL,
-        status VARCHAR(255) NOT NULL DEFAULT pendiente,
+        status VARCHAR(255) DEFAULT pendiente,
         id_vehiculo INTEGER NOT NULL
     )`)
 

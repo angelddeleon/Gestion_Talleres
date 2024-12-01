@@ -16,9 +16,12 @@
             <form id="taskForm" class="space-y-6">
                 <div class="grid md:grid-cols-2 gap-6">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2" for="mechanic">Selecciona Mecanico</label>
-                        <select id="mechanic" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-                            <option value="">Selecciona Mecanico</option>
+                        <label class="block text-sm font-medium text-gray-700 mb-2" for="mechanic">Selecciona Modo</label>
+                        <select id="mode" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                            <option value="">Selecciona Opcion</option>
+                            <option value="reparacion">Reparacion</option>
+                            <option value="revision">Revision</option>
+                            <option value="mantenimiento">Mantenimiento</option>
                            
                         </select>
                     </div>
@@ -67,50 +70,76 @@
                     </div>
                 </div>
 
+        
                 <div class="space-y-4">
-                    <label class="block text-sm font-medium text-gray-700">Categorias de las tareas</label>
+                    <label class="block text-sm font-medium text-gray-700">Categorias de las Tareas</label>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                         <div class="space-y-2">
                             <label class="flex items-center space-x-2 group relative cursor-pointer" title="Includes electrical system repairs, wiring, and battery services">
-                                <input type="checkbox" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500" onchange="toggleTextarea('electrical-textarea')">
+                                <input type="checkbox" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500" onchange="toggleCategory('electrical')">
                                 <span>Electrico</span>
-                                <div class="invisible group-hover:visible absolute bottom-full left-0 mb-2 p-2 bg-gray-800 text-white text-xs rounded shadow-lg w-48">Sistemas electricos, cableado, servicios de bateria</div>
+                                <div class="invisible group-hover:visible absolute bottom-full left-0 mb-2 p-2 bg-gray-800 text-white text-xs rounded shadow-lg w-48">Reparacion de sistemas electricos, cableado, servicios de bateria</div>
                             </label>
-                            <textarea id="electrical-textarea" class="hidden w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Ingrese detalles" rows="3"></textarea>
+                            <div id="electrical-section" class="hidden space-y-2">
+                                <select id="mechanic-1"  class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    <option value="">Selecciona un mecanico</option>
+                                </select>
+                                <textarea id="electrical-textarea" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Ingresa especificaciones" rows="3"></textarea>
+                            </div>
                         </div>
                         <div class="space-y-2">
                             <label class="flex items-center space-x-2 group relative cursor-pointer" title="Includes engine repairs, transmission work, and brake services">
-                                <input type="checkbox" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500" onchange="toggleTextarea('mechanical-textarea')">
+                                <input type="checkbox" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500" onchange="toggleCategory('mechanical')">
                                 <span>Mecanica</span>
-                                <div class="invisible group-hover:visible absolute bottom-full left-0 mb-2 p-2 bg-gray-800 text-white text-xs rounded shadow-lg w-48"> Reparaciones de motor, trabajos de transmision, y servicios de freno</div>
+                                <div class="invisible group-hover:visible absolute bottom-full left-0 mb-2 p-2 bg-gray-800 text-white text-xs rounded shadow-lg w-48">Reparacion de motor, trabajo de transmision, servicio de frenos</div>
                             </label>
-                            <textarea id="mechanical-textarea" class="hidden w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Ingrese detalles" rows="3"></textarea>
+                            <div id="mechanical-section" class="hidden space-y-2">
+                                <select id="mechanic-2"  class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    <option value="">Selecciona un mecanico</option>
+                                </select>
+                                <textarea id="mechanical-textarea" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Ingresa especificaciones" rows="3"></textarea>
+                            </div>
                         </div>
                         <div class="space-y-2">
                             <label class="flex items-center space-x-2 group relative cursor-pointer" title="Includes fluid systems and radiator repairs">
-                                <input type="checkbox" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500" onchange="toggleTextarea('plumbing-textarea')">
-                                <span>Tuberias</span>
-                                <div class="invisible group-hover:visible absolute bottom-full left-0 mb-2 p-2 bg-gray-800 text-white text-xs rounded shadow-lg w-48">Sistema de fluidos y reparaciones del radiador</div>
+                                <input type="checkbox" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500" onchange="toggleCategory('plumbing')">
+                                <span>Plomeria</span>
+                                <div class="invisible group-hover:visible absolute bottom-full left-0 mb-2 p-2 bg-gray-800 text-white text-xs rounded shadow-lg w-48">Sistema de fluidos y reparaciones de radiador</div>
                             </label>
-                            <textarea id="plumbing-textarea" class="hidden w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Ingrese detalles" rows="3"></textarea>
+                            <div id="plumbing-section" class="hidden space-y-2">
+                                <select id="mechanic-3"  class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    <option value="">Selecciona un mecanico</option>
+                                </select>
+                                <textarea id="plumbing-textarea" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Ingresa especificaciones" rows="3"></textarea>
+                            </div>
                         </div>
                         <div class="space-y-2">
                             <label class="flex items-center space-x-2 group relative cursor-pointer" title="Includes heating, ventilation, and air conditioning services">
-                                <input type="checkbox" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500" onchange="toggleTextarea('hvac-textarea')">
+                                <input type="checkbox" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500" onchange="toggleCategory('hvac')">
                                 <span>Aire Acondicionado</span>
-                                <div class="invisible group-hover:visible absolute bottom-full left-0 mb-2 p-2 bg-gray-800 text-white text-xs rounded shadow-lg w-48">Calefaccion, ventilacion, y servicios del aire acondicionado</div>
+                                <div class="invisible group-hover:visible absolute bottom-full left-0 mb-2 p-2 bg-gray-800 text-white text-xs rounded shadow-lg w-48">Calefaccion, ventilacion, servicio de aire acondicionado</div>
                             </label>
-                            <textarea id="hvac-textarea" class="hidden w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Ingrese detalles" rows="3"></textarea>
+                            <div id="hvac-section" class="hidden space-y-2">
+                                <select id="mechanic-4"  class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    <option value="">Selecciona un mecanico</option>
+                                </select>
+                                <textarea id="hvac-textarea" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Ingresa especificaciones" rows="3"></textarea>
+                            </div>
                         </div>
                     </div>
                 </div>
 
+
+
+
+
+
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2" for="priority">Prioridad</label>
                     <select id="priority" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-                        <option value="low">Baja</option>
-                        <option value="medium">Mediana</option>
-                        <option value="high">Alta</option>
+                        <option value="3">Baja</option>
+                        <option value="2">Mediana</option>
+                        <option value="1">Alta</option>
                       
                     </select>
                 </div>

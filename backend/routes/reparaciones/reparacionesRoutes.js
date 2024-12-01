@@ -55,6 +55,23 @@ reparacionesRouter.get("/:id_mecanico", async (req, res) => {
 });
 
 
+reparacionesRouter.post("/", async (req, res) =>{
+  const {fecha_inicio, descripcion, id_vehiculo} = req.body
+
+
+
+
+  try{
+    await client.execute(`INSERT INTO REPARACIONES (fecha_inicio, 
+        descripcion, id_vehiculo) VALUES (?,?,?)`,[fecha_inicio,descripcion,id_vehiculo])
+
+  }catch{
+    res.status(500).json({error: "Error al crear la reparación"})
+  }
+
+
+})
+
 
 
 

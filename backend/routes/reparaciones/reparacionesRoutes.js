@@ -8,7 +8,7 @@ const reparacionesRouter = Router()
 // GET para obtener todas las reparaciones con sus tareas asociadas
 reparacionesRouter.get("/", async (req, res) => {
   try {
-    // Consulta SQL que obtiene las reparaciones y sus tareas asociadas
+    // Consulta para obtener las reparaciones y sus datos relacionados
     const query = `
       SELECT 
         r.id AS reparacion_id,
@@ -16,6 +16,11 @@ reparacionesRouter.get("/", async (req, res) => {
         r.fecha_finalizacion,
         r.descripcion,
         r.status AS reparacion_status,
+        v.id AS vehiculo_id,
+        v.placa,
+        v.marca,
+        v.modelo,
+        v.year,
         t.id AS tarea_id,
         t.categoria,
         t.tarea_realizada,
@@ -26,46 +31,50 @@ reparacionesRouter.get("/", async (req, res) => {
         t.id_mecanico,
         t.id_pieza
       FROM REPARACIONES r
+      LEFT JOIN VEHICULOS v ON r.id_vehiculo = v.id
       LEFT JOIN TAREAS_REPARACION t ON t.id_reparacion = r.id
     `;
 
     const result = await client.execute(query);
 
-    // Verificar qué estructura tiene 'result' antes de procesarlo
-    console.log(result);  // Agrega esto para ver qué contiene 'result'
+    // Asegurarnos de que la estructura de los datos sea correcta
+    const rows = result.rows || result;
 
-    // Si 'result' tiene una propiedad con los datos, como 'rows', usa eso
-    const rows = result.rows || result;  // Ajusta según la respuesta de tu cliente
-
-    // Si no hay resultados
-    if (rows.length === 0) {
-      return res.status(404).json({ error: "No hay reparaciones encontradas" });
+    // Si no hay resultados, responder con un mensaje
+    if (!rows || rows.length === 0) {
+      return res.status(404).json({ error: "No se encontraron reparaciones" });
     }
 
-    // Organizar los resultados para devolverlos en un formato adecuado
+    // Estructurar los datos para devolverlos en formato organizado
     const reparaciones = [];
-
-    // Agrupar las tareas por reparaciones
     let currentReparacion = null;
 
     rows.forEach(row => {
       if (!currentReparacion || currentReparacion.id !== row.reparacion_id) {
-        // Si encontramos una nueva reparación, creamos un objeto para ella
+        // Agregar la reparación previa a la lista si ya está llena
         if (currentReparacion) {
           reparaciones.push(currentReparacion);
         }
 
+        // Crear una nueva reparación
         currentReparacion = {
           id: row.reparacion_id,
           fecha_inicio: row.fecha_inicio,
           fecha_finalizacion: row.fecha_finalizacion,
           descripcion: row.descripcion,
           status: row.reparacion_status,
+          vehiculo: {
+            id: row.vehiculo_id,
+            placa: row.placa,
+            marca: row.marca,
+            modelo: row.modelo,
+            year: row.year,
+          },
           tareas: [],
         };
       }
 
-      // Si tiene tarea asociada, la agregamos al array de tareas
+      // Si hay una tarea asociada, agregarla al arreglo de tareas
       if (row.tarea_id) {
         currentReparacion.tareas.push({
           id: row.tarea_id,
@@ -74,21 +83,20 @@ reparacionesRouter.get("/", async (req, res) => {
           observaciones: row.observaciones,
           status: row.tarea_status,
           fecha_inicio: row.tarea_fecha_inicio,
-          fecha_finalizacion: row.tarea_fecha_finalizacion,
+          fecha_finalizacion: row.tarea_finalizacion,
           id_mecanico: row.id_mecanico,
           id_pieza: row.id_pieza,
         });
       }
     });
 
-    // Agregar la última reparación
+    // Agregar la última reparación al arreglo
     if (currentReparacion) {
       reparaciones.push(currentReparacion);
     }
 
-    // Devolver todas las reparaciones con las tareas
+    // Enviar las reparaciones con sus datos organizados
     return res.status(200).json(reparaciones);
-    
   } catch (error) {
     console.error("Error al obtener reparaciones:", error);
     return res.status(500).json({ error: "Error al obtener las reparaciones" });

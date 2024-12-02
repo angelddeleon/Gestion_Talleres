@@ -83,6 +83,63 @@ function clearForm(){
 
 }
 
+async function updateTable() {
+    const reparaciones = await fetchObtenerReparaciones();
+    const tableBody = document.getElementById("table-reparaciones");
+
+    for (const entry of reparaciones) {
+        const row = document.createElement("tr");
+
+        // ID
+        row.innerHTML += `<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${entry.id}</td>`;
+
+        // Vehículo
+        row.innerHTML += `<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${entry.vehiculo.placa}</td>`;
+
+        // Mecánicos (esperar las promesas)
+        const mechanicsHTML = await Promise.all(
+            entry.tareas.map(async tarea => {
+                const mecanico = await fetchMecanicoById2(tarea.id_mecanico); // Ajusta el campo según tu API
+                return `<span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">${mecanico.nombre}</span>`;
+            })
+        ).then(results => results.join(" "));
+
+        row.innerHTML += `<td class="px-6 py-4 text-sm text-gray-500"><div class="flex flex-wrap gap-2">${mechanicsHTML}</div></td>`;
+
+        // Categorías
+        const categoriasHTML = entry.tareas
+            .map(tarea => `<span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">${tarea.categoria}</span>`)
+            .join(" ");
+        row.innerHTML += `<td class="px-6 py-4 text-sm text-gray-500"><div class="flex flex-wrap gap-2">${categoriasHTML}</div></td>`;
+
+        // Tareas
+        const tareasHTML = entry.tareas
+            .map(tarea => `<li>${tarea.tarea_realizada}</li>`)
+            .join("");
+        row.innerHTML += `
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <details class="cursor-pointer">
+                    <summary class="font-medium text-blue-600">Ver Tareas (${entry.tareas.length})</summary>
+                    <ul class="mt-2 pl-4 list-disc">${tareasHTML}</ul>
+                </details>
+            </td>
+        `;
+
+        // Descripción
+        row.innerHTML += `<td class="px-6 py-4 text-sm text-gray-500"><div class="flex flex-wrap gap-2">${entry.descripcion}</div></td>`;
+
+        // Fecha de inicio
+        row.innerHTML += `<td class="px-6 py-4 text-sm text-gray-500"><div class="flex flex-wrap gap-2">${entry.fecha_inicio}</div></td>`;
+
+        // Estado
+        row.innerHTML += `<td class="px-6 py-4 text-sm text-gray-500"><div class="flex flex-wrap gap-2">${entry.status}</div></td>`;
+
+        // Añade la fila al cuerpo de la tabla
+        tableBody.appendChild(row);
+    }
+}
+
+
 
 
 
@@ -226,6 +283,23 @@ async function fetchMecanicoById(cedula) {
     
 }
 
+async function fetchMecanicoById2(id) {
+    try{
+
+        const response = await fetch(`/mecanicos/mecanico/${id}`)
+        const mecanico = await response.json()
+        return mecanico
+
+    }catch{
+        alert("Error fetchs mecanicos")
+    }
+
+
+
+    
+}
+
+
 async function fetchReparaciones(reparacion) {
   
     try {
@@ -245,7 +319,6 @@ async function fetchReparaciones(reparacion) {
         throw error;
     }
 }
-
 
 async function fetchCreateTarea(tarea) {
     try {
@@ -267,10 +340,25 @@ async function fetchCreateTarea(tarea) {
     
 }
 
+async function fetchObtenerReparaciones(params) {
+
+    try{
+        const response = await fetch("/reparaciones")
+        if (!response.ok) {
+            throw new Error("Error al obtener reparaciones del servidor");
+            }
+        return response.json();
+
+    }catch{
+        console.error("Error en fetchObtenerReparaciones:", error);
+    }
+    
+}
 
        
 
 document.addEventListener('DOMContentLoaded', () => {
     loadMecanicos()
+    updateTable()
     
 });

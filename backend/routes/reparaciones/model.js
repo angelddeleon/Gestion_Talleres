@@ -37,6 +37,7 @@ await client.execute(`
 await client.execute(`
     CREATE TABLE IF NOT EXISTS TAREAS_REPARACION (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
+        categoria TEXT NOT NULL,
         tarea_realizada TEXT NOT NULL,
         OBSERVACIONES TEXT,
         status VARCHAR(255) DEFAULT pendiente,
@@ -44,7 +45,7 @@ await client.execute(`
         fecha_finalizacion,
         id_mecanico INTEGER NOT NULL,
         id_reparacion INTEGER NOT NULL,
-        id_pieza INTEGER NOT NULL
+        id_pieza INTEGER
         )`)
     
 
@@ -69,11 +70,11 @@ await client.execute(`
 
 
 await client.execute(`
-    INSERT INTO TAREAS_REPARACION (tarea_realizada, OBSERVACIONES,status, id_mecanico, id_reparacion, id_pieza)
+    INSERT INTO TAREAS_REPARACION (tarea_realizada, OBSERVACIONES,status, id_mecanico, id_reparacion, id_pieza, categoria)
     VALUES 
-    ('Cambio de aceite', 'Todo en buen estado','pendiente', 1, 1, 1),
-    ('Cambio de filtro de aire', 'Todo en buen estado','pendiente', 1, 1, 1),
-    ('Revisión de frenos', 'Pastillas desgastadas, se reemplazarán','pendiente', 1, 2, 2);
+    ('Cambio de aceite', 'Todo en buen estado','pendiente', 1, 1, 1, 'mecanica'),
+    ('Cambio de filtro de aire', 'Todo en buen estado','pendiente', 1, 1, 1, 'mecanica'),
+    ('Revisión de frenos', 'Pastillas desgastadas, se reemplazarán','pendiente', 1, 2, 2, 'aire');
 
 `);
 

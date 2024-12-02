@@ -57,13 +57,17 @@ reparacionesRouter.get("/:id_mecanico", async (req, res) => {
 
 reparacionesRouter.post("/", async (req, res) =>{
   const {fecha_inicio, descripcion, id_vehiculo} = req.body
-
-
-
-
+ 
   try{
     await client.execute(`INSERT INTO REPARACIONES (fecha_inicio, 
         descripcion, id_vehiculo) VALUES (?,?,?)`,[fecha_inicio,descripcion,id_vehiculo])
+
+    // Obtén el último ID generado automáticamente
+    const result = await client.execute(`SELECT last_insert_rowid() AS lastID`);
+    const lastID = result.rows[0].lastID;
+    
+    
+    res.status(200).json({message: "Reparacion creadas" , id: lastID})
 
   }catch{
     res.status(500).json({error: "Error al crear la reparación"})
@@ -71,6 +75,28 @@ reparacionesRouter.post("/", async (req, res) =>{
 
 
 })
+
+
+reparacionesRouter.post("/tarea", async (req, res) =>{
+    const {categoria, tarea_realizada, mecanico_id, reparacion_id} = req.body
+    console.log(categoria)
+    console.log(tarea_realizada)
+   
+   
+    try{
+      await client.execute(`INSERT INTO  TAREAS_REPARACION (categoria, 
+          tarea_realizada, id_mecanico, id_reparacion) VALUES (?,?,?,?)`,
+          [categoria,tarea_realizada,mecanico_id, reparacion_id])
+  
+      
+      res.status(200).json({message: "Tarea Creada"})
+  
+    }catch{
+      res.status(500).json({error: "Error al crear la reparación"})
+    }
+  
+  
+  })
 
 
 

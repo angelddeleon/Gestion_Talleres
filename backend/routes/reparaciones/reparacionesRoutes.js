@@ -118,6 +118,7 @@ reparacionesRouter.get("/:id_mecanico", async (req, res) => {
                 tr.fecha_inicio, 
                 tr.fecha_finalizacion, 
                 tr.observaciones,
+                tr.categoria,
                 v.placa, 
                 v.marca, 
                 v.modelo,
@@ -134,7 +135,7 @@ reparacionesRouter.get("/:id_mecanico", async (req, res) => {
     
 
         if (reparaciones.rows.length === 0) {
-            return res.status(404).json({ message: "No hay reparaciones pendientes para este mecánico" });
+            return res.status(404).json([]);
         }
 
         return res.status(200).json(reparaciones.rows)
@@ -187,6 +188,22 @@ reparacionesRouter.post("/tarea", async (req, res) =>{
   
   
   })
+
+reparacionesRouter.patch("/iniciar-tarea/:id_tarea", async (req, res)=>{
+  const {id_tarea} = req.params
+  const {status} = req.body
+  console.log(id_tarea)
+  try{
+    await client.execute(`UPDATE TAREAS_REPARACION SET status = ? WHERE id = ?
+      `, [status,id_tarea])
+      res.status(200).json({message: "Tarea iniciada"})
+      }catch{
+        res.status(500).json({error: "Error al iniciar la tarea"})
+        }
+
+
+
+})
 
 
 

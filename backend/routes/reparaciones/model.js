@@ -74,7 +74,7 @@ await client.execute(`
     VALUES 
     ('Cambio de aceite', 'Todo en buen estado','pendiente', 1, 1, 1, 'mecanica'),
     ('Cambio de filtro de aire', 'Todo en buen estado','pendiente', 1, 1, 1, 'mecanica'),
-    ('Revisión de frenos', 'Pastillas desgastadas, se reemplazarán','pendiente', 1, 2, 2, 'aire');
+    ('Revisión de frenos', 'Pastillas desgastadas, se reemplazarán','completada', 1, 2, 2, 'aire');
 
 `);
 

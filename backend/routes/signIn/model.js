@@ -31,18 +31,10 @@ await db.execute(`
 `);
 
         
-  
-const fetchUsers = async () => {
-    try {
-        const result = await db.execute('SELECT * FROM USERS');
-        console.log(result); // Asegúrate de que esto sea lo que esperas
-    } catch (error) {
-        console.error("Error al obtener los usuarios:", error);
-    }
-};
+
 
 // Llamar a la función para obtener los usuarios
-fetchUsers();
+
 
 
 

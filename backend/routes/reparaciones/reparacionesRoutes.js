@@ -13,6 +13,7 @@ reparacionesRouter.get("/", async (req, res) => {
       SELECT 
         r.id AS reparacion_id,
         r.fecha_inicio,
+        r.fecha_estimada,
         r.fecha_finalizacion,
         r.descripcion,
         r.status AS reparacion_status,
@@ -60,6 +61,7 @@ reparacionesRouter.get("/", async (req, res) => {
         currentReparacion = {
           id: row.reparacion_id,
           fecha_inicio: row.fecha_inicio,
+          fecha_estimada: row.fecha_estimada,
           fecha_finalizacion: row.fecha_finalizacion,
           descripcion: row.descripcion,
           status: row.reparacion_status,
@@ -147,11 +149,11 @@ reparacionesRouter.get("/:id_mecanico", async (req, res) => {
 
 
 reparacionesRouter.post("/", async (req, res) =>{
-  const {fecha_inicio, descripcion, id_vehiculo} = req.body
+  const {fecha_inicio, fecha_estimada ,descripcion, id_vehiculo} = req.body
  
   try{
-    await client.execute(`INSERT INTO REPARACIONES (fecha_inicio, 
-        descripcion, id_vehiculo) VALUES (?,?,?)`,[fecha_inicio,descripcion,id_vehiculo])
+    await client.execute(`INSERT INTO REPARACIONES (fecha_inicio, fecha_estimada,
+        descripcion, id_vehiculo) VALUES (?,?,?, ?)`,[fecha_inicio,fecha_estimada,descripcion,id_vehiculo])
 
     // Obtén el último ID generado automáticamente
     const result = await client.execute(`SELECT last_insert_rowid() AS lastID`);

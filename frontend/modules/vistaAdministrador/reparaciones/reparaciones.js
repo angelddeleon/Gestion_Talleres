@@ -24,7 +24,7 @@ taskForm.addEventListener("submit", async function(e){
     const modo = document.getElementById("mode").value
     const placaVehiculo = document.getElementById("license-plate").value
     const fecha_inicio = document.getElementById("deadline").value
-    const fechaAprox = document.getElementById("estimated-completion").value
+    const fecha_estimada = document.getElementById("estimated-completion").value
     const tareas = [
         {electrica: [document.getElementById("electrical-textarea").value, document.getElementById("mechanic-1").value]},
         {mecanica: [document.getElementById("mechanical-textarea").value,  document.getElementById("mechanic-2").value]},
@@ -34,7 +34,7 @@ taskForm.addEventListener("submit", async function(e){
     const descripcion = document.getElementById("instructions").value
     const prioridad = document.getElementById("priority").value
 
-    let reparacion = {placaVehiculo, fecha_inicio, fechaAprox,tareas,descripcion,prioridad, modo}
+    let reparacion = {placaVehiculo, fecha_inicio, fecha_estimada,tareas,descripcion,prioridad, modo}
    
     try {
         const response = await createReparacion(reparacion);
@@ -254,7 +254,7 @@ async function trackStatus(){
         }
     }
 
-    location.reload()
+    
 }
 
 

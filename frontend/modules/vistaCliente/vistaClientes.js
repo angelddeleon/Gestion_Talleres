@@ -8,7 +8,7 @@ const placaVehiculo = "XYZ456"
 
 async function loadTask() {
 
-    const taskArea = document.getElementById("tareas")
+    const taskArea = document.getElementById("container-task")
     const data = await getTask()
     
     if (!data){
@@ -28,20 +28,17 @@ async function loadTask() {
         const {id_mecanico} = tarea
         const mecanico = await fetchMecanicoById(id_mecanico)
 
-        const task = document.createElement('div');
-        task.classList.add('border', 'rounded-lg', 'p-4');
-        task.innerHTML = `
-            <h3 class="font-medium text-gray-800">${tarea.tarea_realizada}</h3>
-            <p class="text-sm text-gray-600">Mecanico Asignado ${mecanico.nombre}</p>
-            <p class="text-sm text-gray-600">Observaciones: ${tarea.observaciones}</p>
-            <div class="mt-2">
-                <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800">${tarea.status}</span>
+        const task = `
+            <div class="border rounded-lg p-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="font-semibold">${tarea.tarea_realizada}</h3>
+                            <span class="px-3 py-1 rounded-full text-sm bg-green-100 text-green-800">${tarea.status}</span>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-2">Mecanico: ${mecanico.nombre}</p>
+                        <p class="text-gray-600 text-sm">Observaciones: ${tarea.observaciones || ""}</p>
             </div>
-            <p class="text-sm text-gray-600 mt-2">Iniciado en: ${tarea.fecha_inicio || ""}</p>
-            <p class="text-sm text-gray-600 mt-2">Finalizado en: ${tarea.fecha_finalizacion || ""}</p>
-          
         `;
-        taskArea.appendChild(task);
+        taskArea.innerHTML += task;
    }
     
 
@@ -49,6 +46,38 @@ async function loadTask() {
 }
 
 async function loadReparation() {
+
+    const data = await getTask()
+    const {reparacion} = data
+    document.getElementById("placa").textContent = reparacion.vehiculo.placa
+    document.getElementById("vehiculo").textContent = `${reparacion.vehiculo.marca} ${reparacion.vehiculo.modelo}`
+    document.getElementById("year").textContent = reparacion.vehiculo.year
+    document.getElementById("reparacion-id").textContent = `#${reparacion.id}`
+    document.getElementById("fecha-ingreso").textContent = reparacion.fecha_inicio    
+    document.getElementById("fecha-estimada").textContent = reparacion.fecha_estimada
+
+}
+
+
+async function updateStatus() {
+
+    const response = await getTask()
+    const status = response.reparacion.status
+
+    if(status === "pendiente"){
+        document.getElementById("status").textContent = "Por Iniciar"
+        document.getElementById("status-bar").style = "width:0%"
+    }else if(status==="en progreso"){
+        document.getElementById("status").textContent = "En progreso"
+        document.getElementById("status-bar").style = "width:50%"
+    }else if(status==="completado"){
+         document.getElementById("status").textContent = "Trabajo Completado"
+        document.getElementById("status-bar").style = "width:100%"
+    }else{
+        document.getElementById("status").textContent = "En pausa"
+    }
+  
+    
     
 }
 
@@ -70,11 +99,6 @@ async function getTask() {
     
    
 }
-
-
-
-
-
 
 
 
@@ -132,6 +156,8 @@ async function fetchMecanicoById(id) {
 
 document.addEventListener('DOMContentLoaded', () => {
     loadTask()
+    loadReparation()
+    updateStatus()
     
     
 });

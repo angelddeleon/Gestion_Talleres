@@ -63,7 +63,8 @@ async function loadMecanicos(){
     mecanicos.forEach(mecanico => {
         const option = document.createElement("option");
         option.value = mecanico.cedula;
-        option.text = mecanico.nombre;
+        const especialidades = mecanico.especialidades.map(especialidad =>especialidad.nombre).join("/")
+        option.text = `${mecanico.nombre}-> ${especialidades}`;
     
    
         mechanics.forEach(mechanic => {
@@ -84,6 +85,7 @@ function clearForm(){
 }
 
 async function updateTable() {
+    await trackStatus()
     const reparaciones = await fetchObtenerReparaciones();
     const tableBody = document.getElementById("table-reparaciones");
 
@@ -100,6 +102,7 @@ async function updateTable() {
         const mechanicsHTML = await Promise.all(
             entry.tareas.map(async tarea => {
                 const mecanico = await fetchMecanicoById2(tarea.id_mecanico); // Ajusta el campo según tu API
+
                 return `<span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">${mecanico.nombre}</span>`;
             })
         ).then(results => results.join(" "));
@@ -138,13 +141,6 @@ async function updateTable() {
         tableBody.appendChild(row);
     }
 }
-
-
-
-
-
-
-
 
 //Controllers
 
@@ -232,7 +228,34 @@ async function createReparacion(reparacion) {
     }
 }
 
+async function trackStatus(){
+    const reparaciones = await fetchObtenerReparaciones()
 
+  
+    for (const reparacion of reparaciones) {
+        
+        const status = reparacion.tareas.map(tarea => tarea.status)
+        const validateCompletado =  status.every(state => state === "completado")
+        const validatePausa =  status.every(state => state === "en pausa")
+        const validatePendiente = status.every(state => state === "pendiente")
+
+        if(validateCompletado){
+            await switchState(reparacion.id, {status:"completado"})
+            return
+
+        }else if(validatePausa){
+            await switchState(reparacion.id, {status:"en pausa"})
+            return
+        }else if(validatePendiente){
+            await switchState(reparacion.id, {status:"pendiente"})
+            return
+        }else{
+            await switchState(reparacion.id, {status:"en progreso"})
+        }
+    }
+
+    location.reload()
+}
 
 
 
@@ -299,7 +322,6 @@ async function fetchMecanicoById2(id) {
     
 }
 
-
 async function fetchReparaciones(reparacion) {
   
     try {
@@ -340,7 +362,7 @@ async function fetchCreateTarea(tarea) {
     
 }
 
-async function fetchObtenerReparaciones(params) {
+async function fetchObtenerReparaciones() {
 
     try{
         const response = await fetch("/reparaciones")
@@ -355,10 +377,33 @@ async function fetchObtenerReparaciones(params) {
     
 }
 
+async function switchState(id_reparacion, state) {
+
+    try{
+        const response = await fetch(`/reparaciones/status/${id_reparacion}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                },
+                body: JSON.stringify(state)
+                });
+                if (!response.ok) {
+                    throw new Error("Error al cambiar estado de la reparación");
+                    }
+                return response.json();
+
+    }catch{
+        alert("Error al cambiar estado")
+    }
+    
+}
+
        
 
 document.addEventListener('DOMContentLoaded', () => {
     loadMecanicos()
+    trackStatus()
     updateTable()
+    
     
 });

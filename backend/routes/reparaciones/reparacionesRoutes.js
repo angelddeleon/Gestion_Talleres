@@ -83,7 +83,7 @@ reparacionesRouter.get("/", async (req, res) => {
           observaciones: row.observaciones,
           status: row.tarea_status,
           fecha_inicio: row.tarea_fecha_inicio,
-          fecha_finalizacion: row.tarea_finalizacion,
+          fecha_finalizacion: row.tarea_fecha_finalizacion,
           id_mecanico: row.id_mecanico,
           id_pieza: row.id_pieza,
         });
@@ -170,8 +170,6 @@ reparacionesRouter.post("/", async (req, res) =>{
 
 reparacionesRouter.post("/tarea", async (req, res) =>{
     const {categoria, tarea_realizada, mecanico_id, reparacion_id} = req.body
-    console.log(categoria)
-    console.log(tarea_realizada)
    
    
     try{
@@ -191,11 +189,66 @@ reparacionesRouter.post("/tarea", async (req, res) =>{
 
 reparacionesRouter.patch("/iniciar-tarea/:id_tarea", async (req, res)=>{
   const {id_tarea} = req.params
-  const {status} = req.body
-  console.log(id_tarea)
+  let {status,fecha_inicio} = req.body
+
+  console.log(status)
+  console.log(fecha_inicio)
+ 
   try{
-    await client.execute(`UPDATE TAREAS_REPARACION SET status = ? WHERE id = ?
-      `, [status,id_tarea])
+    await client.execute(`UPDATE TAREAS_REPARACION SET status = ?, fecha_inicio = ? WHERE id = ?
+      `, [status,fecha_inicio,id_tarea])
+      res.status(200).json({message: "Tarea iniciada"})
+      }catch{
+        res.status(500).json({error: "Error al iniciar la tarea"})
+        }
+
+})
+
+reparacionesRouter.patch("/finalizar-tarea/:id_tarea", async (req, res)=>{
+  const {id_tarea} = req.params
+  let {status,observaciones,fecha_finalizacion} = req.body
+
+  if (!observaciones){
+    observaciones = ""
+  }
+ 
+  try{
+    await client.execute(`UPDATE TAREAS_REPARACION SET status = ?,observaciones = ? ,fecha_finalizacion = ? WHERE id = ?
+      `, [status,observaciones,fecha_finalizacion,id_tarea])
+      res.status(200).json({message: "Tarea iniciada"})
+      }catch{
+        res.status(500).json({error: "Error al iniciar la tarea"})
+        }
+})
+
+reparacionesRouter.patch("/pausar-reanuadar-tarea/:id_tarea", async (req, res)=>{
+  const {id_tarea} = req.params
+  let {status,observaciones} = req.body
+
+  if (!observaciones){
+    observaciones = ""
+  }
+ 
+  try{
+    await client.execute(`UPDATE TAREAS_REPARACION SET status = ?,observaciones = ? WHERE id = ?
+      `, [status,observaciones,id_tarea])
+      res.status(200).json({message: "Tarea iniciada"})
+      }catch{
+        res.status(500).json({error: "Error al iniciar la tarea"})
+        }
+})
+
+reparacionesRouter.patch("/status/:id_reparacion", async (req, res)=>{
+  const {id_reparacion} = req.params
+  let { status } = req.body
+
+
+  console.log(id_reparacion)
+  console.log(status)
+
+  try{
+    await client.execute(`UPDATE REPARACIONES SET status = ? WHERE id = ?
+      `,[status,id_reparacion])
       res.status(200).json({message: "Tarea iniciada"})
       }catch{
         res.status(500).json({error: "Error al iniciar la tarea"})
@@ -204,6 +257,7 @@ reparacionesRouter.patch("/iniciar-tarea/:id_tarea", async (req, res)=>{
 
 
 })
+
 
 
 

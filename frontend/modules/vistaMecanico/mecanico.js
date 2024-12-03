@@ -1,68 +1,5 @@
 // Fetch Active Repairs
 let id_mecanico = 1
-
-// // Fetch Repair History
-
-
-// // async function fetchRepairHistory() {
-// //     try {
-// //         const response = await fetch('/api/reparaciones/historial');
-// //         const repairs = await response.json();
-// //         const historyRepairsContainer = document.getElementById('historyRepairs');
-// //         historyRepairsContainer.innerHTML = '';  // Clear current list
-
-// //         repairs.forEach(repair => {
-// //             const historyElement = document.createElement('div');
-// //             historyElement.classList.add('border', 'rounded-lg', 'p-4');
-// //             historyElement.innerHTML = `
-// //                 <h3 class="font-medium text-gray-800">${repair.vehicle}</h3>
-// //                 <p class="text-sm text-gray-600">Client: ${repair.client}</p>
-// //                 <p class="text-sm text-gray-600">Service: ${repair.service}</p>
-// //                 <div class="mt-2">
-// //                     <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">${repair.status}</span>
-// //                 </div>
-// //                 <p class="text-sm text-gray-600 mt-2">Completed on: ${repair.completedDate}</p>
-// //             `;
-// //             historyRepairsContainer.appendChild(historyElement);
-// //         });
-// //     } catch (error) {
-// //         console.error("Error fetching repair history: ", error);
-// //     }
-// // }
-
-// // Open Repair Modal
-
-
-// // Close Repair Modal
-// function closeRepairModal() {
-//     document.getElementById('repairModal').classList.add('hidden');
-// }
-
-// // Save Repair Status
-// async function saveRepairStatus() {
-//     const status = document.getElementById('repairStatus').value;
-//     const notes = document.getElementById('repairNotes').value;
-//     const partsUsed = document.getElementById('repairParts').value;
-
-//     const repairId = 1; // Example, replace with dynamic repairId from the modal
-
-//     const response = await fetch('/api/reparaciones/update', {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify({ repairId, status, notes, partsUsed }),
-//     });
-
-//     if (response.ok) {
-//         alert('Repair status updated');
-//         closeRepairModal();
-//         fetchActiveRepairs(); // Refresh active repairs
-//     } else {
-//         alert('Error updating repair status');
-//     }
-// }
-
 //Eventos
 
 document.getElementById('activeRepairs').addEventListener("click", (e)=>{
@@ -70,6 +7,21 @@ document.getElementById('activeRepairs').addEventListener("click", (e)=>{
     if(e.target.classList.contains("button-update")){
         const repairId = e.target.previousElementSibling.children[0].querySelector("span").textContent
         openRepairModal(repairId)
+
+        document.getElementById("update-form").addEventListener("submit", async (e)=>{
+            e.preventDefault()
+        
+            const estatus = document.getElementById("estatus-modal").value
+            const observaciones = document.getElementById("detalles-modal").value
+            
+            // const partes = document.getElementById("partes-modal").value
+        
+            const update = {estatus, observaciones}
+        
+            const response = await actualizarTarea(update, repairId)
+        
+        
+        })
         
     }else if(e.target.classList.contains("button-start")){
         const repairId = e.target.previousElementSibling.children[0].querySelector("span").textContent
@@ -77,6 +29,11 @@ document.getElementById('activeRepairs').addEventListener("click", (e)=>{
 
     }
 
+
+})
+
+document.getElementById("button-cancel").addEventListener("click", ()=>{
+    document.getElementById('repairModal').classList.add('hidden');
 
 })
 
@@ -89,7 +46,7 @@ async function loadTasks() {
         const activeRepairsContainer = document.getElementById('activeRepairs');
         activeRepairsContainer.innerHTML = '';  // Clear current list
         
-        const repairsActive = response.filter(reapair => reapair.status !== "completada")
+        const repairsActive = response.filter(reapair => reapair.status !== "completado")
 
         repairsActive.forEach(repair => {
             const repairElement = document.createElement('div');
@@ -155,10 +112,43 @@ async function openRepairModal(repairId) {
     const  [reparacion]  = response.filter(r => r.tarea_id == repairId)
     console.log(reparacion)
     document.getElementById("estatus-modal").value = reparacion.status
-
+    document.getElementById('detalles-modal').value = reparacion.observaciones
     document.getElementById('repairModal').classList.remove('hidden');
+
+   
+    
     
 }
+
+async function loadHistorial() {
+ 
+        const response = await fetchReparaciones(id_mecanico)
+        const reparaciones = response.filter(response => response.status === "completado")
+        console.log(reparaciones)
+        const historyRepairsContainer = document.getElementById('historyRepairs');
+        historyRepairsContainer.innerHTML = '';  // Clear current list
+
+        reparaciones.forEach(repair => {
+            const historyElement = document.createElement('div');
+            historyElement.classList.add('border', 'rounded-lg', 'p-4');
+            historyElement.innerHTML = `
+                <h3 class="font-medium text-gray-800">${repair.marca} ${repair.modelo} ${repair.year}</h3>
+                <p class="text-sm text-gray-600">Servicio: ${repair.tarea_realizada}</p>
+                <p class="text-sm text-gray-600">Observaciones: ${repair.observaciones}</p>
+                <div class="mt-2">
+                    <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">${repair.status}</span>
+                </div>
+                <p class="text-sm text-gray-600 mt-2">Iniciado en: ${repair.fecha_inicio}</p>
+                <p class="text-sm text-gray-600 mt-2">Finalizado en: ${repair.fecha_finalizacion}</p>
+            `;
+            historyRepairsContainer.appendChild(historyElement);
+        });
+    
+}
+
+
+
+
 
 
 //Controllers
@@ -176,6 +166,26 @@ async function startRepair(tarea_id){
 
 }
 
+async function actualizarTarea(update,repairId) {
+    const {estatus, observaciones} = update
+        
+    if(estatus === "en pausa"){
+        await fetchPausarTarea(repairId, observaciones)
+    }else if(estatus === "en progreso"){
+        await fetchReaunudar(repairId, observaciones)
+    }else{
+        await fetchCompletarTarea(repairId, observaciones)
+   }
+
+   location.reload()
+  
+    
+
+   
+
+
+    
+}
 
 //Fetchs
 
@@ -201,7 +211,7 @@ async function fetchIniciarTarea(tarea_id) {
             headers: {
                 'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({status:"en progreso"})
+                body: JSON.stringify({status:"en progreso",fecha_inicio:new Date()})
                 });
             return response
 
@@ -211,15 +221,15 @@ async function fetchIniciarTarea(tarea_id) {
     
 }
 
-async function fetchCompletarTarea(tarea_id) {
+async function fetchCompletarTarea(tarea_id, observaciones) {
 
     try{
-        const response = await fetch(`/reparaciones/iniciar-tarea/${tarea_id}`, {
+        const response = await fetch(`/reparaciones/finalizar-tarea/${tarea_id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({status:"completada"})
+                body: JSON.stringify({status:"completado", observaciones, fecha_finalizacion:new Date()})
                 });
                 return response
 
@@ -229,15 +239,15 @@ async function fetchCompletarTarea(tarea_id) {
     
 }
 
-async function fetchPausarTarea(tarea_id) {
+async function fetchPausarTarea(tarea_id, observaciones) {
 
     try{
-        const response = await fetch(`/reparaciones/iniciar-tarea/${tarea_id}`, {
+        const response = await fetch(`/reparaciones/pausar-reanuadar-tarea/${tarea_id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({status:"en pausa"})
+                body: JSON.stringify({status:"en pausa", observaciones})
                 });
             return response
 
@@ -246,6 +256,27 @@ async function fetchPausarTarea(tarea_id) {
     }
     
 }
+
+async function fetchReaunudar(tarea_id, observaciones) {
+    
+    try{
+        const response = await fetch(`/reparaciones/pausar-reanuadar-tarea/${tarea_id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({status:"en progreso",observaciones})
+                });
+            return response
+
+    }catch{
+        console.error('Error fetching iniciar tarea');
+    }
+    
+    
+}
+
+
 
 
 
@@ -258,4 +289,5 @@ async function fetchPausarTarea(tarea_id) {
 
 document.addEventListener('DOMContentLoaded', () => {
    loadTasks()
+   loadHistorial()
 });

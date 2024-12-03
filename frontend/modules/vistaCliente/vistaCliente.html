@@ -7,21 +7,20 @@
     <link rel="stylesheet" href="../../../src/output.css">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-50 min-h-screen">
+<body id="id" class="bg-gray-50 min-h-screen">
     <div class="container mx-auto px-4 py-8">
         <div class="bg-white shadow-lg rounded-lg p-6 mb-8">
-            <h1 class="text-2xl font-bold text-gray-800">Vehicle Repair Status</h1>
-            <p class="text-gray-600">Placa: #sd-2024-001</p>
+            <h1 class="text-2xl font-bold text-gray-800">Estatus de Reparacion</h1>
+            <p id="placa" class="text-gray-600"></p>
         </div>
 
         <div class="grid md:grid-cols-2 gap-6">
             <!-- Current Repair Status -->
             <div class="bg-white shadow-lg rounded-lg p-6">
-                <h2 class="text-xl font-semibold text-gray-800 mb-4">Current Repair Status</h2>
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Estatus de Reparacion</h2>
                 <div class="space-y-4">
                     <div class="border rounded-lg p-4">
                         <div class="flex items-center mb-4">
-                            <img src="https://images.unsplash.com/photo-1590486803833-1c5dc8ddd4c8" alt="Mechanic Profile" class="w-12 h-12 rounded-full object-cover">
                             <div class="ml-4">
                                 <h3 class="font-medium text-gray-800">Mecanico</h3>
                                 <p class="text-sm text-gray-600">Andres Ng</p>
@@ -46,9 +45,12 @@
             </div>
 
             <!-- Repair Details -->
-            <div class="bg-white shadow-lg rounded-lg p-6">
-                <h2 class="text-xl font-semibold text-gray-800 mb-4">Repair Details</h2>
-                <div class="space-y-4">
+            <div  class="bg-white shadow-lg rounded-lg p-6">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Tareas asignadas</h2>
+                <div id="tareas" class="">
+                    <!-- Tarjetas de tareas irán aquí -->
+                </div>
+                <!-- <div class="space-y-4">
                     <div class="border rounded-lg p-4">
                         <h3 class="font-medium text-gray-800 mb-2">Services Being Performed</h3>
                         <ul class="list-disc list-inside space-y-2 text-gray-600">
@@ -58,13 +60,13 @@
                             <li>Cambio de pastillas de frenos</li>
                         </ul>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
 
         <!-- Progress Timeline -->
         <div class="mt-8 bg-white shadow-lg rounded-lg p-6">
-            <h2 class="text-xl font-semibold text-gray-800 mb-4">Repair Progress</h2>
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Progreso De Vehiculo</h2>
             <div class="space-y-4">
                 <div class="flex items-center">
                     <div class="flex items-center relative">
@@ -148,5 +150,6 @@
             </div>
         </div>
     </div>
+    <script src="./vistaClientes.js"></script>
 </body>
 </html>

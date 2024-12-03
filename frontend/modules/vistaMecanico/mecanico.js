@@ -126,7 +126,7 @@ async function loadHistorial() {
         const reparaciones = response.filter(response => response.status === "completado")
         console.log(reparaciones)
         const historyRepairsContainer = document.getElementById('historyRepairs');
-        historyRepairsContainer.innerHTML = '';  // Clear current list
+        historyRepairsContainer.innerHTML = `<h2 class="text-xl font-semibold text-gray-800 mb-4">Historial De Reparaciones</h2>`;  // Clear current list
 
         reparaciones.forEach(repair => {
             const historyElement = document.createElement('div');
@@ -138,8 +138,8 @@ async function loadHistorial() {
                 <div class="mt-2">
                     <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">${repair.status}</span>
                 </div>
-                <p class="text-sm text-gray-600 mt-2">Iniciado en: ${repair.fecha_inicio}</p>
-                <p class="text-sm text-gray-600 mt-2">Finalizado en: ${repair.fecha_finalizacion}</p>
+                <p class="text-sm text-gray-600 mt-2">Iniciado en: ${repair.fecha_inicio || ""}</p>
+                <p class="text-sm text-gray-600 mt-2">Finalizado en: ${repair.fecha_finalizacion || ""}</p>
             `;
             historyRepairsContainer.appendChild(historyElement);
         });

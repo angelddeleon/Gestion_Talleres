@@ -1,5 +1,5 @@
 // Fetch Active Repairs
-let id_mecanico = "1"
+let id_mecanico = localStorage.getItem('id')
 //Eventos
 
 document.getElementById('activeRepairs').addEventListener("click", (e)=>{
@@ -39,6 +39,16 @@ document.getElementById("button-cancel").addEventListener("click", ()=>{
 
 
 //UI
+
+let contenedorPonerNombre = document.getElementById("nombre");
+
+let nombre = localStorage.getItem('nombre');
+
+console.log(nombre)
+
+// Asignar el contenido a innerHTML correctamente
+contenedorPonerNombre.innerHTML = `Bienvenido de nuevo ${nombre}`;
+
 
 async function loadTasks() {
         const response = await fetchReparaciones(id_mecanico)

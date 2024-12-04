@@ -1,116 +1,70 @@
+
+
+async function fetchMecanicoById(cedula) {
+    try {
+        const response = await fetch(`/mecanicos/${cedula}`);
+        const mecanico = await response.json();
+        return mecanico;
+    } catch (error) {
+        alert("Error al buscar mecánico");
+        console.error(error); // Agregar un log del error para depuración
+    }
+}
+
 // Formularios
-
-
-let formSigIn = document.getElementById("formSigIn")
-let formLogIn = document.getElementById("formLogIn")
-
+let formSigIn = document.getElementById("formSigIn");
 
 // Contenedores
+let contenedorSignIn = document.getElementById("divSignin");
+let signInButton = document.getElementById("signInButton");
 
-let contenedorSignIn = document.getElementById("divSignin")
-let contenedorLogIn = document.getElementById("divLogin")
+console.log("hola");
 
-let signInButton = document.getElementById("signInButton")
+async function validar() {
+    console.log("hola");
+
+    let cedula = document.getElementById("cedula").value.trim(); // Usar trim para eliminar espacios
 
 
-function desplegarContenedor() {
-
-    console.log("hola")
-
-    if (contenedorLogIn.classList.contains("oculto")){
-        contenedorLogIn.classList.remove('oculto')
-        contenedorSignIn.classList.add('oculto')
-
-        
-    } else {
-        contenedorSignIn.classList.remove('oculto')
-        contenedorLogIn.classList.add('oculto')
+    //Cedula del Administrador
+    if(String(cedula) === '30303030'){
+        window.location.href = './modules/vistaAdministrador/index.html';
+        return
     }
 
+    console.log(cedula);
+
+    try {
+        // Esperar a que las funciones asíncronas se resuelvan
+        let mecanico = await fetchMecanicoById(cedula);
+
+    
+
+        // Verificar que el mecánico existe
+        if (mecanico && mecanico.cedula) {
+            console.log(mecanico.nombre);
+
+
+            // Comparar la cédula ingresada con la cédula del mecánico
+            if (String(cedula) === String(mecanico.cedula)) {
+                localStorage.setItem('id', mecanico.id);
+                localStorage.setItem('nombre', mecanico.nombre);
+
+
+                console.log('hola soy trabajador');
+                // Redirigir a otra página si es necesario
+                window.location.href = './modules/vistaMecanico/mecanico.html';
+            } else {
+                alert('No existe el mecánico con los datos proporcionados.');
+            }
+        } else {
+            alert('No existe el mecánico con los datos proporcionados.');
+        }
+
+    } catch (error) {
+        console.error("Error al buscar mecánico:", error);
+        alert("Ocurrió un error al buscar la información. Por favor, inténtalo de nuevo.");
+    }
 }
 
-async function pedirDatos() {
-    const respuesta = await fetch('http://localhost:3000/signin')
-
-    console.log(respuesta)
-
-    const datos = await respuesta.json(); // Asumiendo que la respuesta es JSON
-    console.log(datos);
-
-}
-
-
-signInButton.addEventListener("click", e => {
-    e.preventDefault()
-
-    let correo = document.getElementsByName("correoLognin").value
-    let contrasena = document.getElementsByName("passwordLognin").value
-
-    let transaccion = {email: correo, password: contrasena}
-    let transaccionJson = JSON.stringify(transaccion)
-
-    console.log(transaccion)
-    console.log(transaccionJson)
-
-
-    fetch('http://localhost:3000/login', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json' // Asegúrate de incluir este encabezado
-        },
-        body: transaccionJson
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data); // Maneja la respuesta aquí
-        desplegarContenedor()
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-
-
-
-    pedirDatos()
-
-    console.log(correo)
-    console.log(contrasena)
-
-
-})
-
-
-logInButton.addEventListener("click", e => {
-    e.preventDefault()
-
-    let correo = document.getElementById("correoSignIn").value
-    let contrasena = document.getElementById("passwordSignIn").value
-    let role = document.getElementById("listaRoles").value
-
-    let transaccion = {email: correo, password: contrasena, role: role}
-    let transaccionJson = JSON.stringify(transaccion)
-
-    console.log(transaccion)
-    console.log(transaccionJson)
-
-
-    fetch('http://localhost:3000/signin', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json' // Asegúrate de incluir este encabezado
-        },
-        body: transaccionJson
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data); // Maneja la respuesta aquí
-        desplegarContenedor()
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-
-
-    console.log(correo)
-    console.log(contrasena)
-})
+document.getElementById("signInButton").addEventListener("click", validar);

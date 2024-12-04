@@ -22,6 +22,7 @@ reparacionesRouter.get("/", async (req, res) => {
         v.marca,
         v.modelo,
         v.year,
+        v.id_cliente,
         t.id AS tarea_id,
         t.categoria,
         t.tarea_realizada,
@@ -71,6 +72,7 @@ reparacionesRouter.get("/", async (req, res) => {
             marca: row.marca,
             modelo: row.modelo,
             year: row.year,
+            id_cliente:row.id_cliente
           },
           tareas: [],
         };
@@ -121,6 +123,7 @@ reparacionesRouter.get("/:id_mecanico", async (req, res) => {
                 tr.fecha_finalizacion, 
                 tr.observaciones,
                 tr.categoria,
+                tr.id_reparacion,
                 v.placa, 
                 v.marca, 
                 v.modelo,

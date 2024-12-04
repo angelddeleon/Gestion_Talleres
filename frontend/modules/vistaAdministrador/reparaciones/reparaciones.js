@@ -2,7 +2,7 @@
 
 const mechanics = [document.getElementById("mechanic-1"),document.getElementById("mechanic-2"),
     document.getElementById("mechanic-3"),document.getElementById("mechanic-4") ]
-const searchVehicleBtn = document.getElementById("searchVehicle")
+
 const vehicleInfoContainer = document.getElementById("vehicleInfoContainer")
 const taskForm = document.getElementById("taskForm")
 
@@ -12,12 +12,7 @@ const taskForm = document.getElementById("taskForm")
 
 //Eventos
 
-searchVehicleBtn.addEventListener("click", async  ()=>{
 
-    const placa = document.getElementById("license-plate").value
-    
-    const response = searchVehicle(placa)
-})
 
 taskForm.addEventListener("submit", async function(e){
     e.preventDefault()
@@ -77,6 +72,20 @@ function toggleCategory(category) {
     section.classList.toggle('hidden');
 }
 
+async function loadVehiculos(params) {
+    const vehiculosContainer = document.getElementById("license-plate")
+    const vehiculos = await fetchVehiculos()
+    
+    vehiculos.forEach(vehiculo =>{
+        const option = document.createElement("option");
+        option.value = vehiculo.placa
+        option.text = `${vehiculo.placa} - ${vehiculo.marca} ${vehiculo.modelo}`
+        vehiculosContainer.appendChild(option)
+
+    })
+
+    
+}
 function clearForm(){
     document.getElementById("taskForm").reset();
     location.reload()
@@ -398,10 +407,28 @@ async function switchState(id_reparacion, state) {
     
 }
 
+
+async function fetchVehiculos() {
+
+    try{
+        const response = await fetch(`/vehiculos`)
+
+        if(!response.ok){
+            throw new Error("Error al obtener vehiculos del servidor")
+        }
+        return await response.json()
+
+    }catch{
+
+    }
+    
+}
+
        
 
 document.addEventListener('DOMContentLoaded', () => {
     loadMecanicos()
+    loadVehiculos()
     trackStatus()
     updateTable()
     

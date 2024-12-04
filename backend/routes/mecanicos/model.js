@@ -50,9 +50,13 @@ await client.execute(`
 await client.execute(`
   INSERT INTO MECANICOS (nombre, telefono, correo, cedula, interno)
   VALUES 
-  ('Juan Pérez', '555-1234', 'juan.perez@mail.com', 'v-123456789', true),
-  ('María López', '555-5678', 'maria.lopez@mail.com', 'v-987654321', false),
-  ('Carlos Gómez', '555-9101', 'carlos.gomez@mail.com', 'v-456789123', true)
+      ('José Ramírez', '04244611234', 'jose.ramirez@mail.com', '111222333', true),
+      ('Andrés Martínez', '04244622345', 'andres.martinez@mail.com', '222333444', true),
+      ('Luis Hernández', '04244633456', 'luis.hernandez@mail.com', '333444555', true),
+      ('Miguel Torres', '04244644567', 'miguel.torres@mail.com', '444555666', false),
+      ('Pedro López', '04244655678', 'pedro.lopez@mail.com', '555666777', true),
+      ('Fernando Rojas', '04244699012', 'fernando.rojas@mail.com', '999000111', true),
+      ('Manuel Vargas', '04244610123', 'manuel.vargas@mail.com', '000111222', false);
 `);
 
 // // Insertar especialidades
@@ -69,10 +73,17 @@ await client.execute(`
 await client.execute(`
   INSERT INTO MECANICOS_ESPECIALIDADES (id_mecanico, id_especialidad)
   VALUES 
-  (1, 1),  -- Juan Pérez, Electricidad
-  (1, 2),  -- Juan Pérez, Mecánica
-  (2, 3),  -- María López, Aire Acondicionado
-  (3, 2)   -- Carlos Gómez, Mecánica
+  (1, 1),  
+  (1, 2),  
+  (2, 3),  
+  (3, 2),
+  (4, 4),
+  (5, 2),
+  (6, 1),
+  (7, 1),
+  (7, 2),
+  (7, 3),
+  (6, 3)   
 `);
 
 export default client;

@@ -186,16 +186,45 @@ async function actualizarTarea(update,repairId) {
     }else{
         await fetchCompletarTarea(repairId, observaciones)
    }
-
-   location.reload()
+location.reload()
+   
   
     
-
-   
 
 
     
 }
+
+async function trackStatus(){
+    const reparaciones = await fetchObtenerReparaciones()
+
+  
+    for (const reparacion of reparaciones) {
+        
+        const status = reparacion.tareas.map(tarea => tarea.status)
+        const validateCompletado =  status.every(state => state === "completado")
+        const validatePausa =  status.every(state => state === "en pausa")
+        const validatePendiente = status.every(state => state === "pendiente")
+
+        if(validateCompletado){
+            await switchState(reparacion.id, {status:"completado"})
+            return
+
+        }else if(validatePausa){
+            await switchState(reparacion.id, {status:"en pausa"})
+            return
+        }else if(validatePendiente){
+            await switchState(reparacion.id, {status:"pendiente"})
+            return
+        }else{
+            await switchState(reparacion.id, {status:"en progreso"})
+        }
+    }
+
+    
+}
+
+
 
 //Fetchs
 
@@ -285,7 +314,25 @@ async function fetchReaunudar(tarea_id, observaciones) {
     
     
 }
-
+async function fetchObtenerReparaciones(reparacion) {
+  
+    try {
+        const response = await fetch("/reparaciones", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(reparacion),
+        });
+        if (!response.ok) {
+            throw new Error("Error al enviar reparación al servidor");
+        }
+        return response;
+    } catch (error) {
+        console.error("Error en fetchReparaciones:", error);
+        throw error;
+    }
+}
 
 
 
@@ -300,4 +347,5 @@ async function fetchReaunudar(tarea_id, observaciones) {
 document.addEventListener('DOMContentLoaded', () => {
    loadTasks()
    loadHistorial()
+   trackStatus()
 });

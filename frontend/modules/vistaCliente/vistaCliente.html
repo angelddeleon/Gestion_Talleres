@@ -4,149 +4,75 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vehicle Repair Status</title>
-    <link rel="stylesheet" href="../../../src/output.css">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body class="bg-gray-50 min-h-screen">
+<body class="bg-gray-50">
     <div class="container mx-auto px-4 py-8">
-        <div class="bg-white shadow-lg rounded-lg p-6 mb-8">
-            <h1 class="text-2xl font-bold text-gray-800">Vehicle Repair Status</h1>
-            <p class="text-gray-600">Placa: #sd-2024-001</p>
-        </div>
-
-        <div class="grid md:grid-cols-2 gap-6">
-            <!-- Current Repair Status -->
-            <div class="bg-white shadow-lg rounded-lg p-6">
-                <h2 class="text-xl font-semibold text-gray-800 mb-4">Current Repair Status</h2>
-                <div class="space-y-4">
-                    <div class="border rounded-lg p-4">
-                        <div class="flex items-center mb-4">
-                            <img src="https://images.unsplash.com/photo-1590486803833-1c5dc8ddd4c8" alt="Mechanic Profile" class="w-12 h-12 rounded-full object-cover">
-                            <div class="ml-4">
-                                <h3 class="font-medium text-gray-800">Mecanico</h3>
-                                <p class="text-sm text-gray-600">Andres Ng</p>
-                            </div>
-                        </div>
-                        <div class="space-y-2">
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">Status:</span>
-                                <span class="px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-800">In Progress</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">Started:</span>
-                                <span>Jan 20, 2024 09:00 AM</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">Estimated Completion:</span>
-                                <span>Jan 22, 2024 05:00 PM</span>
-                            </div>
-                        </div>
+        <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">
+            <h1 class="text-2xl font-bold text-gray-800 mb-6">Vehicle Repair Status</h1>
+            
+            <!-- Vehicle Information -->
+            <div class="bg-gray-50 p-6 rounded-lg mb-6">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Detalles del Vehiculo</h2>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <div>
+                        <p class="text-sm text-gray-600">Placa</p>
+                        <p id="placa" class="font-semibold"></p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">Modelo</p>
+                        <p id="vehiculo" class="font-semibold"></p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">Year</p>
+                        <p id="year" class="font-semibold"></p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">Reparacion Id</p>
+                        <p id="reparacion-id" class="font-semibold"></p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">Ingreso del vehiculo</p>
+                        <p id="fecha-ingreso" class="font-semibold"></p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">Fecha Estimada de Finalizacion</p>
+                        <p id="fecha-estimada" class="font-semibold"></p>
                     </div>
                 </div>
             </div>
 
-            <!-- Repair Details -->
-            <div class="bg-white shadow-lg rounded-lg p-6">
-                <h2 class="text-xl font-semibold text-gray-800 mb-4">Repair Details</h2>
-                <div class="space-y-4">
-                    <div class="border rounded-lg p-4">
-                        <h3 class="font-medium text-gray-800 mb-2">Services Being Performed</h3>
-                        <ul class="list-disc list-inside space-y-2 text-gray-600">
-                            <li>Limpieza de inyectores</li>
-                            <li>Cambio de aceite</li>
-                            <li>Inspeccion de frenos</li>
-                            <li>Cambio de pastillas de frenos</li>
-                        </ul>
-                    </div>
+            <!-- Overall Progress -->
+            <div class="mb-8">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Progreso de la reparacion</h2>
+                <div class="w-full bg-gray-200 rounded-full h-4">
+                    <div id="status-bar" class="bg-blue-600 h-4 rounded-full" style="width: 0%"></div>
+                </div>
+                <p id="status" class="text-center mt-2 text-gray-600"></p>
+            </div>
+
+            <!-- Repair Tasks Status -->
+            <div class="mb-8">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Repair Tasks</h2>
+                <div id="container-task" class="space-y-4">
+                    
                 </div>
             </div>
-        </div>
 
-        <!-- Progress Timeline -->
-        <div class="mt-8 bg-white shadow-lg rounded-lg p-6">
-            <h2 class="text-xl font-semibold text-gray-800 mb-4">Repair Progress</h2>
-            <div class="space-y-4">
-                <div class="flex items-center">
-                    <div class="flex items-center relative">
-                        <div class="rounded-full h-12 w-12 bg-green-500 text-white flex items-center justify-center">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                        </div>
-                        <div class="flex-1 ml-4">
-                            <h3 class="font-medium">Vehicle Received</h3>
-                            <p class="text-sm text-gray-600">Jan 20, 2024 09:00 AM</p>
-                        </div>
-                    </div>
+            <!-- Additional Notes -->
+            <div class="bg-gray-50 p-6 rounded-lg">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Informacion</h2>
+                <p class="text-gray-600">Su vehículo está siendo reparado según lo programado. Nuestro equipo le notificará sobre cualquier actualización o cambio en el tiempo estimado de finalización.</p>
+                <div class="mt-4">
+                    <p class="text-sm text-gray-600">Informacion de Contacto:</p>
+                    <p class="font-semibold">Telefono: (000) 000-0000</p>
+                    <p class="font-semibold">Email: service@taller.com</p>
                 </div>
-                <div class="flex items-center">
-                    <div class="flex items-center relative">
-                        <div class="rounded-full h-12 w-12 bg-green-500 text-white flex items-center justify-center">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                        </div>
-                        <div class="flex-1 ml-4">
-                            <h3 class="font-medium">Diagnostic Complete</h3>
-                            <p class="text-sm text-gray-600">Jan 20, 2024 11:30 AM</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex items-center">
-                    <div class="flex items-center relative">
-                        <div class="rounded-full h-12 w-12 bg-yellow-500 text-white flex items-center justify-center">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                            </svg>
-                        </div>
-                        <div class="flex-1 ml-4">
-                            <h3 class="font-medium">Repairs In Progress</h3>
-                            <p class="text-sm text-gray-600">Jan 20, 2024 02:00 PM</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex items-center opacity-50">
-                    <div class="flex items-center relative">
-                        <div class="rounded-full h-12 w-12 bg-gray-300 text-white flex items-center justify-center">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                        </div>
-                        <div class="flex-1 ml-4">
-                            <h3 class="font-medium">Quality Check</h3>
-                            <p class="text-sm text-gray-600">Pending</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex items-center opacity-50">
-                    <div class="flex items-center relative">
-                        <div class="rounded-full h-12 w-12 bg-gray-300 text-white flex items-center justify-center">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                        </div>
-                        <div class="flex-1 ml-4">
-                            <h3 class="font-medium">Ready for Pickup</h3>
-                            <p class="text-sm text-gray-600">Pending</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Contact Information -->
-        <div class="mt-8 bg-white shadow-lg rounded-lg p-6">
-            <h2 class="text-xl font-semibold text-gray-800 mb-4">Need Help?</h2>
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-gray-600">Contact your assigned mechanic:</p>
-                    <p class="font-medium">Andres Ng</p>
-                    <p class="text-gray-600">Phone: 0000000000</p>
-                    <p class="text-gray-600">Email: ejemplo@ejemplo.com</p>
-                </div>
-                <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Send Message</button>
             </div>
         </div>
     </div>
+    <script src="./vistaClientes.js"></script>
 </body>
 </html>

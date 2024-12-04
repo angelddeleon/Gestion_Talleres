@@ -12,19 +12,19 @@ const taskForm = document.getElementById("taskForm")
 
 //Eventos
 
-searchVehicleBtn.addEventListener("click", async ()=>{
+searchVehicleBtn.addEventListener("click", async  ()=>{
 
     const placa = document.getElementById("license-plate").value
     
     const response = searchVehicle(placa)
 })
 
-taskForm.addEventListener("submit", async (e) =>{
+taskForm.addEventListener("submit", async function(e){
     e.preventDefault()
     const modo = document.getElementById("mode").value
     const placaVehiculo = document.getElementById("license-plate").value
     const fecha_inicio = document.getElementById("deadline").value
-    const fechaAprox = document.getElementById("estimated-completion").value
+    const fecha_estimada = document.getElementById("estimated-completion").value
     const tareas = [
         {electrica: [document.getElementById("electrical-textarea").value, document.getElementById("mechanic-1").value]},
         {mecanica: [document.getElementById("mechanical-textarea").value,  document.getElementById("mechanic-2").value]},
@@ -34,15 +34,17 @@ taskForm.addEventListener("submit", async (e) =>{
     const descripcion = document.getElementById("instructions").value
     const prioridad = document.getElementById("priority").value
 
-    let reparacion = {placaVehiculo, fecha_inicio, fechaAprox,tareas,descripcion,prioridad, modo}
+    let reparacion = {placaVehiculo, fecha_inicio, fecha_estimada,tareas,descripcion,prioridad, modo}
    
-    
-    const response = await createReparacion(reparacion)
-
-    if(response){
-
-        alert("Reparacion Asignada Correctamente")
-        location.reload()
+    try {
+        const response = await createReparacion(reparacion);
+        if (response) {
+            clearForm();
+            alert("Reparación asignada correctamente");
+        }
+    } catch (error) {
+        console.error("Error al crear reparación:", error);
+        alert("Ocurrió un error al asignar la reparación.");
     }
 })
 
@@ -61,7 +63,8 @@ async function loadMecanicos(){
     mecanicos.forEach(mecanico => {
         const option = document.createElement("option");
         option.value = mecanico.cedula;
-        option.text = mecanico.nombre;
+        const especialidades = mecanico.especialidades.map(especialidad =>especialidad.nombre).join("/")
+        option.text = `${mecanico.nombre}-> ${especialidades}`;
     
    
         mechanics.forEach(mechanic => {
@@ -74,12 +77,70 @@ function toggleCategory(category) {
     section.classList.toggle('hidden');
 }
 
+function clearForm(){
+    document.getElementById("taskForm").reset();
+    location.reload()
+    
 
+}
 
+async function updateTable() {
+    await trackStatus()
+    const reparaciones = await fetchObtenerReparaciones();
+    const tableBody = document.getElementById("table-reparaciones");
 
+    for (const entry of reparaciones) {
+        const row = document.createElement("tr");
 
+        // ID
+        row.innerHTML += `<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${entry.id}</td>`;
 
+        // Vehículo
+        row.innerHTML += `<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${entry.vehiculo.placa}</td>`;
 
+        // Mecánicos (esperar las promesas)
+        const mechanicsHTML = await Promise.all(
+            entry.tareas.map(async tarea => {
+                const mecanico = await fetchMecanicoById2(tarea.id_mecanico); // Ajusta el campo según tu API
+
+                return `<span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">${mecanico.nombre}</span>`;
+            })
+        ).then(results => results.join(" "));
+
+        row.innerHTML += `<td class="px-6 py-4 text-sm text-gray-500"><div class="flex flex-wrap gap-2">${mechanicsHTML}</div></td>`;
+
+        // Categorías
+        const categoriasHTML = entry.tareas
+            .map(tarea => `<span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">${tarea.categoria}</span>`)
+            .join(" ");
+        row.innerHTML += `<td class="px-6 py-4 text-sm text-gray-500"><div class="flex flex-wrap gap-2">${categoriasHTML}</div></td>`;
+
+        // Tareas
+        const tareasHTML = entry.tareas
+            .map(tarea => `<li>${tarea.tarea_realizada}</li>`)
+            .join("");
+        row.innerHTML += `
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <details class="cursor-pointer">
+                    <summary class="font-medium text-blue-600">Ver Tareas (${entry.tareas.length})</summary>
+                    <ul class="mt-2 pl-4 list-disc">${tareasHTML}</ul>
+                </details>
+            </td>
+        `;
+
+        // Descripción
+        row.innerHTML += `<td class="px-6 py-4 text-sm text-gray-500"><div class="flex flex-wrap gap-2">${entry.descripcion}</div></td>`;
+
+        // Fecha de inicio
+        row.innerHTML += `<td class="px-6 py-4 text-sm text-gray-500"><div class="flex flex-wrap gap-2">${entry.fecha_inicio}</div></td>`;
+
+        // Estado
+        row.innerHTML += `<td class="px-6 py-4 text-sm text-gray-500"><div class="flex flex-wrap gap-2">${entry.status}</div></td>`;
+
+        // Añade la fila al cuerpo de la tabla
+        tableBody.appendChild(row);
+    }
+}
 
 //Controllers
 
@@ -106,36 +167,95 @@ async function searchVehicle(placa) {
 
     
 }
+async function createReparacion(reparacion) {
+    try {
+        const { placaVehiculo } = reparacion;
+        console.log(placaVehiculo);
 
-async function createReparacion(reparacion){
-    const { placaVehiculo } = reparacion
-    const  [ vehiculo ] = await fetchVehiculoById(placaVehiculo)
+        // Obtener el vehículo por placa
+        const [vehiculo] = await fetchVehiculoById(placaVehiculo);
+        if (!vehiculo) {
+            throw new Error("Vehículo no encontrado");
+        }
+        reparacion.id_vehiculo = vehiculo.id;
 
-    reparacion.id_vehiculo = vehiculo.id
-    
-    try{
-        const response = await fetchReparaciones(reparacion)
-        return true
+      
+        const response = await fetchReparaciones(reparacion);
+        const response_id = await response.json();
+        const reparacion_id = response_id.id;
 
-    }catch{
-        alert("Error creando reparacion")
+        if (!response.ok) {
+            throw new Error("Error al crear la reparación en el servidor");
+        }
+
         
+        let responseEstatus = true;
+        for (const tarea of reparacion.tareas) {
+            const [categoria, tareaInfo] = Object.entries(tarea)[0]; // Ejemplo: "electrica", ["detalle", "id_mecanico"]
+            const [tareaEspecificacion, cedulaMecanico] = tareaInfo;
 
+            if (tareaEspecificacion && cedulaMecanico) {
+                const mecanico = await fetchMecanicoById(cedulaMecanico);
+                const mecanico_id = await mecanico.id;
+                const nuevaTarea = {
+                    categoria,
+                    mecanico_id,
+                    tarea_realizada: tareaEspecificacion,
+                    reparacion_id,
+                }
+                console.log(nuevaTarea)
+            
+
+                // Crear la tarea
+                const tareaResponse = await fetchCreateTarea(nuevaTarea);
+                if (!tareaResponse.ok) {
+                    responseEstatus = false;
+                    console.error(`Error al crear tarea: ${JSON.stringify(nuevaTarea)}`);
+                } else {
+                    console.log(`Tarea creada: ${JSON.stringify(nuevaTarea)}`);
+                }
+            }
+        }
+
+        if (responseEstatus) {
+            return true;
+        } else {
+            throw new Error("Error al crear una o más tareas en el servidor");
+        }
+    } catch (error) {
+        console.error("Error en createReparacion:", error);
+        throw error;
     }
-    return false
+}
+
+async function trackStatus(){
+    const reparaciones = await fetchObtenerReparaciones()
 
   
-  
+    for (const reparacion of reparaciones) {
+        
+        const status = reparacion.tareas.map(tarea => tarea.status)
+        const validateCompletado =  status.every(state => state === "completado")
+        const validatePausa =  status.every(state => state === "en pausa")
+        const validatePendiente = status.every(state => state === "pendiente")
 
-   
+        if(validateCompletado){
+            await switchState(reparacion.id, {status:"completado"})
+            return
 
-
+        }else if(validatePausa){
+            await switchState(reparacion.id, {status:"en pausa"})
+            return
+        }else if(validatePendiente){
+            await switchState(reparacion.id, {status:"pendiente"})
+            return
+        }else{
+            await switchState(reparacion.id, {status:"en progreso"})
+        }
+    }
 
     
 }
-
-
-
 
 
 
@@ -157,17 +277,17 @@ async function fetchMecanicos() {
     
 }
 
-async function fetchVehiculoById(placa){
-    try{
-        
-        const response = await fetch(`/vehiculos/${placa}`)
-        const vehiculo = await response.json()
-        return vehiculo
-
-    }catch{
-        alert("Error fetchs mecanicos")
+async function fetchVehiculoById(placa) {
+    try {
+        const response = await fetch(`/vehiculos/${placa}`);
+        if (!response.ok) {
+            throw new Error("Error al obtener vehículo");
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("Error en fetchVehiculoById:", error);
+        throw error;
     }
-    
 }
 
 async function fetchMecanicoById(cedula) {
@@ -186,30 +306,104 @@ async function fetchMecanicoById(cedula) {
     
 }
 
-async function fetchReparaciones(reparacion){
-  
+async function fetchMecanicoById2(id) {
     try{
 
-        const response = await fetch("/reparaciones", {
-          method: "POST", // Tipo de solicitud
-          headers: {
-            "Content-Type": "application/json", // Especifica que se está enviando JSON
-          },
-          body: JSON.stringify(reparacion), // Convierte el objeto a un string JSON
-        })
+        const response = await fetch(`/mecanicos/mecanico/${id}`)
+        const mecanico = await response.json()
+        return mecanico
 
-      
+    }catch{
+        alert("Error fetchs mecanicos")
+    }
 
-  }catch{
-      
-      
-  }   
+
+
+    
 }
 
+async function fetchReparaciones(reparacion) {
+  
+    try {
+        const response = await fetch("/reparaciones", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(reparacion),
+        });
+        if (!response.ok) {
+            throw new Error("Error al enviar reparación al servidor");
+        }
+        return response;
+    } catch (error) {
+        console.error("Error en fetchReparaciones:", error);
+        throw error;
+    }
+}
+
+async function fetchCreateTarea(tarea) {
+    try {
+        const response = await fetch("/reparaciones/tarea", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(tarea),
+        });
+        if (!response.ok) {
+            throw new Error("Error al enviar reparación al servidor");
+        }
+        return response;
+    } catch (error) {
+        console.error("Error en fetchReparaciones:", error);
+        throw error;
+    }
+    
+}
+
+async function fetchObtenerReparaciones() {
+
+    try{
+        const response = await fetch("/reparaciones")
+        if (!response.ok) {
+            throw new Error("Error al obtener reparaciones del servidor");
+            }
+        return response.json();
+
+    }catch{
+        console.error("Error en fetchObtenerReparaciones:", error);
+    }
+    
+}
+
+async function switchState(id_reparacion, state) {
+
+    try{
+        const response = await fetch(`/reparaciones/status/${id_reparacion}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                },
+                body: JSON.stringify(state)
+                });
+                if (!response.ok) {
+                    throw new Error("Error al cambiar estado de la reparación");
+                    }
+                return response.json();
+
+    }catch{
+        alert("Error al cambiar estado")
+    }
+    
+}
 
        
 
 document.addEventListener('DOMContentLoaded', () => {
     loadMecanicos()
+    trackStatus()
+    updateTable()
+    
     
 });

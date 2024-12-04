@@ -23,16 +23,17 @@ await client.execute(`
         )
       `)
 
-      //Prueba
-await client.execute(`
-    INSERT INTO VEHICULOS (placa, marca, modelo, year, id_cliente)
-    VALUES 
-        ('XYZ456', 'Honda', 'Civic', '2018', 1),
-        ('LMN789', 'Ford', 'Focus', '2021', 3),
-        ('TAC349', 'Toyota', 'Fortuner', '2008', 2),
-        ('WER359', 'Toyota', '4runner', '2010', 4);
-    `);
+
+      await client.execute(`
+        INSERT INTO VEHICULOS (placa, marca, modelo, year, id_cliente)
+        VALUES 
+            ('XYZ456', 'Honda', 'Civic', '2020', 1),
+            ('LMN789', 'Ford', 'Focus', '2020', 3),
+            ('TAC349', 'Toyota', 'Fortuner', '2008', 1),
+            ('WEs9', 'Toyota', '4runner', '2020', 3);
+        `);
     
 
+
+
 export default client
-      

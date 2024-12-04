@@ -28,6 +28,7 @@ await client.execute(`
     CREATE TABLE IF NOT EXISTS REPARACIONES(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         fecha_inicio DATETIME NOT NULL,
+        fecha_estimada DATETIME NOT NULL,
         fecha_finalizacion DATETIME,
         descripcion VARCHAR(255) NOT NULL,
         status VARCHAR(255) DEFAULT pendiente,
@@ -37,14 +38,15 @@ await client.execute(`
 await client.execute(`
     CREATE TABLE IF NOT EXISTS TAREAS_REPARACION (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
+        categoria TEXT NOT NULL,
         tarea_realizada TEXT NOT NULL,
-        OBSERVACIONES TEXT,
+        observaciones TEXT NOT NULL DEFAULT "",
         status VARCHAR(255) DEFAULT pendiente,
-        fecha_inicio,
-        fecha_finalizacion,
+        fecha_inicio DATETIME,
+        fecha_finalizacion DATETIME,
         id_mecanico INTEGER NOT NULL,
         id_reparacion INTEGER NOT NULL,
-        id_pieza INTEGER NOT NULL
+        id_pieza INTEGER
         )`)
     
 
@@ -61,19 +63,19 @@ await client.execute(`
     
 //Testeo
 await client.execute(`
-    INSERT INTO REPARACIONES (fecha_inicio, fecha_finalizacion, descripcion, status, id_vehiculo)
+    INSERT INTO REPARACIONES (fecha_inicio, fecha_estimada, descripcion, status, id_vehiculo)
     VALUES 
-    ('2024-11-01 08:00:00', '2024-11-03 17:00:00', 'Cambio de aceite y revisión general', 'completada', 1),
+    ('2024-11-01 08:00:00', '2024-11-03 17:00:00', 'Cambio de aceite y revisión general', 'pendiente', 1),
     ('2024-11-05 09:00:00', '2024-11-07 15:00:00', 'Reparación del sistema de frenos', 'en progreso', 2)
 `);
 
 
 await client.execute(`
-    INSERT INTO TAREAS_REPARACION (tarea_realizada, OBSERVACIONES,status, id_mecanico, id_reparacion, id_pieza)
+    INSERT INTO TAREAS_REPARACION (tarea_realizada,status, id_mecanico, id_reparacion, id_pieza, categoria)
     VALUES 
-    ('Cambio de aceite', 'Todo en buen estado','pendiente', 1, 1, 1),
-    ('Cambio de filtro de aire', 'Todo en buen estado','pendiente', 1, 1, 1),
-    ('Revisión de frenos', 'Pastillas desgastadas, se reemplazarán','pendiente', 1, 2, 2);
+    ('Cambio de aceite', 'pendiente', 1, 1, 1, 'mecanica'),
+    ('Cambio de filtro de aire', 'pendiente', 1, 1, 1, 'mecanica'),
+    ('Revisión de compresor','en progreso', 1, 2, 2, 'aire acondicionado');
 
 `);
 

@@ -118,6 +118,57 @@ mecanicosRouter.get("/:cedula", async (req, res) => {
         return res.status(500).json([]);
     }
 });
+mecanicosRouter.get("/mecanico/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const result = await client.execute(`
+            SELECT 
+                m.id,
+                m.nombre,
+                m.telefono,
+                m.correo,
+                m.cedula,
+                m.interno,
+                e.id AS especialidad_id,
+                e.nombre_especialidad
+            FROM MECANICOS m
+            LEFT JOIN MECANICOS_ESPECIALIDADES me ON m.id = me.id_mecanico
+            LEFT JOIN ESPECIALIDAD e ON me.id_especialidad = e.id
+            WHERE m.id = ?
+        `, [id]);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: "Mecánico no encontrado" });
+        }
+
+        // Estructurar los datos para agrupar las especialidades por mecánico
+        const mecanico = {
+            id: result.rows[0].id,
+            nombre: result.rows[0].nombre,
+            telefono: result.rows[0].telefono,
+            correo: result.rows[0].correo,
+            cedula: result.rows[0].cedula,
+            interno: result.rows[0].interno,
+            especialidades: []
+        };
+
+        result.rows.forEach(row => {
+            if (row.especialidad_id) {
+                mecanico.especialidades.push({
+                    id: row.especialidad_id,
+                    nombre: row.nombre_especialidad
+                });
+            }
+        });
+
+        return res.status(200).json(mecanico);
+    } catch (error) {
+        console.error("Error al obtener el mecánico:", error);
+        return res.status(500).json([]);
+    }
+});
+
 
 mecanicosRouter.post("/", async (req, res) =>{
 

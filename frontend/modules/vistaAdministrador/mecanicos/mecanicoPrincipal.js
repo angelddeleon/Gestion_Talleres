@@ -301,6 +301,36 @@
             
         }
 
+
+        async function trackStatus(){
+            const reparaciones = await fetchObtenerReparaciones()
+        
+          
+            for (const reparacion of reparaciones) {
+                
+                const status = await reparacion.tareas.map(tarea => tarea.status)
+                const validateCompletado = await status.every(state => state === "completado")
+                const validatePausa = await status.every(state => state === "en pausa")
+                const validatePendiente = await status.every(state => state === "pendiente")
+        
+                if(validateCompletado){
+                    await switchState(reparacion.id, {status:"completado"})
+                    return
+        
+                }else if(validatePausa){
+                    await switchState(reparacion.id, {status:"en pausa"})
+                    return
+                }else if(validatePendiente){
+                    await switchState(reparacion.id, {status:"pendiente"})
+                    return
+                }else{
+                    await switchState(reparacion.id, {status:"en progreso"})
+                }
+            }
+        
+          
+        }
+
           
        
         //Fetchs
@@ -411,6 +441,42 @@
             
         }
 
+        async function switchState(id_reparacion, state) {
+
+            try{
+                const response = await fetch(`/reparaciones/status/${id_reparacion}`, {
+                    method: "PATCH",
+                    headers: {
+                        "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(state)
+                        });
+                        if (!response.ok) {
+                            throw new Error("Error al cambiar estado de la reparación");
+                            }
+                        return response.json();
+        
+            }catch{
+                alert("Error al cambiar estado")
+            }
+            
+        }
+
+        async function fetchObtenerReparaciones() {
+
+            try{
+                const response = await fetch("/reparaciones")
+                if (!response.ok) {
+                    throw new Error("Error al obtener reparaciones del servidor");
+                    }
+                return response.json();
+        
+            }catch{
+                console.error("Error en fetchObtenerReparaciones:", error);
+            }
+            
+        }
+        
 
         //Controllers
 
@@ -504,5 +570,6 @@
         document.addEventListener('DOMContentLoaded', () => {
             loadSpecialities()
             updateMecanicosTable()
+            trackStatus()
             
         });

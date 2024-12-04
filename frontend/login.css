@@ -1,4 +1,4 @@
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -6,6 +6,12 @@
 
 .oculto{
     display: none;
+}
+
+a{
+    text-align: center;
+    text-decoration: underline;
+    color: #313131;
 }
 
 .contenedor {
@@ -67,7 +73,13 @@ button {
     background-color: #313131;
     border: none;
     color: #fff;
+    align-self: center;
 
+}
+
+.buttons {
+    display: flex;
+    flex-direction: column;
 }
 
 p {
@@ -80,4 +92,5 @@ p {
 
     text-align: center;
 }
+
 

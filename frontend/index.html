@@ -20,54 +20,32 @@
     <div class="contenedor">
 
         <div class="contForm" id="divSignin">
-            <h2>Crear Cuenta</h2>
+            
+            <h2>Trabajadores</h2>
 
             <form id="formSignIn">
 
-                <input type="email" id="correoSignIn" placeholder="Email">
+                <input type="number" id="cedula" placeholder="Ingrese su cedula">
 
-                <input type="password" id="passwordSignIn" placeholder="Password">
-
-                <select name="roles" id="listaRoles">
-                    <option value="admin">admin</option>
-                    <option value="mecanico">mecanico</option>
-                    <option value="cliente">cliente</option>
-
-                </select>
-    
-                <button id="signInButton" >Crear Cuenta</button>
+                <input type="text" id="placa" placeholder="Ingrese su placa">
     
             </form>
 
+            <div class="buttons">
+                <button id="signInButton" >A Trabajar</button>
 
-            <p onclick="desplegarContenedor()">Ya tienes una cuenta?</p>
+                <a href="../frontend/modules/login/index.html">Eres un cliente?</a>
+            </div>
+
+            
             
 
         </div>
-
-        <div class="contForm oculto" id="divLogin">
-
-            <h2>Log In</h2>
-
-            <form id="formLogIn">
-                <input type="email" name="correoLogin" class="correo" placeholder="Email">
-
-                <input type="password" name="passwordLogin" class="password" placeholder="Password">
-    
-                <button id="logInButton">Ingresar</button>
-    
-            </form>
-
-            
-            <p onclick="desplegarContenedor()">No tienes una cuenta todavia?</p>
-    
-        </div>
-
 
     </div>
+    
 
     
 </body>
-<script src="login.js"></script>
-
+<script src="login.js" type="module"></script>
 </html>

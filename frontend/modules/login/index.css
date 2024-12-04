@@ -8,6 +8,12 @@
     display: none;
 }
 
+a{
+    text-align: center;
+    text-decoration: underline;
+    color: #313131;
+}
+
 .contenedor {
     height: 100vh;
   }
@@ -67,7 +73,13 @@ button {
     background-color: #313131;
     border: none;
     color: #fff;
+    align-self: center;
 
+}
+
+.buttons {
+    display: flex;
+    flex-direction: column;
 }
 
 p {

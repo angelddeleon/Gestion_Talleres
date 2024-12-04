@@ -25,6 +25,13 @@ async function validar() {
 
     let cedula = document.getElementById("cedula").value.trim(); // Usar trim para eliminar espacios
 
+
+    //Cedula del Administrador
+    if(String(cedula) === '30303030'){
+        window.location.href = './modules/vistaAdministrador/index.html';
+        return
+    }
+
     console.log(cedula);
 
     try {
@@ -36,6 +43,7 @@ async function validar() {
         // Verificar que el mecánico existe
         if (mecanico && mecanico.cedula) {
             console.log(mecanico.nombre);
+
 
             // Comparar la cédula ingresada con la cédula del mecánico
             if (String(cedula) === String(mecanico.cedula)) {

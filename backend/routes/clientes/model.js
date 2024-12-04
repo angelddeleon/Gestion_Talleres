@@ -26,12 +26,17 @@ await client.execute(`
 
 await client.execute(`
         INSERT INTO CLIENTES (nombre, telefono, correo, cedula, direccion) VALUES
-                ('Juan Pérez', '0414-1234567', 'juan.perez@example.com', '12345678', 'Av. Principal, Edif. Apto 2'),
-                ('Ana García', '0424-9876543', 'ana.garcia@example.com', '87654321', 'Calle Secundaria, Casa 5'),
-                ('Carlos Rodríguez', '0412-5555555', 'carlos.rodriguez@example.com', '11223344', 'Zona Industrial, Galpón 3'),
-                ('Marta López', '0416-3334444', 'marta.lopez@example.com', '55667788', 'Urbanización Norte, Torre C')
-        `)
-              
+                ('Ana Gómez', '04163336666', 'ana.gomez@example.com', '55668800', 'Urbanización Sur, Torre D'),
+                ('Carlos Ruiz', '04163337777', 'carlos.ruiz@example.com', '55669911', 'Calle Mayor, Residencias B'),
+                ('María Fernández', '04163338888', 'maria.fernandez@example.com', '55670022', 'Boulevard Oeste, Edificio E'),
+                ('Luis Sánchez', '04163339999', 'luis.sanchez@example.com', '55671133', 'Avenida del Sol, Torre F'),
+                ('Patricia Torres', '04163340000', 'patricia.torres@example.com', '55672244', 'Urbanización Este, Residencias G'),
+                ('Miguel Rodríguez', '04163341111', 'miguel.rodriguez@example.com', '55673355', 'Calle Nueva, Edificio H'),
+                ('Carmen Martínez', '04163342222', 'carmen.martinez@example.com', '55674466', 'Plaza Norte, Torre I'),
+                ('Fernando Castro', '04163343333', 'fernando.castro@example.com', '55675577', 'Parque Central, Edificio J'),
+                ('Laura Moreno', '04163344444', 'laura.moreno@example.com', '55676688', 'Avenida Las Flores, Residencias K');
+                        `)
+                              
 
 
 

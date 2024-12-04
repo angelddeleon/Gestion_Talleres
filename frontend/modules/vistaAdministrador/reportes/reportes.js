@@ -208,11 +208,12 @@ async function modalMecanicoControl(id_mecanico) {
     
 
     tareas.forEach(tarea =>{
+        console.log(tarea)
         const div = document.createElement("div")
         div.classList.add("bg-gray-50", "p-3", "rounded")
         div.innerHTML = `
             <p class="text-sm"><span class="font-medium">Reparacion ID: ${tarea.id_reparacion}</p>
-            <p class="text-sm"><span class="font-medium">Tarea ID: ${tarea.id}</p>
+            <p class="text-sm"><span class="font-medium">Tarea ID: ${tarea.tarea_id}</p>
             <p class="text-sm"><span class="font-medium">Vehiculo: ${tarea.marca} ${tarea.modelo} ${tarea.year}</p>
             <p class="text-sm"><span class="font-medium">Placa Vehiculo: ${tarea.placa}</p>
             <p class="text-sm"><span class="font-medium">Tarea Realizada: ${tarea.tarea_realizada}</p>

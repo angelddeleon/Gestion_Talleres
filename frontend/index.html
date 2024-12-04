@@ -1,50 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="login.css">
-    <title>Document</title>
+    <title>Login Cedula</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-   
-    <ul>
-        <!-- ESTO SOLO ES PARA EJEMPLO Y ACCEDER MAS FACIL -->
-        <h4>SOLO PARA EJEMPLO Y ACCEDER MAS FACIL</h4>
-        <li> <a href="./modules/vistaAdministrador/index.html">Vista Administrador</a></li>
-        <li> <a href="./modules/vistaMecanico/mecanico.html">Vista mecanico</a></li>
-        <li> <a href="./modules/vistaCliente/vistaCliente.html">Vista cliente</a></li>
-        
-    </ul>
-
-    <div class="contenedor">
-
-        <div class="contForm" id="divSignin">
-
-            <h2>Trabajadores</h2>
-
-            <form id="formSignIn">
-
-                <input type="number" id="cedula" placeholder="Ingrese su cedula">
-
-
-            </form>
-
-            <div class="buttons">
-                <button id="signInButton" >A Trabajar</button>
-
-                <a href="../frontend/modules/login/index.html">Eres un cliente?</a>
+<body class="min-h-screen bg-gradient-to-br from-blue-100 to-white">
+    <div class="flex items-center justify-center min-h-screen px-4">
+        <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-2xl shadow-xl">
+            <div class="text-center space-y-2">
+                <h1 class="text-3xl font-bold text-gray-900">Bienvenido</h1>
+                <p class="text-gray-600">Ingrese sus credenciales para continuar</p>
             </div>
 
-            
-            
+            <form class="space-y-6" id="loginForm">
+                <div class="space-y-2">
+                    <label for="cedula" class="block text-sm font-medium text-gray-700">Cédula</label>
+                    <input type="number" id="cedula" name="cedula" placeholder="Ingrese su cédula" required aria-label="Ingrese su número de cédula" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all hover:border-blue-400" />
+                    <div id="cedulaError" class="hidden text-sm text-red-600 mt-1">Formato de cédula inválido</div>
+                </div>
 
+                <button type="submit" class="w-full px-6 py-3 text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transform transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed">
+                    A Trabajar
+                </button>
+            </form>
+
+            <div class="pt-4 text-center">
+                <p class="text-sm text-gray-600">
+                    ¿Eres Cliente? 
+                    <a href="./modules/login/index.html" class="font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:underline">Tracking Vehiculo</a>
+                </p>
+            </div>
         </div>
-
     </div>
-    
 
-    
+
+    <script src="login.js"></script>
 </body>
-<script src="login.js" type="module"></script>
 </html>

@@ -67,4 +67,7 @@ async function validar() {
     }
 }
 
-document.getElementById("signInButton").addEventListener("click", validar);
+document.getElementById("loginForm").addEventListener("submit", (e)=>{
+    e.preventDefault()
+    validar()
+});

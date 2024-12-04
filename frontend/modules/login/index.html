@@ -3,48 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="index.css">
-    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Car Status Form</title>
 </head>
-<body>
-   
-    <ul>
-        <!-- ESTO SOLO ES PARA EJEMPLO Y ACCEDER MAS FACIL -->
-        <h4>SOLO PARA EJEMPLO Y ACCEDER MAS FACIL</h4>
-        <li> <a href="./modules/vistaAdministrador/index.html">Vista Administrador</a></li>
-        <li> <a href="./modules/vistaMecanico/mecanico.html">Vista mecanico</a></li>
-        <li> <a href="./modules/vistaCliente/vistaCliente.html">Vista cliente</a></li>
-        
-    </ul>
-
-    <div class="contenedor">
-
-        <div class="contForm" id="divSignin">
-            <h2>Vea el estado de su carro</h2>
-
-            <form id="formSignIn">
-
-                <input type="number" id="cedula" placeholder="Ingrese su cedula">
-
-                <input type="text" id="placa" placeholder="Ingrese su placa">
-    
-            </form>
-
-            <div class="buttons">
-                <button id="signInButton" >Ver auto</button>
-
-                <a href="../../index.html">Eres un trabajador?</a>
+<body class="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100">
+    <div class="container mx-auto px-4 py-12">
+        <div class="max-w-md mx-auto bg-white rounded-2xl shadow-xl p-8 space-y-6">
+            <div class="text-center">
+                <h1 class="text-3xl font-bold text-gray-900">Rastrea tu Vehiculo</h1>
+                <p class="mt-2 text-gray-600">Ingresa sus Datos</p>
             </div>
-
-            
-            
-
+            <form id="carStatusForm" class="space-y-6">
+                <div class="space-y-2">
+                    <label for="cedula" class="block text-sm font-medium text-gray-700">Cedula</label>
+                    <div class="relative">
+                        <input type="number" id="cedula" name="cedula" class="block w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out" placeholder="Enter your ID number" required>
+                        <div class="hidden text-red-500 text-sm mt-1" id="cedulaError">Ingresa Cedula asociada con el vehiculos</div>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <label for="placa" class="block text-sm font-medium text-gray-700">Placa</label>
+                    <div class="relative">
+                        <input type="text" id="placa" name="placa" class="block w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out" placeholder="Enter license plate number" required>
+                        <div class="hidden text-red-500 text-sm mt-1" id="placaError">Ingresa placa de vehiculo</div>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between space-x-4">
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 
+                    rounded-lg transform transition duration-200 hover:scale-[1.02] focus:outline-none focus:ring-2 
+                    focus:ring-blue-500 focus:ring-offset-2">Ver Vehiculo</button>
+                </div>
+                <div class="text-center">
+                    <a href="../../index.html" class="text-blue-600 hover:text-blue-800 text-sm font-medium transition duration-150 ease-in-out">Eres un empleado? A Trabajar</a>
+                </div>
+            </form>
         </div>
-
     </div>
-    
 
-    
+    <script src="./index.js"></script>
 </body>
-<script src="index.js" type="module"></script>
 </html>

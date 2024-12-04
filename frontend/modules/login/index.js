@@ -51,7 +51,12 @@ async function validar() {
         // Aquí puedes agregar lógica adicional para manejar los datos obtenidos
         
         if (String(cedula) === String(cliente.cedula) && String(placa) === String(vehiculo[0].placa)) {
-                window.location.href = '../vistaCliente/vistaCliente.html';
+            
+            localStorage.setItem('cedula', cedula)
+            localStorage.setItem('placa', placa)
+            
+            window.location.href = '../vistaCliente/vistaCliente.html';
+                
             } else {
                 alert('No existe un cliente o vehículo con los datos proporcionados.');
             }

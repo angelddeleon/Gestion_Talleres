@@ -1,6 +1,6 @@
-const placaVehiculo = "XYZ456"
-
-
+let placa = localStorage.getItem('placa');
+let cedula = localStorage.getItem('cedula')
+const placaVehiculo = placa
 
 //Eventos
 

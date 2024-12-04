@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <title>Document</title>
+</head>
+<body>
+   
+    <ul>
+        <!-- ESTO SOLO ES PARA EJEMPLO Y ACCEDER MAS FACIL -->
+        <h4>SOLO PARA EJEMPLO Y ACCEDER MAS FACIL</h4>
+        <li> <a href="./modules/vistaAdministrador/index.html">Vista Administrador</a></li>
+        <li> <a href="./modules/vistaMecanico/mecanico.html">Vista mecanico</a></li>
+        <li> <a href="./modules/vistaCliente/vistaCliente.html">Vista cliente</a></li>
+        
+    </ul>
+
+    <div class="contenedor">
+
+        <div class="contForm" id="divSignin">
+            <h2>Vea el estado de su carro</h2>
+
+            <form id="formSignIn">
+
+                <input type="number" id="cedula" placeholder="Ingrese su cedula">
+
+                <input type="text" id="placa" placeholder="Ingrese su placa">
+    
+            </form>
+
+            <button id="signInButton" >Ver auto</button>
+
+
+            <p onclick="desplegarContenedor()">Ya tienes una cuenta?</p>
+            
+
+        </div>
+
+    </div>
+    
+
+    
+</body>
+<script src="index.js" type="module"></script>
+</html>

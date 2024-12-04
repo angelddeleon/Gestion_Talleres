@@ -47,7 +47,6 @@ clientesRouter.get("/", async(req, res) =>{
     });
     
 
-
 clientesRouter.get("/:cedula", async (req, res) => {
         try {
             const { cedula } = req.params;
@@ -83,6 +82,23 @@ clientesRouter.get("/:cedula", async (req, res) => {
         }
     });
 
+clientesRouter.get("/cliente/:id", async(req,res)=>{
+
+    const { id } = req.params
+
+    try{
+        const cliente = await client.execute(`SELECT * FROM CLIENTES WHERE id = ?`,[id])
+        if(cliente.rows.length === 0){
+            return res.status(404).json({})
+            }
+            return res.status(200).json(cliente.rows[0])
+
+    }catch{
+        return res.status(500).json({message:"Error al obtener el cliente"})
+    }
+
+
+})
 clientesRouter.post("/", async (req, res) =>{
     try{
 

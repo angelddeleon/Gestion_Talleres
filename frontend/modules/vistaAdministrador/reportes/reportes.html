@@ -3,10 +3,228 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="../../../src/output.css">
+    <title>Mechanic Workshop Reports</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-gray-50">
+
+
+    <!-- Modal Vehiculos -->
+    <div id="vehicleModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full transition-opacity duration-300" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
+            <div class="flex justify-between items-center pb-3">
+                <h3 class="text-2xl font-bold text-gray-800" id="modal-title">Vehiculo Historial</h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-500">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="mt-4">
+                <div class="space-y-6">
+                    <!-- Vehicle Details Section -->
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-800 mb-2">Informacion Vehiculo</h4>
+                        <div class="grid grid-cols-2 gap-4 text-sm">
+                            <p ><span class="font-medium">Vehiculo ID: </span><span id="vehiculo-id"></span></p>
+                            <p ><span class="font-medium">Marca/Modelo: </span><span id="vehiculo-modelo"></span></p>
+                            <p ><span class="font-medium">Año: </span><span id="vehiculo-year"></span></p>
+                            <p ><span class="font-medium">Placa: </span><span id="vehiculo-placa"></span></p>
+                        </div>
+                    </div>
+                    <!-- Owner Information -->
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-800 mb-2">Informacion Propietario</h4>
+                        <div class="grid grid-cols-2 gap-4 text-sm">
+                            <p ><span class="font-medium">Nombre: </span><span id="nombre"></span> </p>
+                            <p ><span class="font-medium">Cedula: </span><span id="cedula"></span> </p>
+                            <p ><span class="font-medium">Telefono: </span ><span id="telefono"></span></p>
+                        </div>
+                    </div>
+                    <!-- Service History -->
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-800 mb-2">Historial Reparaciones</h4>
+                        <div id="container-historial" class="space-y-2">
+                            <!-- <div class="bg-gray-50 p-3 rounded">
+                                <p class="text-sm"><span class="font-medium">Date:</span> 2024-01-15</p>
+                                <p class="text-sm"><span class="font-medium">Service:</span> Oil Change</p>
+                                <p class="text-sm"><span class="font-medium">Mechanic:</span> John Smith</p>
+                                <p class="text-sm"><span class="font-medium">Mechanic:</span> John Smith</p>
+                                <p class="text-sm"><span class="font-medium">Mechanic:</span> John Smith</p>
+
+                            </div> -->
+                           
+                        </div>
+                    </div>
+                    <!-- Pending Maintenance -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+      <!-- Modal Mecanico -->
+      <div id="mecanicoModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full transition-opacity duration-300" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
+            <div class="flex justify-between items-center pb-3">
+                <h3 class="text-2xl font-bold text-gray-800" id="modal-title">Mecanico Historial</h3>
+                <button onclick="closeModalMecanico()" class="text-gray-400 hover:text-gray-500">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="mt-4">
+                <div class="space-y-6">
+                    <!-- Vehicle Details Section -->
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-800 mb-2">Informacion Mecanico</h4>
+                        <div class="grid grid-cols-2 gap-4 text-sm">
+                            <p ><span class="font-medium">Mecanico Id: </span><span id="mecanico-id"></span></p>
+                            <p ><span class="font-medium">Mecanico: </span><span id="mecanico-nombre"></span></p>
+                            <p ><span class="font-medium">Especialidades: </span><span id="mecanico-especialidades"></span></p>
+                           
+                        </div>
+                    </div>
+                   
+                    <!-- Historial -->
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-800 mb-2">Historial Mecanico</h4>
+                        <div id="container-historial-mecanico" class="space-y-2">
+                            <!-- <div class="bg-gray-50 p-3 rounded">
+                                <p class="text-sm"><span class="font-medium">Date:</span> 2024-01-15</p>
+                                <p class="text-sm"><span class="font-medium">Service:</span> Oil Change</p>
+                                <p class="text-sm"><span class="font-medium">Mechanic:</span> John Smith</p>
+                                <p class="text-sm"><span class="font-medium">Mechanic:</span> John Smith</p>
+                                <p class="text-sm"><span class="font-medium">Mechanic:</span> John Smith</p>
+                            </div> -->
+                           
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
     
+
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-gray-800 mb-8">Dashboard Reportes</h1>
+    
+        <!-- Tabs de navegacion -->
+        <div class="mb-8">
+            <div class="border-b border-gray-200">
+                <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                    <button onclick="switchTab('vehicle')" id="vehicleTab" class="border-blue-500 text-blue-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" aria-current="page">Reportes Vehiculos</button>
+                    <button onclick="switchTab('mechanic')" id="mechanicTab" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">Reportes Mecanicos</button>
+                    <button onclick="switchTab('customer')" id="customerTab" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">Reportes Clientes</button>
+                </nav>
+            </div>
+        </div>
+
+        <!-- VEHICULO REPORTES -->
+        <div id="vehicleReports" class="tab-content">
+           
+                
+
+            <!-- Vehicle Data Table -->
+            <div class="bg-white shadow rounded-lg overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Placa</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha Reparacion</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo de Servicio</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mecanicos</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estatus</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="tbody" class="bg-white divide-y divide-gray-200">
+                            <!-- <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <a href="#" onclick="filterByVehicle('VH-001')" class="text-blue-600 hover:text-blue-800 hover:underline cursor-pointer">VH-001</a>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2024-01-15</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Oil Change</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                    <a href="#" onclick="filterByMechanic('John Smith')" class="text-blue-600 hover:text-blue-800 hover:underline cursor-pointer">John Smith</a>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Completed</span>
+                                </td>
+                            </tr> -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- MECANICOS REPORTES -->
+        <div id="mechanicReports" class="tab-content hidden">
+        
+          
+
+            <!-- Mechanic Data Table -->
+            <div class="bg-white shadow rounded-lg overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre Mecanico</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Especialidades</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Interno</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Reparaciones</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Activo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablebody-mecanicos" class="bg-white divide-y divide-gray-200">
+                            <!-- <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">John Smith</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">156</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Available</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">4.8/5.0</td>
+                            </tr> -->
+                         
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- CLIENTES REPORTES -->
+        <div id="customerReports" class="tab-content hidden">
+
+            <!-- Customer Data Table -->
+            <div class="bg-white shadow rounded-lg overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cedula</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contacto</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vehiculos</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-clientes" class="bg-white divide-y divide-gray-200">
+                     
+                    
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    
+    </div>
+
+    <script src="./reportes.js">
+    </script>
 </body>
 </html>

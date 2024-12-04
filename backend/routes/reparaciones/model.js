@@ -74,7 +74,7 @@ await client.execute(`
     INSERT INTO TAREAS_REPARACION (tarea_realizada,status, id_mecanico, id_reparacion, id_pieza, categoria)
     VALUES 
     ('Cambio de aceite', 'pendiente', 1, 1, 1, 'mecanica'),
-    ('Cambio de filtro de aire', 'pendiente', 1, 1, 1, 'mecanica'),
+    ('Cambio de filtro de aire', 'pendiente', 2, 1, 1, 'mecanica'),
     ('Revisión de compresor','en progreso', 1, 2, 2, 'aire acondicionado');
 
 `);

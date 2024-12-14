@@ -1,0 +1,30 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+#barra{
+    display: flex;
+    height: 100vh;
+    width: 6%;
+
+    align-items: center; /* Centra verticalmente */ 
+}
+
+
+#barraCentro{
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    height: 60%;
+}
+
+.botonRedireccion {
+    padding: 1rem;
+}
+
+#Reportes {
+    
+}
